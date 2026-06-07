@@ -98,6 +98,7 @@ description: Search web features, including components and workflows.
 # Search Web
 
 ## When to use this skill
+
 Use this skill when working with search web features...
 
 ## Features
@@ -112,11 +113,11 @@ Use this skill when working with search web features...
 
 Guideline 有點像是開發指南與指導原則，你可以把你的開發習慣與團隊規則寫在上面。Skills 則是給 AI Agent 使用的工具，專注於特定目的上。
 
-| 方面 | Guidelines | Skills |
-| --- | --- | --- |
-| 載入時機 | 前置作業，每一次都會載入 | 根據需求載入 |
-| 範圍 | 屬於廣泛且基礎的原則 | 屬於專注於特定任務的工具 |
-| 目的 | 核心規範與最佳實踐 | 詳細的實現模式 |
+| 方面     | Guidelines               | Skills                   |
+| -------- | ------------------------ | ------------------------ |
+| 載入時機 | 前置作業，每一次都會載入 | 根據需求載入             |
+| 範圍     | 屬於廣泛且基礎的原則     | 屬於專注於特定任務的工具 |
+| 目的     | 核心規範與最佳實踐       | 詳細的實現模式           |
 
 ## 參考資料
 
