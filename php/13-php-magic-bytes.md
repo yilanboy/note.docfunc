@@ -1,7 +1,7 @@
 ---
 layout: default
 parent: PHP
-nav_order: 12
+nav_order: 13
 ---
 
 # 在 PHP 中判斷 Magic Bytes
