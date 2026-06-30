@@ -77,7 +77,7 @@ xdebug.client_port=9003
 - Force break at first line when no path mappings specified
 - Force break at first line when a script is outside the project
 
-**在這裡有一個常見的誤區：XDebug 並不是 Server**。在 Debug 連線中，**PHPStorm 才是扮演監聽連線的 Server**（這也是為什麼啟動除錯叫做 *Start Listening*），而 **XDebug 扮演的是連向 IDE 的 Client**。
+**在這裡有一個常見的誤區：XDebug 並不是 Server**。在 Debug 連線中，**PHPStorm 才是扮演監聽連線的 Server**（這也是為什麼啟動除錯叫做 _Start Listening_），而 **XDebug 扮演的是連向 IDE 的 Client**。
 
 在 Settings -> PHP -> Servers 中設定 Server，這個 Server 指的是你的**網頁伺服器（Web Server）**。這主要是**要告訴 PHPStorm，當 XDebug 從某個網域連線過來時，請把它對應到目前這個專案的程式碼**，這樣 IDE 才知道要去哪裡尋找對應的原始碼並觸發中斷點。
 
@@ -98,6 +98,51 @@ xdebug.client_port=9003
 1. 在瀏覽器外掛中啟用 `Debug`。
 2. 在 PHPStorm 中，點選右上角的 `Start Listening for PHP Debug Connections`。
 3. 重新整理頁面，即可開始 Debug。
+
+## 快速移除自訂佈景主題（Custom Themes）
+
+安裝像 **Material Theme UI** 這類外掛後，它會在設定目錄中產生大量的「使用者編輯器配色（editor color schemes）」。即使之後移除了外掛，這些配色仍會殘留在 Settings -> Editor -> Color Scheme 的下拉選單中（例如 `Material Darker`、`Monokai Pro`、`Dracula (Material)` 等）。
+
+透過 GUI 一個個刪除非常麻煩，直接從設定目錄刪除檔案是最快的方式。
+
+### 設定檔位置（macOS）
+
+每個 PHPStorm 版本都有獨立的設定目錄：
+
+```
+~/Library/Application Support/JetBrains/PhpStorm<版本>/
+├── colors/    # 編輯器配色，每個 .icls 檔就是一個 scheme（檔名以 _@user_ 開頭）
+├── themes/    # 介面佈景主題，每個 .theme.json 檔就是一個 UI theme
+└── options/   # 外掛殘留設定，例如 material_theme.xml
+```
+
+> 重點：`colors/` 底下的 `.icls` 全部都是「使用者層級」的自訂配色，IDE 內建配色放在程式本體中、不會出現在這裡。所以刪除這裡的檔案只會移除自訂內容，**內建配色（Darcula、Light 等）依然存在，只是會還原成預設值**。
+
+### 刪除步驟
+
+**務必先完全關閉 PHPStorm**，否則刪除後 IDE 會在結束時把記憶體中的配色重新寫回。
+
+```bash
+# 1. 先列出來確認要刪什麼（* 會展開成所有已安裝的版本）
+ls ~/Library/Application\ Support/JetBrains/PhpStorm*/colors/*.icls
+
+# 2-a. 只刪特定外掛的配色，例如 Material Theme
+find ~/Library/Application\ Support/JetBrains/PhpStorm*/colors -type f \
+  \( -name "*_Material_*.icls" -o -name "_@user_Material *.icls" \) -delete -print
+
+# 2-b. 或一次清掉「所有版本」的全部自訂配色（最乾淨）
+find ~/Library/Application\ Support/JetBrains/PhpStorm*/colors -type f -name "*.icls" -delete -print
+
+# 3. 順手清掉外掛殘留的設定檔
+find ~/Library/Application\ Support/JetBrains/PhpStorm*/options -type f \
+  -iname "material_theme*.xml" -delete -print
+```
+
+### 注意事項
+
+- **外掛若還沒移除，配色會被重新產生**。若某個版本仍安裝著 Material Theme UI，需先在 Settings -> Plugins 中移除外掛（或直接刪掉 `plugins/Material Theme UI` 資料夾），再清配色才不會復活。
+- **介面佈景主題（UI theme）** 與編輯器配色不同，它是由外掛直接提供的，移除外掛後就會自動從 Appearance 的下拉選單消失，通常不需要手動處理。
+- 刪除後若原本套用的是被刪掉的配色，PHPStorm 下次啟動會自動退回預設（Darcula／Light），重新挑一個內建配色即可。
 
 ## 參考資料
 
