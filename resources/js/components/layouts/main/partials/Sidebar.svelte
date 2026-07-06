@@ -1,8 +1,8 @@
 <script lang="ts">
   import { inertia, page } from "@inertiajs/svelte";
-  import { ChevronRight } from "@lucide/svelte";
-  import { fly, slide } from "svelte/transition";
-  import { onMount, tick } from "svelte";
+  import { ChevronRight, X } from "@lucide/svelte";
+  import { fly, slide, fade } from "svelte/transition";
+  import { onMount, tick, untrack } from "svelte";
   import { sidebar } from "@/shared/sidebar.svelte.js";
   import type { NoteCategory } from "@/types";
 
@@ -20,6 +20,16 @@
   function syncSidebarWithViewport() {
     sidebar.isOpen = window.matchMedia(DESKTOP_MEDIA_QUERY).matches;
   }
+
+  // Auto-close sidebar on mobile when route path changes
+  $effect(() => {
+    activePath;
+    untrack(() => {
+      if (!window.matchMedia(DESKTOP_MEDIA_QUERY).matches && sidebar.isOpen) {
+        sidebar.isOpen = false;
+      }
+    });
+  });
 
   onMount(async () => {
     mounted = true;
@@ -41,16 +51,28 @@
 
 <!-- Desktop Sidebar -->
 {#if sidebar.isOpen}
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <div
+    transition:fade={{ duration: transitionDuration }}
+    onclick={() => (sidebar.isOpen = false)}
+    class={{ "fixed inset-0 z-40 bg-black/70 lg:hidden": mounted }}
+  ></div>
+
   <aside
     transition:fly={{ x: slideOffset, duration: transitionDuration }}
     class={{
       "fixed inset-y-0 top-16 z-40 w-72 flex-col": true,
       "hidden lg:flex": !mounted,
-      "flex": mounted,
+      flex: mounted,
     }}
   >
+    <button class="pointer-events-none absolute top-6 -right-12 text-white lg:hidden">
+      <X class="size-8" />
+    </button>
+
     <div
-      class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-zinc-200 bg-white px-6 pb-4"
+      class="z-10 flex grow flex-col gap-y-5 overflow-y-auto border-r border-zinc-200 bg-white px-6 pb-4"
     >
       <nav class="mt-6 flex flex-1 flex-col">
         <ul role="list" class="flex flex-1 flex-col gap-y-7">
