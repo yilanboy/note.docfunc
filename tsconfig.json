@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "checkJs": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "sourceMap": true,
+        "strict": true,
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "target": "esnext",
+        "isolatedModules": true,
+        "noEmit": true,
+        "verbatimModuleSyntax": true,
+        "lib": ["esnext", "dom", "dom.iterable"],
+        "paths": {
+            "@inertiajs/svelte/server": ["../../node_modules/@inertiajs/svelte/dist/server"],
+            "@/*": ["./resources/js/*"]
+        },
+        "types": ["vite/client"]
+    },
+    "include": ["resources/**/*.d.ts", "resources/**/*.ts", "resources/**/*.svelte", "*.config.js"]
+}

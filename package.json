@@ -1,0 +1,37 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build && vite build --ssr",
+        "dev": "vite",
+        "check": "svelte-check --tsconfig ./tsconfig.json",
+        "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
+        "fmt": "oxfmt",
+        "fmt:check": "oxfmt --check"
+    },
+    "devDependencies": {
+        "@inertiajs/core": "^3.5.0",
+        "@inertiajs/svelte": "^3.5.0",
+        "@inertiajs/vite": "^3.5.0",
+        "@lucide/svelte": "^1.23.0",
+        "@sveltejs/vite-plugin-svelte": "^7.1.2",
+        "@tailwindcss/typography": "^0.5.20",
+        "@tailwindcss/vite": "^4.3.2",
+        "@tailwindplus/elements": "^1.0.22",
+        "@types/node": "^26.1.0",
+        "axios": "^1.18.1",
+        "laravel-vite-plugin": "^3.1.0",
+        "lodash": "^4.18.1",
+        "oxfmt": "^0.57.0",
+        "playwright": "^1.61.1",
+        "shiki": "^4.3.1",
+        "svelte": "^5.56.4",
+        "svelte-check": "^4.7.1",
+        "tailwindcss": "^4.3.2",
+        "typescript": "^6.0.3",
+        "vite": "^8.1.2"
+    },
+    "engines": {
+        "pnpm": ">=11"
+    }
+}

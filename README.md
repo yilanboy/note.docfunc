@@ -1,71 +1,175 @@
-# 個人學習筆記
+# note.docfunc 📝
 
-此專案用來存放我的技術學習筆記，基本上有接觸到的技術都會寫在這裡，主要是為了方便自己之後查詢。
+[![Laravel Framework](https://img.shields.io/badge/Laravel-13-FF2D20?style=flat-square&logo=laravel)](https://laravel.com)
+[![Inertia.js](https://img.shields.io/badge/Inertia.js-v3-9553E9?style=flat-square)](https://inertiajs.com)
+[![Svelte](https://img.shields.io/badge/Svelte-5-FF3E00?style=flat-square&logo=svelte)](https://svelte.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
+[![Pest Testing](https://img.shields.io/badge/Pest-4-01C1EE?style=flat-square)](https://pestphp.com)
 
-GitHub Page 連結在[這裡](https://yilanboy.github.io/note/)。
+A high-performance, beautiful, read-only markdown note and documentation site. This project serves as a single source of truth for personal technical learning notes, compiling markdown files server-side and rendering them client-side in a premium, responsive layout.
 
-> [!IMPORTANT]
->
-> 這裡的筆記都是我自己的理解，可能有錯誤，甚至非常多錯誤，如果有朋友發現錯誤的地方，歡迎開 issue 指正，非常感謝！
+---
 
-## 筆記架構
+## ⚡ Key Features
 
-我想把筆記的架構盡可能簡化，所以每個資料夾底下不會有另外一個資料夾，只會有單純的筆記檔案。
-筆記檔案會使用數字開頭，讓我可以依照數字排序。
+- **File-based Note Architecture**: Stored directly in `resources/notes/`. The directory structure represents your categories and documents.
+- **Dynamic Wildcard Routing**: Automatic clean URLs. Numeric sorting prefixes are automatically stripped (e.g. `resources/notes/php/01-swoole-confuse.md` maps to `/php/swoole-confuse`).
+- **High-Performance Caching**: Dynamic note structures (`NoteRepository::tree`) and converted HTML output are aggressively cached using file modification time (`filemtime`) fingerprints, ensuring sub-millisecond response times without stale content.
+- **On-Demand Client-Side Syntax Highlighting**: Pre-rendered HTML is highlighted client-side with **Shiki**, dynamically loading language grammars and themes (One Light / One Dark Pro) only when a code block is detected.
+- **Premium Design & Aesthetics**: Built with Tailwind CSS 4 and custom fonts (Inter for English, Noto Sans TC for Traditional Chinese, and JetBrains Mono for code blocks). Features a responsive navigation sidebar and a customizable dark mode.
 
-每個資料夾底下都會有一個 `README.md`，裡面會有該筆記的大綱與目錄 (盡可能這麼做 😆)。
+---
 
-因此筆記的架構會像這樣：
+## 🛠️ Tech Stack
+
+### Backend
+
+- **PHP**: `8.4+` (utilizes strict types, property promotion, constructor promotion)
+- **Laravel Framework**: `13`
+- **Inertia Laravel**: `v3`
+- **Markdown Converter**: Standard CommonMark via Laravel's built-in `Str::markdown()`
+
+### Frontend
+
+- **Svelte**: `5` (Runes, snippets, and clean state management)
+- **Inertia Svelte**: `v3`
+- **Tailwind CSS**: `4` (with `@tailwindcss/vite` and `@tailwindcss/typography`)
+- **Shiki**: Dual-theme client-side syntax highlighting
+- **Icons**: `@lucide/svelte`
+
+### Quality Assurance & Linting
+
+- **Pest PHP**: `4` (with Pest Laravel & Pest Browser integration)
+- **Laravel Pint**: PHP code styler
+- **Oxfmt**: Ultra-fast JS/TS formatter
+- **Svelte Check**: Static type checker for Svelte files
+
+---
+
+## 📂 Project Structure
 
 ```text
-.
-├── README.md
-├── aws
-│   ├── 01-aws-cli.md
-│   ├── 02-egress-only-gateway.md
-│   ├── 03-region-and-availability-zone.md
-│   └── README.md
-├── azure
-│   ├── 01-azure-cli.md
-│   ├── 02-blob-storage.md
-│   ├── 03-function-app.md
-│   └── README.md
-└── google-cloud
-    ├── 01-google-cloud-cli.md
-    ├── 02-projects.md
-    └── 03-service-account.md
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── ShowHomeController.php      # Render / (loads resources/notes/README.md)
+│   │   │   ├── ShowCategoryController.php  # Render /{category} (scans category README and note lists)
+│   │   │   └── ShowNoteController.php      # Render /{category}/{note}
+│   │   └── Middleware/
+│   │       └── HandleInertiaRequests.php   # Shares global navigation tree
+│   └── Services/
+│       ├── MarkdownConverter.php           # Server-side HTML generation & caching
+│       └── NoteRepository.php              # Scans, parses, and retrieves note structures
+├── config/
+│   └── notes.php                           # Paths and overrides for category display names
+├── resources/
+│   ├── css/
+│   │   └── app.css                         # Tailwind CSS imports, fonts (Inter/Noto/JetBrains) & overrides
+│   ├── js/
+│   │   ├── components/                     # Sidebar, Header, Layout components
+│   │   ├── pages/                          # Svelte page entries
+│   │   ├── shared/                         # Highlight helper & sidebar state
+│   │   └── ssr.ts                          # Server-side rendering entry point
+│   └── notes/                              # Markdown files (Single Source of Truth)
+└── tests/                                  # Unit, Feature, and E2E Browser tests
 ```
 
-## 目錄
+---
 
-1. [AWS](./aws/README.md)
-2. [Azure](./azure/README.md)
-3. [Google Cloud Platform](./google-cloud-platform/README.md)
-4. [Terraform](./terraform/README.md)
-5. [Ansible](./ansible/README.md)
-6. [Docker](./docker/README.md)
-7. [K8s](./k8s/README.md)
-8. [Argo CD](./argocd/README.md)
-9. [Grafana](./grafana/README.md)
-10. [Network](./network/README.md)
-11. [Linux](./linux/README.md)
-12. [Windows](./windows/README.md)
-13. [Database](./database/README.md)
-14. [PHP](./php/README.md)
-15. [Pest](./pest/README.md)
-16. [Laravel](./laravel/README.md)
-17. [Python](./python/README.md)
-18. [Rust](./rust/README.md)
-19. [Svelte](./svelte/README.md)
-20. [Git](./git/README.md)
-21. [Vim](./vim/README.md)
-22. [Warp](./warp/README.md)
-23. [Tailwind CSS](./tailwind-css/README.md)
-24. [Web](./web/README.md)
-25. [TypeScript](./typescript/README.md)
-26. [Fluent Bit](./fluent-bit/README.md)
-27. [Zed](./zed/README.md)
-28. [Fitness](./fitness/README.md)
-29. [Cloudflare](./cloudflare/README.md)
-30. [Security](./security/README.md)
-31. [Trip](./trip/README.md)
+## 🚀 Getting Started
+
+### 1. Prerequisites
+
+- **PHP 8.4+**
+- **Composer**
+- **Node.js 22+ & pnpm >= 11**
+
+### 2. Installation
+
+Clone the repository, copy the environment file, and install backend and frontend dependencies:
+
+```bash
+# Clone the repository
+git clone https://github.com/yilanboy/note.docfunc.git
+cd note.docfunc
+
+# Setup local environment configurations
+cp .env.example .env
+
+# Install PHP dependencies
+composer install
+
+# Install JS/TS dependencies
+pnpm install
+
+# Generate application key & set up database.sqlite skeleton
+php artisan key:generate
+touch database/database.sqlite
+php artisan migrate
+```
+
+### 3. Local Development
+
+Run the concurrent server runner which starts the Artisan server, queue listener, Pail log tailer, and Vite server under a single command:
+
+```bash
+composer run dev
+```
+
+Visit the application at `http://127.0.0.1:8000`.
+
+---
+
+## ✍️ Writing & Organizing Notes
+
+The notes directory is located in `resources/notes/`.
+
+### Folder and File Naming Rules
+
+1. **Categories**: Create a subdirectory inside `resources/notes/` (e.g. `resources/notes/kubernetes`).
+2. **Category Names**: By default, category folder names are capitalized and formatted into headlines using `Str::headline()`. To override the title representation (e.g. for acronyms like AWS, K8s, API), configure them in [config/notes.php](file:///Users/allenjiang/code/php/note.docfunc/config/notes.php):
+    ```php
+    'display_names' => [
+        'k8s' => 'K8s',
+        'aws' => 'AWS',
+        'tailwind-css' => 'Tailwind CSS',
+    ]
+    ```
+3. **Documents**: Create markdown files inside categories. Use numeric prefixes for sorting order (e.g., `01-install.md`, `02-architecture.md`).
+4. **URL Slugs**: The system automatically strips the sorting prefix to keep URLs clean:
+    - File path: `resources/notes/php/07-property-hook.md`
+    - URL: `/php/property-hook`
+5. **Document Titles**: Note titles are resolved by parsing the first `# H1` tag inside the markdown file. If no H1 tag is found, it falls back to the headline-case representation of the slug.
+6. **Images**: Do not put images in the repository. Standard practice is to upload images to an external object store (e.g. S3) and reference them via absolute URLs.
+
+---
+
+## 🧪 Testing & Code Styling
+
+### Running Tests
+
+Execute the Pest suite (which includes E2E browser smoke tests powered by Playwright/Pest-Browser):
+
+```bash
+php artisan test
+```
+
+### PHP Code Formatting
+
+Align PHP code with the project's formatting standard:
+
+```bash
+vendor/bin/pint --format agent
+```
+
+### Svelte & TypeScript Code Formatting
+
+Verify types and format JS/Svelte code:
+
+```bash
+# Format JS/TS/Svelte files
+pnpm run fmt
+
+# Run Svelte compiler diagnostic checks
+pnpm run check
+```

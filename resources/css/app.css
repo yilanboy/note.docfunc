@@ -1,0 +1,72 @@
+/* Latin text hits Inter, CJK falls back to Noto Sans TC; code uses JetBrains Mono. */
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+TC:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
+@import "tailwindcss";
+
+@plugin "@tailwindcss/typography";
+
+@source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
+
+@theme {
+    /* Feeds --default-font-family (body) and --default-mono-font-family (code/pre). */
+    --font-sans: "Inter", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "Noto Sans TC", monospace;
+}
+
+:not(pre) > code::before {
+    content: "";
+}
+
+:not(pre) > code::after {
+    content: "";
+}
+
+:not(pre) > code {
+    font-family: var(--font-mono), serif;
+    background-color: var(--color-emerald-100);
+    color: var(--color-emerald-900);
+    padding: 0.15rem 0.3rem;
+    font-weight: 600;
+    border-radius: 0.3rem;
+}
+
+blockquote p:first-of-type::before {
+    content: "" !important;
+}
+
+blockquote p:last-of-type::after {
+    content: "" !important;
+}
+
+/* Shiki dual-theme code blocks: dark palette kicks in under the `.dark` class.
+   `!important` is required to beat the inline light-theme styles. */
+.dark .shiki,
+.dark .shiki span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+}
+
+/* Font styles (italic comments etc.) are emitted as CSS variables only. */
+.shiki span {
+    font-style: var(--shiki-light-font-style);
+    font-weight: var(--shiki-light-font-weight);
+    text-decoration: var(--shiki-light-text-decoration);
+}
+
+.dark .shiki span {
+    font-style: var(--shiki-dark-font-style);
+    font-weight: var(--shiki-dark-font-weight);
+    text-decoration: var(--shiki-dark-text-decoration);
+}
+
+/* One Light's own background (#FAFAFA) is nearly identical to the white page,
+   so give light-mode code blocks a distinct background and a hairline border.
+   Dark mode re-asserts the theme background (One Dark Pro #282c34). */
+.prose pre.shiki {
+    background-color: var(--color-zinc-100) !important;
+    border: 1px solid var(--color-zinc-200);
+}
+
+.dark .prose pre.shiki {
+    background-color: var(--shiki-dark-bg) !important;
+    border-color: var(--color-zinc-700);
+}
