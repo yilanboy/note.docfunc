@@ -2,6 +2,13 @@
   import { PanelLeftClose, PanelLeftOpen, House } from "@lucide/svelte";
   import { sidebar } from "@/shared/sidebar.svelte.js";
   import { inertia } from "@inertiajs/svelte";
+  import { onMount } from "svelte";
+
+  let mounted = $state(false);
+
+  onMount(() => {
+    mounted = true;
+  });
 
   function toggleSidebar() {
     sidebar.isOpen = !sidebar.isOpen;
@@ -21,7 +28,10 @@
       >
         <span class="sr-only">Toggle Sidebar</span>
 
-        {#if sidebar.isOpen}
+        {#if !mounted}
+          <PanelLeftOpen class="lg:hidden" />
+          <PanelLeftClose class="hidden lg:block" />
+        {:else if sidebar.isOpen}
           <PanelLeftClose />
         {:else}
           <PanelLeftOpen />

@@ -2,14 +2,34 @@
   import { inertia, page } from "@inertiajs/svelte";
   import { ChevronRight } from "@lucide/svelte";
   import { fly, slide } from "svelte/transition";
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
   import { sidebar } from "@/shared/sidebar.svelte.js";
   import type { NoteCategory } from "@/types";
 
-  let slideOffset = $state(0);
+  // Must stay in sync with Tailwind's `lg` breakpoint (1024px). Using matchMedia
+  // means we share the same breakpoint engine as the `lg:` utility classes.
+  const DESKTOP_MEDIA_QUERY = "(min-width: 1024px)";
 
-  onMount(() => {
+  let slideOffset = $state(0);
+  let transitionDuration = $state(0);
+  let mounted = $state(false);
+
+  // Open on desktop, closed on mobile. Called on mount and whenever the viewport
+  // crosses the breakpoint. Assigning the same value is a no-op in Svelte's $state,
+  // so firing on every resize event is cheap.
+  function syncSidebarWithViewport() {
+    sidebar.isOpen = window.matchMedia(DESKTOP_MEDIA_QUERY).matches;
+  }
+
+  onMount(async () => {
+    mounted = true;
+    syncSidebarWithViewport();
+
+    await tick();
+
+    // Delay transition properties to avoid initial flash animations
     slideOffset = -200;
+    transitionDuration = 300;
   });
 
   let noteTree = $derived((page.props.noteTree ?? []) as NoteCategory[]);
@@ -17,11 +37,17 @@
   let activePath = $derived(page.url.split("?")[0]);
 </script>
 
+<svelte:window onresize={syncSidebarWithViewport} />
+
 <!-- Desktop Sidebar -->
 {#if sidebar.isOpen}
   <aside
-    transition:fly={{ x: slideOffset, duration: 300 }}
-    class="fixed inset-y-0 top-16 z-40 flex w-72 flex-col"
+    transition:fly={{ x: slideOffset, duration: transitionDuration }}
+    class={{
+      "fixed inset-y-0 top-16 z-40 w-72 flex-col": true,
+      "hidden lg:flex": !mounted,
+      "flex": mounted,
+    }}
   >
     <div
       class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-zinc-200 bg-white px-6 pb-4"
