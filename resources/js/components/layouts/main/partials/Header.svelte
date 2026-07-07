@@ -1,30 +1,43 @@
 <script lang="ts">
-  import { PanelLeftClose, PanelLeftOpen, House } from "@lucide/svelte";
+  import { PanelLeftClose, PanelLeftOpen, House, Sun, Moon } from "@lucide/svelte";
   import { sidebar } from "@/shared/sidebar.svelte.js";
   import { inertia } from "@inertiajs/svelte";
   import { onMount } from "svelte";
 
   let mounted = $state(false);
+  let isDark = $state(false);
 
   onMount(() => {
     mounted = true;
+    isDark = document.documentElement.classList.contains("dark");
   });
 
   function toggleSidebar() {
     sidebar.isOpen = !sidebar.isOpen;
   }
+
+  function toggleTheme() {
+    isDark = !isDark;
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }
 </script>
 
-<header class="sticky top-0 z-50 h-16 bg-white">
+<header class="sticky top-0 z-50 h-16 bg-zinc-50 dark:bg-zinc-900 transition-colors duration-300">
   <nav
     aria-label="Global"
-    class="flex h-full items-center justify-between border-b border-zinc-200 p-4 lg:px-8"
+    class="flex h-full items-center justify-between border-b border-zinc-200 dark:border-zinc-800 p-4 lg:px-8"
   >
     <div class="flex items-center gap-x-2 lg:flex-1">
       <button
         onclick={toggleSidebar}
         type="button"
-        class="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200"
+        class="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 dark:focus-visible:ring-zinc-700"
         aria-label="Toggle Sidebar"
       >
         <span class="sr-only">Toggle Sidebar</span>
@@ -42,7 +55,7 @@
       <a
         use:inertia
         href="/"
-        class="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200"
+        class="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 dark:focus-visible:ring-zinc-700"
         aria-label="Home"
       >
         <House class="size-5" />
@@ -51,12 +64,28 @@
 
     <div class="hidden lg:flex lg:gap-x-12"></div>
 
-    <div class="flex flex-1 items-center justify-end gap-x-4">
+    <div class="flex flex-1 items-center justify-end gap-x-3">
+      <button
+        onclick={toggleTheme}
+        type="button"
+        class="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800 transition-all duration-200 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 dark:focus-visible:ring-zinc-700"
+        aria-label="Toggle Theme"
+      >
+        <span class="sr-only">Toggle Theme</span>
+        {#if !mounted}
+          <div class="size-5"></div>
+        {:else if isDark}
+          <Sun class="size-5 text-amber-500 transition-transform duration-300 rotate-0 hover:rotate-12" />
+        {:else}
+          <Moon class="size-5 text-indigo-600 dark:text-indigo-400 transition-transform duration-300 rotate-0 hover:-rotate-12" />
+        {/if}
+      </button>
+
       <a
         href="https://github.com/yilanboy/note.docfunc"
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200"
+        class="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 dark:focus-visible:ring-zinc-700"
         aria-label="GitHub Repository"
       >
         <svg

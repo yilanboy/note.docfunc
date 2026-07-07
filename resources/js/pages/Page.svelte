@@ -26,9 +26,9 @@
 <main class="mx-auto w-full max-w-3xl px-4 py-8 lg:px-8">
   <article
     {@attach highlight}
-    class="prose max-w-none leading-8 prose-zinc prose-p:wrap-break-word
-           prose-a:text-emerald-600 prose-a:no-underline prose-a:underline-offset-2 visited:prose-a:text-emerald-700 prose-a:hover:text-emerald-700 prose-a:hover:underline focus:prose-a:ring-2 focus:prose-a:ring-emerald-300/60 focus:prose-a:outline-none
-           prose-blockquote:rounded-[0.3rem] prose-blockquote:border-emerald-300 prose-blockquote:bg-emerald-50 prose-blockquote:px-4 prose-blockquote:py-3 prose-blockquote:font-semibold prose-blockquote:text-emerald-900 prose-blockquote:not-italic"
+    class="prose max-w-none leading-8 prose-zinc dark:prose-invert prose-p:wrap-break-word
+           prose-a:text-emerald-600 dark:prose-a:text-violet-400 prose-a:no-underline prose-a:underline-offset-2 visited:prose-a:text-emerald-700 dark:visited:prose-a:text-violet-300 prose-a:hover:text-emerald-700 dark:prose-a:hover:text-violet-300 prose-a:hover:underline focus:prose-a:ring-2 focus:prose-a:ring-emerald-300/60 dark:focus:prose-a:ring-violet-800/60 focus:prose-a:outline-none
+           prose-blockquote:rounded-[0.3rem] prose-blockquote:border-emerald-300 dark:prose-blockquote:border-violet-700 prose-blockquote:bg-emerald-50 dark:prose-blockquote:bg-violet-950/30 prose-blockquote:px-4 prose-blockquote:py-3 prose-blockquote:font-semibold prose-blockquote:text-emerald-900 dark:prose-blockquote:text-violet-200 prose-blockquote:not-italic"
   >
     <!-- Safe: html is rendered server-side from our own Markdown files with html_input=strip -->
     {@html html}

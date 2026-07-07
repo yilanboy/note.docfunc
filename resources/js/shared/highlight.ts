@@ -47,9 +47,7 @@ async function getHighlighter(): Promise<Highlighter> {
  * with Shiki. Shiki itself and each grammar/theme are dynamically imported,
  * so they load on demand and never block the initial page render.
  */
-export async function highlightCodeBlocks(
-    container: HTMLElement,
-): Promise<void> {
+export async function highlightCodeBlocks(container: HTMLElement): Promise<void> {
     const highlighter = await getHighlighter();
     const blocks = container.querySelectorAll<HTMLElement>(
         'pre:not(.shiki-highlighted) > code[class*="language-"]',
@@ -61,8 +59,7 @@ export async function highlightCodeBlocks(
 
     await Promise.all(
         Array.from(blocks).map(async (code) => {
-            const language =
-                /language-([\w-]+)/.exec(code.className)?.[1] ?? "text";
+            const language = /language-([\w-]+)/.exec(code.className)?.[1] ?? "text";
             const pre = code.parentElement;
 
             if (!(pre instanceof HTMLPreElement)) {

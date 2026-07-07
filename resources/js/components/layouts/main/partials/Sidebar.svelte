@@ -76,7 +76,7 @@
     </button>
 
     <div
-      class="z-10 flex grow flex-col gap-y-5 overflow-y-auto border-r border-zinc-200 bg-white px-6 pb-4"
+      class="z-10 flex grow flex-col gap-y-5 overflow-y-auto border-r border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 px-6 pb-4 transition-colors duration-300"
     >
       <nav class="mt-6 flex flex-1 flex-col">
         <ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -92,8 +92,8 @@
                     aria-expanded={expanded}
                     class={{
                       "flex w-full cursor-pointer items-center gap-x-2 rounded-lg p-2 text-sm font-semibold transition-colors duration-200": true,
-                      "text-zinc-700 hover:bg-zinc-100": href !== activePath,
-                      "pointer-events-none bg-zinc-100 font-medium text-zinc-900":
+                      "text-zinc-700 hover:bg-zinc-200/50 dark:text-zinc-300 dark:hover:bg-zinc-800": href !== activePath,
+                      "pointer-events-none bg-zinc-200/50 dark:bg-zinc-800 font-medium text-zinc-900 dark:text-zinc-100":
                         href === activePath,
                     }}
                   >
@@ -109,7 +109,7 @@
                   {#if expanded}
                     <ul
                       transition:slide={{ duration: 150 }}
-                      class="mt-1 space-y-1 border-l border-zinc-200 pl-4"
+                      class="mt-1 space-y-1 border-l border-zinc-200 dark:border-zinc-800 pl-4"
                     >
                       {#each category.notes as note (note.slug)}
                         {@const href = `/${category.slug}/${note.slug}`}
@@ -118,8 +118,8 @@
                             use:inertia
                             {href}
                             class={{
-                              "block truncate rounded-lg p-2 text-sm text-zinc-600 transition-colors duration-200 hover:bg-zinc-100": true,
-                              "pointer-events-none bg-zinc-100 font-medium text-zinc-900":
+                              "block truncate rounded-lg p-2 text-sm text-zinc-600 dark:text-zinc-400 transition-colors duration-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-800": true,
+                              "pointer-events-none bg-zinc-200/50 dark:bg-zinc-800 font-medium text-zinc-900 dark:text-zinc-100":
                                 href === activePath,
                             }}
                             title={note.title}
