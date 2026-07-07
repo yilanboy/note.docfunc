@@ -14,6 +14,10 @@
   let transitionDuration = $state(0);
   let mounted = $state(false);
 
+  let noteTree = $derived((page.props.noteTree ?? []) as NoteCategory[]);
+  let activeCategory = $derived(page.url.split("/")[1] ?? "");
+  let activePath = $derived(page.url.split("?")[0]);
+
   // Open on desktop, closed on mobile. Called on mount and whenever the viewport
   // crosses the breakpoint. Assigning the same value is a no-op in Svelte's $state,
   // so firing on every resize event is cheap.
@@ -41,10 +45,6 @@
     slideOffset = -200;
     transitionDuration = 300;
   });
-
-  let noteTree = $derived((page.props.noteTree ?? []) as NoteCategory[]);
-  let activeCategory = $derived(page.url.split("/")[1] ?? "");
-  let activePath = $derived(page.url.split("?")[0]);
 </script>
 
 <svelte:window onresize={syncSidebarWithViewport} />
@@ -67,7 +67,11 @@
       flex: mounted,
     }}
   >
-    <button class="pointer-events-none absolute top-6 -right-12 text-white lg:hidden">
+    <button
+      onclick={() => (sidebar.isOpen = false)}
+      class="absolute top-6 -right-12 text-white hover:text-zinc-200 focus:outline-none lg:hidden"
+      aria-label="Close sidebar"
+    >
       <X class="size-8" />
     </button>
 
