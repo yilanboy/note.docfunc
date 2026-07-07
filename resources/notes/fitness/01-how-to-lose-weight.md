@@ -69,4 +69,4 @@
 
 ## 參考資料
 
-[![三個月減 26 斤不反彈，如何做到？](https://img.youtube.com/vi/t07FDJ5gDyU/maxresdefault.jpg)](https://www.youtube.com/watch?v=t07FDJ5gDyU)
+- [三個月減 26 斤不反彈，如何做到？](https://www.youtube.com/watch?v=t07FDJ5gDyU)

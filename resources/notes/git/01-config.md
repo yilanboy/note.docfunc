@@ -1,6 +1,6 @@
 # 初次使用 Git 的設定
 
-查看全域設定 x。
+查看全域設定。
 
 ```bash
 git config --global --list

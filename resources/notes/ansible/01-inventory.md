@@ -41,24 +41,24 @@ YAML 格式的 inventory 範例如下：
 
 ```yaml
 ungrouped:
-  hosts:
-    web:
-      ansible_host: foo.example.com
-      ansible_connection: ssh
-      ansible_user: ubuntu
-      ansible_password: ubuntu
-    web2:
-      ansible_host: bar.example.com
-      ansible_connection: winrm
-      ansible_user: win
-      ansible_password: win
+    hosts:
+        web:
+            ansible_host: foo.example.com
+            ansible_connection: ssh
+            ansible_user: ubuntu
+            ansible_password: ubuntu
+        web2:
+            ansible_host: bar.example.com
+            ansible_connection: winrm
+            ansible_user: win
+            ansible_password: win
 web_server:
-  hosts:
-    web:
-      ansible_host: foo.example.com
-      ansible_connection: ssh
-      ansible_user: ubuntu
-      ansible_password: ubuntu
+    hosts:
+        web:
+            ansible_host: foo.example.com
+            ansible_connection: ssh
+            ansible_user: ubuntu
+            ansible_password: ubuntu
 ```
 
 Ansible 預設會有 `all` 與 `ungrouped` 兩個 group，`all` 代表所有的 host，`ungrouped` 代表沒有被分到任何 group 的 host。
@@ -92,7 +92,7 @@ ansible web_servers -i inventory.ini -m ping
 
 Ansible 是可以與 SSH Config 一起使用的，假設我們有一個 SSH Config 如下：
 
-```ini
+```text
 Host foo
   HostName foo.example.com
   User ubuntu
