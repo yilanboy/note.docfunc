@@ -29,6 +29,11 @@ Thumbs.db
 # Inertia.js
 /bootstrap/ssr
 
+# FrankenPHP
+**/caddy
+frankenphp
+frankenphp-worker.php
+
 # AI
 /.ai
 /.junie

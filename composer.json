@@ -13,6 +13,7 @@
         "inertiajs/inertia-laravel": "^3.0",
         "laravel-lang/common": "^6.8",
         "laravel/framework": "^13.0",
+        "laravel/octane": "^2.17",
         "laravel/tinker": "^3.0",
         "laravel/wayfinder": "^0.1.5"
     },
