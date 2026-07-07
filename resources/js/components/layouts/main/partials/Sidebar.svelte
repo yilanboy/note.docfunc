@@ -69,10 +69,10 @@
   >
     <button
       onclick={() => (sidebar.isOpen = false)}
-      class="absolute top-6 -right-12 text-white hover:text-zinc-200 focus:outline-none lg:hidden"
+      class="absolute top-3 -right-12 inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-400 transition-colors duration-200 hover:bg-zinc-800/60 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 lg:hidden"
       aria-label="Close sidebar"
     >
-      <X class="size-8" />
+      <X class="size-5" />
     </button>
 
     <div
@@ -91,7 +91,7 @@
                     {href}
                     aria-expanded={expanded}
                     class={{
-                      "flex w-full cursor-pointer items-center gap-x-2 rounded-md p-2 text-sm font-semibold": true,
+                      "flex w-full cursor-pointer items-center gap-x-2 rounded-lg p-2 text-sm font-semibold transition-colors duration-200": true,
                       "text-zinc-700 hover:bg-zinc-100": href !== activePath,
                       "pointer-events-none bg-zinc-100 font-medium text-zinc-900":
                         href === activePath,
@@ -118,7 +118,7 @@
                             use:inertia
                             {href}
                             class={{
-                              "block truncate rounded-md p-2 text-sm text-zinc-600 hover:bg-zinc-100": true,
+                              "block truncate rounded-lg p-2 text-sm text-zinc-600 transition-colors duration-200 hover:bg-zinc-100": true,
                               "pointer-events-none bg-zinc-100 font-medium text-zinc-900":
                                 href === activePath,
                             }}
