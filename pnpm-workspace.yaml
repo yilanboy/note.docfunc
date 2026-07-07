@@ -1,3 +1,5 @@
 allowBuilds:
   "@tailwindcss/oxide": set this to true or false
   esbuild: true
+minimumReleaseAgeExclude:
+  - '@sveltejs/vite-plugin-svelte@7.1.4'
