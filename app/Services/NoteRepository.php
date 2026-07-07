@@ -19,13 +19,13 @@ class NoteRepository
         return Cache::remember(
             'notes:tree:'.$this->fingerprint(),
             now()->addWeek(),
-            fn(): array => collect(glob(config('notes.path').'/*', GLOB_ONLYDIR))
-                ->map(fn(string $directory): array => [
+            fn (): array => collect(glob(config('notes.path').'/*', GLOB_ONLYDIR))
+                ->map(fn (string $directory): array => [
                     'slug' => basename($directory),
                     'displayName' => $this->displayName(basename($directory)),
                     'notes' => $this->notes(basename($directory)),
                 ])
-                ->filter(fn(array $category): bool => $category['notes'] !== [])
+                ->filter(fn (array $category): bool => $category['notes'] !== [])
                 ->sortBy('slug')
                 ->values()
                 ->all(),
@@ -40,8 +40,8 @@ class NoteRepository
     public function notes(string $category): array
     {
         return collect(glob(config('notes.path')."/{$category}/*.md"))
-            ->reject(fn(string $path): bool => basename($path) === 'README.md')
-            ->map(fn(string $path): array => [
+            ->reject(fn (string $path): bool => basename($path) === 'README.md')
+            ->map(fn (string $path): array => [
                 'slug' => $this->slug($path),
                 'title' => $this->title($path),
             ])
@@ -78,6 +78,138 @@ class NoteRepository
     public function displayName(string $category): string
     {
         return config("notes.display_names.{$category}") ?? Str::headline($category);
+    }
+
+    /**
+     * Search notes by keyword in title and content.
+     *
+     * @return array<int, array{category: string, categoryName: string, slug: string, title: string, snippet: string}>
+     */
+    public function search(string $query): array
+    {
+        $query = trim($query);
+        if ($query === '') {
+            return [];
+        }
+
+        $terms = array_filter(explode(' ', $query));
+        if (empty($terms)) {
+            return [];
+        }
+
+        $results = [];
+        $searchIndex = $this->getSearchIndex();
+
+        foreach ($searchIndex as $note) {
+            $score = 0;
+            $titleMatched = true;
+            $contentMatched = true;
+
+            // Check if all terms exist in the title (logical AND)
+            foreach ($terms as $term) {
+                if (stripos($note['title'], $term) === false) {
+                    $titleMatched = false;
+                    break;
+                }
+            }
+
+            // Check if all terms exist in the content (logical AND)
+            foreach ($terms as $term) {
+                if (stripos($note['content'], $term) === false) {
+                    $contentMatched = false;
+                    break;
+                }
+            }
+
+            if ($titleMatched) {
+                $score += 10; // Prioritize title matches heavily
+            }
+
+            if ($contentMatched) {
+                $score += 1;
+            }
+
+            if ($titleMatched || $contentMatched) {
+                $results[] = [
+                    'category' => $note['category'],
+                    'categoryName' => $note['categoryName'],
+                    'slug' => $note['slug'],
+                    'title' => $note['title'],
+                    'snippet' => $this->generateSnippet($note['content'], $query),
+                    'score' => $score,
+                ];
+            }
+        }
+
+        // Sort by search score descending
+        usort($results, fn ($a, $b) => $b['score'] <=> $a['score']);
+
+        return array_values($results);
+    }
+
+    /**
+     * Build a cached search index of all notes.
+     *
+     * @return array<int, array{category: string, categoryName: string, slug: string, title: string, content: string}>
+     */
+    private function getSearchIndex(): array
+    {
+        return Cache::remember(
+            'notes:search_index:'.$this->fingerprint(),
+            now()->addWeek(),
+            function (): array {
+                $index = [];
+                $files = glob(config('notes.path').'/*/*.md');
+
+                foreach ($files as $path) {
+                    if (basename($path) === 'README.md') {
+                        continue;
+                    }
+
+                    $category = basename(dirname($path));
+                    $content = file_get_contents($path);
+
+                    $index[] = [
+                        'category' => $category,
+                        'categoryName' => $this->displayName($category),
+                        'slug' => $this->slug($path),
+                        'title' => $this->title($path),
+                        'content' => $content,
+                    ];
+                }
+
+                return $index;
+            }
+        );
+    }
+
+    /**
+     * Extract a text snippet around the search query.
+     */
+    private function generateSnippet(string $content, string $query): string
+    {
+        // Strip Markdown headers/formatting characters for a clean text preview
+        $clean = preg_replace('/[#*`_\-]/', '', $content);
+        $clean = preg_replace('/\s+/', ' ', $clean);
+        $clean = trim($clean);
+
+        $pos = stripos($clean, $query);
+        if ($pos === false) {
+            return mb_substr($clean, 0, 120).'...';
+        }
+
+        $start = max(0, $pos - 40);
+        $length = min(mb_strlen($clean) - $start, 120);
+        $snippet = mb_substr($clean, $start, $length);
+
+        if ($start > 0) {
+            $snippet = '...'.$snippet;
+        }
+        if ($start + $length < mb_strlen($clean)) {
+            $snippet .= '...';
+        }
+
+        return $snippet;
     }
 
     /**

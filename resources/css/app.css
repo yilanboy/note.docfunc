@@ -32,8 +32,8 @@
 }
 
 .dark :not(pre) > code {
-    background-color: var(--color-violet-950);
-    color: var(--color-violet-300);
+    background-color: var(--color-indigo-950);
+    color: var(--color-indigo-300);
 }
 
 blockquote p:first-of-type::before {

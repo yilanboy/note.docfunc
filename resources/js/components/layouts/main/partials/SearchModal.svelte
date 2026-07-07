@@ -1,0 +1,239 @@
+<script lang="ts">
+  import { router } from "@inertiajs/svelte";
+  import { Search, CornerDownLeft, Loader, FileText, X } from "@lucide/svelte";
+  import { fade, fly } from "svelte/transition";
+  import { search } from "@/shared/search.svelte";
+
+  interface Result {
+    category: string;
+    categoryName: string;
+    slug: string;
+    title: string;
+    snippet: string;
+  }
+
+  let query = $state("");
+  let results = $state<Result[]>([]);
+  let isLoading = $state(false);
+  let selectedIndex = $state(0);
+  let searchInput = $state<HTMLInputElement | null>(null);
+
+  // Debounce logic for fetching search results
+  let debounceTimeout: number | undefined;
+
+  $effect(() => {
+    // Whenever query changes, run this effect
+    const trimmed = query.trim();
+    if (trimmed === "") {
+      results = [];
+      isLoading = false;
+      return;
+    }
+
+    isLoading = true;
+    clearTimeout(debounceTimeout);
+    debounceTimeout = window.setTimeout(async () => {
+      try {
+        const response = await fetch(`/search?q=${encodeURIComponent(trimmed)}`);
+        if (response.ok) {
+          results = await response.json();
+          selectedIndex = 0;
+        }
+      } catch (err) {
+        console.error("Search error:", err);
+      } finally {
+        isLoading = false;
+      }
+    }, 200);
+  });
+
+  // Focus the input automatically when the modal is opened
+  $effect(() => {
+    if (search.isOpen) {
+      query = "";
+      results = [];
+      selectedIndex = 0;
+      setTimeout(() => {
+        searchInput?.focus();
+      }, 50);
+    }
+  });
+
+  function handleGlobalKeyDown(e: KeyboardEvent) {
+    // Open/Close on Cmd+K or Ctrl+K
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      search.isOpen = !search.isOpen;
+      return;
+    }
+
+    // Open on slash / (if not in an input or textarea)
+    if (
+      e.key === "/" &&
+      document.activeElement?.tagName !== "INPUT" &&
+      document.activeElement?.tagName !== "TEXTAREA"
+    ) {
+      e.preventDefault();
+      search.isOpen = true;
+      return;
+    }
+
+    if (!search.isOpen) return;
+
+    // Handle keys when open
+    if (e.key === "Escape") {
+      e.preventDefault();
+      search.isOpen = false;
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (results.length > 0) {
+        selectedIndex = (selectedIndex + 1) % results.length;
+      }
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (results.length > 0) {
+        selectedIndex = (selectedIndex - 1 + results.length) % results.length;
+      }
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (results[selectedIndex]) {
+        const res = results[selectedIndex];
+        search.isOpen = false;
+        router.visit(`/${res.category}/${res.slug}`);
+      }
+    }
+  }
+</script>
+
+<svelte:window onkeydown={handleGlobalKeyDown} />
+
+{#if search.isOpen}
+  <!-- Backdrop -->
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <div
+    transition:fade={{ duration: 150 }}
+    onclick={() => (search.isOpen = false)}
+    class="fixed inset-0 z-50 bg-zinc-950/40 backdrop-blur-[2px] transition-opacity"
+  ></div>
+
+  <!-- Modal Container -->
+  <div class="pointer-events-none fixed inset-0 z-50 flex items-start justify-center p-4 pt-[10vh]">
+    <div
+      transition:fly={{ y: -20, duration: 200 }}
+      class="pointer-events-auto relative flex max-h-[60vh] w-full max-w-xl flex-col overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 shadow-2xl transition-colors duration-300 dark:border-zinc-800 dark:bg-zinc-900"
+    >
+      <!-- Search Input Wrapper -->
+      <div class="flex items-center border-b border-zinc-200 px-5 dark:border-zinc-800">
+        <Search class="size-5 shrink-0 text-zinc-400 dark:text-zinc-500" />
+        <input
+          bind:this={searchInput}
+          bind:value={query}
+          type="text"
+          placeholder="Search notes... (esc to close)"
+          class="h-14 w-full bg-transparent px-4 text-base text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 outline-none"
+        />
+        <div class="flex shrink-0 items-center gap-3">
+          {#if isLoading}
+            <Loader class="size-4 animate-spin text-zinc-400 dark:text-zinc-500" />
+          {/if}
+          <button
+            onclick={() => (search.isOpen = false)}
+            class="text-zinc-400 transition-colors hover:text-zinc-600 dark:hover:text-zinc-200"
+            aria-label="Close"
+          >
+            <X class="size-5" />
+          </button>
+        </div>
+      </div>
+
+      <!-- Results list -->
+      {#if query.trim() !== ""}
+        <div class="flex-1 overflow-y-auto p-3">
+          {#if results.length > 0}
+            <ul class="space-y-1.5">
+              {#each results as result, idx}
+                <li>
+                  <button
+                    onclick={() => {
+                      search.isOpen = false;
+                      router.visit(`/${result.category}/${result.slug}`);
+                    }}
+                    onmouseenter={() => (selectedIndex = idx)}
+                    class="flex w-full cursor-pointer items-start gap-4 rounded-lg border border-transparent px-4 py-3 text-left text-sm transition-colors duration-150 outline-none"
+                    class:bg-emerald-600={selectedIndex === idx}
+                    class:text-white={selectedIndex === idx}
+                    class:dark:bg-indigo-600={selectedIndex === idx}
+                    class:bg-transparent={selectedIndex !== idx}
+                    class:text-zinc-700={selectedIndex !== idx}
+                    class:dark:text-zinc-300={selectedIndex !== idx}
+                  >
+                    <FileText class="mt-0.5 size-5 shrink-0" />
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-center gap-1.5 font-semibold">
+                        <span
+                          class="text-[11px] tracking-wider uppercase opacity-70"
+                          class:text-zinc-500={selectedIndex !== idx}
+                          class:dark:text-zinc-400={selectedIndex !== idx}
+                          class:text-zinc-100={selectedIndex === idx}
+                        >
+                          {result.categoryName}
+                        </span>
+                        <span>/</span>
+                        <span class="truncate">{result.title}</span>
+                      </div>
+                      <p
+                        class="mt-1 line-clamp-2 text-xs"
+                        class:text-zinc-500={selectedIndex !== idx}
+                        class:dark:text-zinc-400={selectedIndex !== idx}
+                        class:text-zinc-200={selectedIndex === idx}
+                      >
+                        {result.snippet}
+                      </p>
+                    </div>
+                    {#if selectedIndex === idx}
+                      <CornerDownLeft class="size-5 shrink-0 self-center opacity-85" />
+                    {/if}
+                  </button>
+                </li>
+              {/each}
+            </ul>
+          {:else if !isLoading}
+            <div class="py-10 text-center text-base text-zinc-500 dark:text-zinc-400">
+              No results found for "<span class="font-medium text-zinc-700 dark:text-zinc-300"
+                >{query}</span
+              >"
+            </div>
+          {/if}
+        </div>
+      {:else}
+        <!-- Default State / Search Tips -->
+        <div class="space-y-3 p-8 text-center text-sm text-zinc-400 dark:text-zinc-500">
+          <p class="font-semibold text-zinc-700 dark:text-zinc-300">
+            Search Note Titles & Contents
+          </p>
+          <p>
+            Type keywords to search. The search engine supports multi-term logical AND searching.
+          </p>
+          <div class="flex justify-center gap-5 pt-3">
+            <span
+              class="inline-flex items-center gap-1.5 rounded border border-zinc-200 bg-zinc-200/50 px-2 py-0.5 font-mono text-xs dark:border-zinc-800 dark:bg-zinc-800/50"
+            >
+              <kbd class="font-sans">↑↓</kbd> Navigate
+            </span>
+            <span
+              class="inline-flex items-center gap-1.5 rounded border border-zinc-200 bg-zinc-200/50 px-2 py-0.5 font-mono text-xs dark:border-zinc-800 dark:bg-zinc-800/50"
+            >
+              <kbd class="font-sans">↵</kbd> Select
+            </span>
+            <span
+              class="inline-flex items-center gap-1.5 rounded border border-zinc-200 bg-zinc-200/50 px-2 py-0.5 font-mono text-xs dark:border-zinc-800 dark:bg-zinc-800/50"
+            >
+              <kbd class="font-sans">esc</kbd> Close
+            </span>
+          </div>
+        </div>
+      {/if}
+    </div>
+  </div>
+{/if}

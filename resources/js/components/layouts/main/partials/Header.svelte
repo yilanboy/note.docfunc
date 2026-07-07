@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { PanelLeftClose, PanelLeftOpen, House, Sun, Moon } from "@lucide/svelte";
+  import { PanelLeftClose, PanelLeftOpen, House, Sun, Moon, Search } from "@lucide/svelte";
   import { sidebar } from "@/shared/sidebar.svelte.js";
+  import { search } from "@/shared/search.svelte";
   import { inertia } from "@inertiajs/svelte";
   import { onMount } from "svelte";
 
@@ -33,7 +34,7 @@
     aria-label="Global"
     class="flex h-full items-center justify-between border-b border-zinc-200 dark:border-zinc-800 p-4 lg:px-8"
   >
-    <div class="flex items-center gap-x-2 lg:flex-1">
+    <div class="flex items-center gap-x-2 flex-1">
       <button
         onclick={toggleSidebar}
         type="button"
@@ -60,9 +61,34 @@
       >
         <House class="size-5" />
       </a>
+
+      <!-- Search Trigger Button (Mobile) -->
+      <button
+        onclick={() => (search.isOpen = true)}
+        type="button"
+        class="md:hidden inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 dark:focus-visible:ring-zinc-700"
+        aria-label="Search"
+      >
+        <Search class="size-5" />
+      </button>
     </div>
 
-    <div class="hidden lg:flex lg:gap-x-12"></div>
+    <!-- Centered Search Trigger Button (Desktop) -->
+    <div class="hidden md:flex justify-center items-center flex-1">
+      <button
+        onclick={() => (search.isOpen = true)}
+        type="button"
+        class="flex items-center gap-x-2.5 cursor-pointer rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-zinc-800/40 px-4 py-2 text-sm text-zinc-400 dark:text-zinc-500 hover:bg-zinc-200/50 dark:hover:bg-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 dark:focus-visible:ring-zinc-700 w-72 lg:w-80 justify-between font-normal"
+      >
+        <div class="flex items-center gap-x-2">
+          <Search class="size-4 shrink-0" />
+          <span class="font-normal text-zinc-500 dark:text-zinc-400">Search notes...</span>
+        </div>
+        <kbd class="pointer-events-none inline-flex h-5.5 select-none items-center gap-0.5 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-1.5 font-mono text-[11px] font-medium text-zinc-400 dark:text-zinc-500">
+          <span class="text-xs">⌘</span>K
+        </kbd>
+      </button>
+    </div>
 
     <div class="flex flex-1 items-center justify-end gap-x-3">
       <button

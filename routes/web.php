@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SearchNotesController;
 use App\Http\Controllers\ShowCategoryController;
 use App\Http\Controllers\ShowHomeController;
 use App\Http\Controllers\ShowNoteController;
@@ -8,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 $validPathPattern = '[0-9a-z\-]+';
 
 Route::get('/', ShowHomeController::class)->name('home');
+
+Route::get('/search', SearchNotesController::class)->name('search');
 
 Route::get('/{category}', ShowCategoryController::class)
     ->where('category', $validPathPattern);

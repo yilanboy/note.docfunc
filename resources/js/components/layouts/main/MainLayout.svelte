@@ -2,6 +2,7 @@
   import type { Snippet } from "svelte";
   import Sidebar from "@/components/layouts/main/partials/Sidebar.svelte";
   import Header from "@/components/layouts/main/partials/Header.svelte";
+  import SearchModal from "@/components/layouts/main/partials/SearchModal.svelte";
   import { sidebar } from "@/shared/sidebar.svelte";
 
   interface Props {
@@ -24,4 +25,6 @@
   >
     {@render children?.()}
   </div>
+
+  <SearchModal />
 </div>
