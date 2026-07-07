@@ -4,6 +4,7 @@
   import { fly, slide, fade } from "svelte/transition";
   import { onMount, tick, untrack } from "svelte";
   import { sidebar } from "@/shared/sidebar.svelte.js";
+  import { search } from "@/shared/search.svelte";
   import type { NoteCategory } from "@/types";
 
   // Must stay in sync with Tailwind's `lg` breakpoint (1024px). Using matchMedia
@@ -33,6 +34,33 @@
         sidebar.isOpen = false;
       }
     });
+  });
+
+  let sidebarContainer = $state<HTMLDivElement | null>(null);
+
+  // Scroll active note into the center of the sidebar viewport on route changes
+  $effect(() => {
+    // Svelte tracks activePath
+    activePath;
+
+    // Read search flag without tracking it, so it doesn't trigger scroll on flag change
+    const wasSearched = untrack(() => search.justNavigated);
+
+    if (mounted && sidebarContainer && wasSearched) {
+      // Reset the search navigation flag
+      untrack(() => {
+        search.justNavigated = false;
+      });
+
+      const timeout = setTimeout(() => {
+        const activeEl = sidebarContainer?.querySelector(".pointer-events-none");
+        if (activeEl) {
+          activeEl.scrollIntoView({ block: "center", behavior: "smooth" });
+        }
+      }, 180);
+
+      return () => clearTimeout(timeout);
+    }
   });
 
   onMount(async () => {
@@ -76,6 +104,7 @@
     </button>
 
     <div
+      bind:this={sidebarContainer}
       class="z-10 flex grow flex-col gap-y-5 overflow-y-auto border-r border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 px-6 pb-4 transition-colors duration-300"
     >
       <nav class="mt-6 flex flex-1 flex-col">

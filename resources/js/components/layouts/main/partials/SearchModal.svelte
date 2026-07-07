@@ -17,6 +17,7 @@
   let isLoading = $state(false);
   let selectedIndex = $state(0);
   let searchInput = $state<HTMLInputElement | null>(null);
+  let resultsContainer = $state<HTMLDivElement | null>(null);
 
   // Debounce logic for fetching search results
   let debounceTimeout: number | undefined;
@@ -59,6 +60,17 @@
     }
   });
 
+  // Scroll the selected item into view on keyboard navigation
+  $effect(() => {
+    if (search.isOpen && resultsContainer && results.length > 0) {
+      // Svelte tracks selectedIndex and results automatically
+      const activeEl = resultsContainer.querySelector(`[data-index="${selectedIndex}"]`);
+      if (activeEl) {
+        activeEl.scrollIntoView({ block: "nearest" });
+      }
+    }
+  });
+
   function handleGlobalKeyDown(e: KeyboardEvent) {
     // Open/Close on Cmd+K or Ctrl+K
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -98,6 +110,7 @@
       e.preventDefault();
       if (results[selectedIndex]) {
         const res = results[selectedIndex];
+        search.justNavigated = true;
         search.isOpen = false;
         router.visit(`/${res.category}/${res.slug}`);
       }
@@ -149,13 +162,15 @@
 
       <!-- Results list -->
       {#if query.trim() !== ""}
-        <div class="flex-1 overflow-y-auto p-3">
+        <div bind:this={resultsContainer} class="flex-1 overflow-y-auto p-3">
           {#if results.length > 0}
             <ul class="space-y-1.5">
               {#each results as result, idx}
                 <li>
                   <button
+                    data-index={idx}
                     onclick={() => {
+                      search.justNavigated = true;
                       search.isOpen = false;
                       router.visit(`/${result.category}/${result.slug}`);
                     }}
