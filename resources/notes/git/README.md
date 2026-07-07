@@ -57,13 +57,13 @@ git cat-file -p 7aab1b5
 
 分支（Branch）不是平行的時空： 在 Git 中，一個分支其實只是一個 41 位元組的文字檔，裡面只寫著一行它所指向的 Commit 雜湊值。
 
-HEAD（目前位置）： 決定你工作目錄（Working Directory）長什麼樣子的檔案，它通常指向你目前所在的分支。
+**HEAD（目前位置）**： 決定你工作目錄（Working Directory）長什麼樣子的檔案，它通常指向你目前所在的分支。
 
-快進合併 (Fast-Forward Merge)： 當兩個合併分支沒有分叉時，Git 不會建立任何新物件，它只是單純把 Main 分支檔案裡的雜湊值覆蓋成 Feature 分支的雜湊值，讓指標「滑」過去而已。
+**快進合併 (Fast-Forward Merge)**： 當兩個合併分支沒有分叉時，Git 不會建立任何新物件，它只是單純把 Main 分支檔案裡的雜湊值覆蓋成 Feature 分支的雜湊值，讓指標「滑」過去而已。
 
-衝突合併 (Merge Commit)： 當歷史分叉時，Git 會找出共同祖先並融合出一個新的快照，這個 Merge Commit 的特殊之處在於它擁有 兩個 Parent 指標。
+**衝突合併 (Merge Commit)**： 當歷史分叉時，Git 會找出共同祖先並融合出一個新的快照，這個 Merge Commit 的特殊之處在於它擁有 兩個 Parent 指標。
 
-分離頭部 (Detached HEAD)： 當你 Checkout 到某個具體的 Commit 而不是分支時，HEAD 就會直接指向該 Commit 雜湊值。
+**分離頭部 (Detached HEAD)**： 當你 Checkout 到某個具體的 Commit 而不是分支時，HEAD 就會直接指向該 Commit 雜湊值。
 
 ### 常用指令的底層運作
 

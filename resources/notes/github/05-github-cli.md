@@ -2,7 +2,7 @@
 
 本筆記整理了 GitHub CLI (`gh`) 的常用指令。
 
-## 1. 如何登入
+## 如何登入
 
 使用以下指令登入 GitHub 帳號，你可以選擇使用瀏覽器授權或是貼上 Personal Access Token (PAT) 進行登入：
 
@@ -34,7 +34,7 @@ Press Enter to open https://github.com/login/device in your browser...
 gh auth status
 ```
 
-## 2. 列出專案 (Repositories)
+## 列出專案 (Repositories)
 
 列出目前登入帳號擁有的專案：
 
@@ -42,14 +42,33 @@ gh auth status
 gh repo list
 ```
 
-**進階用法：**
+### 進階用法
 
-* 列出特定使用者的專案：`gh repo list <username>`
-* 限制列出數量 (例如 50 個)：`gh repo list --limit 50`
-* 只列出公開專案：`gh repo list --visibility public`
-* 只列出私有專案：`gh repo list --visibility private`
+列出特定使用者的專案：
 
-## 3. 查看某專案的 PR、Issue
+```bash
+gh repo list <username>
+```
+
+限制列出數量 (例如 50 個)：
+
+```bash
+gh repo list --limit 50
+```
+
+只列出公開專案：
+
+```bash
+gh repo list --visibility public
+```
+
+只列出私有專案：
+
+```bash
+gh repo list --visibility private
+```
+
+## 查看某專案的 PR、Issue
 
 以下指令預設會針對「當前目錄的 Git 專案」執行。如果想操作其他專案，可以加上 `-R <owner>/<repo>` 參數（例如：`-R facebook/react`）。
 
@@ -61,12 +80,6 @@ gh repo list
 gh pr list
 ```
 
-**進階用法：**
-
-* 查看特定 PR 的詳細內容：`gh pr view <pr-number>`
-* 直接在網頁瀏覽器中開啟該 PR：`gh pr view <pr-number> --web`
-* 列出特定狀態的 PR (例如 merged)：`gh pr list --state merged`
-
 ### 查看 Issues
 
 列出專案中目前的 Issues：
@@ -75,12 +88,39 @@ gh pr list
 gh issue list
 ```
 
-**進階用法：**
+### 進階用法
 
-* 查看特定 Issue 的詳細內容：`gh issue view <issue-number>`
-* 直接在網頁瀏覽器中開啟該 Issue：`gh issue view <issue-number> --web`
+查看特定 PR 的詳細內容：
 
-## 4. 觸發某專案的 Action Workflow
+```bash
+gh pr view <pr-number>
+```
+
+直接在網頁瀏覽器中開啟該 PR：
+
+```bash
+gh pr view <pr-number> --web
+```
+
+列出特定狀態的 PR（例如 merged）：
+
+```bash
+gh pr list --state merged
+```
+
+查看特定 Issue 的詳細內容：
+
+```bash
+gh issue view <issue-number>
+```
+
+直接在網頁瀏覽器中開啟該 Issue：
+
+```bash
+gh issue view <issue-number> --web
+```
+
+## 觸發某專案的 Action Workflow
 
 與前面相同，如果不在專案目錄下，請補上 `-R <owner>/<repo>`。
 
@@ -111,22 +151,22 @@ To see the created workflow run, try: gh run view 35999777555
 To see runs for this workflow, try: gh run list --workflow="deploy-cms.yaml"
 ```
 
-**進階用法：**
+### 進階用法：
 
-* 若 Workflow 需要帶入參數 (inputs) 執行，可使用 `-f` 參數：
+若 Workflow 需要帶入參數 (inputs) 執行，可使用 `-f` 參數：
 
-  ```bash
-  gh workflow run <workflow-name> -f <key1>=<value1> -f <key2>=<value2>
-  ```
+```bash
+gh workflow run <workflow-name> -f <key1>=<value1> -f <key2>=<value2>
+```
 
-* 觸發後想即時觀看執行的進度與狀態：
+觸發後想即時觀看執行的進度與狀態：
 
-  ```bash
-  gh run watch
-  ```
+```bash
+gh run watch
+```
 
-* 列出專案近期執行的 Actions 紀錄 (Runs)：
+列出專案近期執行的 Actions 紀錄 (Runs)：
 
-  ```bash
-  gh run list
-  ```
+```bash
+gh run list
+```
