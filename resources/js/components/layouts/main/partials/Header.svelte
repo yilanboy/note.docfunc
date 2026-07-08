@@ -15,7 +15,7 @@
   });
 
   function toggleSidebar() {
-    sidebar.isOpen = !sidebar.isOpen;
+    sidebar.toggle();
   }
 
   function toggleTheme() {

@@ -12,7 +12,9 @@
   let { children }: Props = $props();
 </script>
 
-<div class="relative min-h-screen w-full bg-zinc-50 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100 transition-colors duration-300">
+<div
+  class="relative min-h-screen w-full bg-zinc-50 text-zinc-900 transition-colors duration-300 dark:bg-zinc-900 dark:text-zinc-100"
+>
   <Header />
 
   <Sidebar />

@@ -27,8 +27,8 @@
   <article
     {@attach highlight}
     class="prose max-w-none leading-8 prose-zinc dark:prose-invert prose-p:wrap-break-word
-           prose-a:text-emerald-600 dark:prose-a:text-indigo-400 prose-a:no-underline prose-a:underline-offset-2 visited:prose-a:text-emerald-700 dark:visited:prose-a:text-indigo-300 prose-a:hover:text-emerald-700 dark:prose-a:hover:text-indigo-300 prose-a:hover:underline focus:prose-a:ring-2 focus:prose-a:ring-emerald-300/60 dark:focus:prose-a:ring-indigo-800/60 focus:prose-a:outline-none
-           prose-blockquote:rounded-[0.3rem] prose-blockquote:border-emerald-300 dark:prose-blockquote:border-indigo-700 prose-blockquote:bg-emerald-50 dark:prose-blockquote:bg-indigo-950/30 prose-blockquote:px-4 prose-blockquote:py-3 prose-blockquote:font-semibold prose-blockquote:text-emerald-900 dark:prose-blockquote:text-indigo-200 prose-blockquote:not-italic"
+           prose-a:text-emerald-600 prose-a:no-underline prose-a:underline-offset-2 visited:prose-a:text-emerald-700 prose-a:hover:text-emerald-700 prose-a:hover:underline focus:prose-a:ring-2 focus:prose-a:ring-emerald-300/60 focus:prose-a:outline-none dark:prose-a:text-indigo-400 dark:visited:prose-a:text-indigo-300 dark:prose-a:hover:text-indigo-300 dark:focus:prose-a:ring-indigo-800/60
+           prose-blockquote:rounded-[0.3rem] prose-blockquote:border-emerald-300 prose-blockquote:bg-emerald-50 prose-blockquote:px-4 prose-blockquote:py-3 prose-blockquote:font-semibold prose-blockquote:text-emerald-900 prose-blockquote:not-italic dark:prose-blockquote:border-indigo-700 dark:prose-blockquote:bg-indigo-950/30 dark:prose-blockquote:text-indigo-200"
   >
     <!-- Safe: html is rendered server-side from our own Markdown files with html_input=strip -->
     {@html html}
