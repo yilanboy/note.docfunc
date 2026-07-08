@@ -110,11 +110,15 @@
       e.preventDefault();
       if (results[selectedIndex]) {
         const res = results[selectedIndex];
-        search.justNavigated = true;
         search.isOpen = false;
         router.visit(`/${res.category}/${res.slug}`);
       }
     }
+  }
+
+  function navigateToResult(href: string) {
+    search.isOpen = false;
+    router.visit(href);
   }
 </script>
 
@@ -144,7 +148,7 @@
           bind:value={query}
           type="text"
           placeholder="Search notes... (esc to close)"
-          class="h-14 w-full bg-transparent px-4 text-base text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 outline-none"
+          class="h-14 w-full bg-transparent px-4 text-base text-zinc-900 placeholder-zinc-400 outline-none dark:text-zinc-100 dark:placeholder-zinc-500"
         />
         <div class="flex shrink-0 items-center gap-3">
           {#if isLoading}
@@ -169,28 +173,23 @@
                 <li>
                   <button
                     data-index={idx}
-                    onclick={() => {
-                      search.justNavigated = true;
-                      search.isOpen = false;
-                      router.visit(`/${result.category}/${result.slug}`);
-                    }}
+                    onclick={() => navigateToResult(`/${result.category}/${result.slug}`)}
                     onmouseenter={() => (selectedIndex = idx)}
-                    class="flex w-full cursor-pointer items-start gap-4 rounded-lg border border-transparent px-4 py-3 text-left text-sm transition-colors duration-150 outline-none"
-                    class:bg-emerald-600={selectedIndex === idx}
-                    class:text-white={selectedIndex === idx}
-                    class:dark:bg-indigo-600={selectedIndex === idx}
-                    class:bg-transparent={selectedIndex !== idx}
-                    class:text-zinc-700={selectedIndex !== idx}
-                    class:dark:text-zinc-300={selectedIndex !== idx}
+                    class={{
+                      "flex w-full cursor-pointer items-start gap-4 rounded-lg border border-transparent px-4 py-3 text-left text-sm transition-colors duration-150 outline-none": true,
+                      "bg-emerald-600 text-white dark:bg-indigo-600": selectedIndex === idx,
+                      "bg-transparent  text-zinc-700 dark:text-zinc-300": selectedIndex !== idx,
+                    }}
                   >
                     <FileText class="mt-0.5 size-5 shrink-0" />
                     <div class="min-w-0 flex-1">
                       <div class="flex items-center gap-1.5 font-semibold">
                         <span
-                          class="text-[11px] tracking-wider uppercase opacity-70"
-                          class:text-zinc-500={selectedIndex !== idx}
-                          class:dark:text-zinc-400={selectedIndex !== idx}
-                          class:text-zinc-100={selectedIndex === idx}
+                          class={{
+                            "text-[11px] tracking-wider uppercase opacity-70": true,
+                            "text-zinc-100": selectedIndex === idx,
+                            "text-zinc-500 dark:text-zinc-400": selectedIndex !== idx,
+                          }}
                         >
                           {result.categoryName}
                         </span>
@@ -198,10 +197,11 @@
                         <span class="truncate">{result.title}</span>
                       </div>
                       <p
-                        class="mt-1 line-clamp-2 text-xs"
-                        class:text-zinc-500={selectedIndex !== idx}
-                        class:dark:text-zinc-400={selectedIndex !== idx}
-                        class:text-zinc-200={selectedIndex === idx}
+                        class={{
+                          "mt-1 line-clamp-2 text-xs": true,
+                          "text-zinc-200": selectedIndex === idx,
+                          "text-zinc-500 dark:text-zinc-400": selectedIndex !== idx,
+                        }}
                       >
                         {result.snippet}
                       </p>

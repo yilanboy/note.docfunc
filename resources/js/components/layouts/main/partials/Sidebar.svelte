@@ -1,10 +1,9 @@
 <script lang="ts">
   import { inertia, page } from "@inertiajs/svelte";
   import { ChevronRight, X } from "@lucide/svelte";
-  import { fly, slide, fade } from "svelte/transition";
+  import { fade, fly, slide } from "svelte/transition";
   import { onMount, tick, untrack } from "svelte";
   import { sidebar } from "@/shared/sidebar.svelte.js";
-  import { search } from "@/shared/search.svelte";
   import type { NoteCategory } from "@/types";
 
   // Must stay in sync with Tailwind's `lg` breakpoint (1024px). Using matchMedia
@@ -18,6 +17,7 @@
   let noteTree = $derived((page.props.noteTree ?? []) as NoteCategory[]);
   let activeCategory = $derived(page.url.split("/")[1] ?? "");
   let activePath = $derived(page.url.split("?")[0]);
+  let isSliding = $state(false);
 
   // Open on desktop, closed on mobile. Called on mount and whenever the viewport
   // crosses the breakpoint. Assigning the same value is a no-op in Svelte's $state,
@@ -36,32 +36,9 @@
     });
   });
 
-  let sidebarContainer = $state<HTMLDivElement | null>(null);
-
-  // Scroll active note into the center of the sidebar viewport on route changes
-  $effect(() => {
-    // Svelte tracks activePath
-    activePath;
-
-    // Read search flag without tracking it, so it doesn't trigger scroll on flag change
-    const wasSearched = untrack(() => search.justNavigated);
-
-    if (mounted && sidebarContainer && wasSearched) {
-      // Reset the search navigation flag
-      untrack(() => {
-        search.justNavigated = false;
-      });
-
-      const timeout = setTimeout(() => {
-        const activeEl = sidebarContainer?.querySelector(".pointer-events-none");
-        if (activeEl) {
-          activeEl.scrollIntoView({ block: "center", behavior: "smooth" });
-        }
-      }, 180);
-
-      return () => clearTimeout(timeout);
-    }
-  });
+  function scrollToActive() {
+    document.getElementById(activePath)?.scrollIntoView({ block: "center", behavior: "smooth" });
+  }
 
   onMount(async () => {
     mounted = true;
@@ -88,6 +65,7 @@
   ></div>
 
   <aside
+    id="sidebar"
     transition:fly={{ x: slideOffset, duration: transitionDuration }}
     class={{
       "fixed inset-y-0 top-16 z-40 w-72 flex-col": true,
@@ -104,8 +82,7 @@
     </button>
 
     <div
-      bind:this={sidebarContainer}
-      class="z-10 flex grow flex-col gap-y-5 overflow-y-auto border-r border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 px-6 pb-4 transition-colors duration-300"
+      class="z-10 flex grow flex-col gap-y-5 overflow-y-auto border-r border-zinc-200 bg-zinc-50 px-6 pb-4 transition-colors duration-300 dark:border-zinc-800 dark:bg-zinc-900"
     >
       <nav class="mt-6 flex flex-1 flex-col">
         <ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -121,8 +98,9 @@
                     aria-expanded={expanded}
                     class={{
                       "flex w-full cursor-pointer items-center gap-x-2 rounded-lg p-2 text-sm font-semibold transition-colors duration-200": true,
-                      "text-zinc-700 hover:bg-zinc-200/50 dark:text-zinc-300 dark:hover:bg-zinc-800": href !== activePath,
-                      "pointer-events-none bg-zinc-200/50 dark:bg-zinc-800 font-medium text-zinc-900 dark:text-zinc-100":
+                      "text-zinc-700 hover:bg-zinc-200/50 dark:text-zinc-300 dark:hover:bg-zinc-800":
+                        href !== activePath,
+                      "pointer-events-none bg-zinc-200/50 font-medium text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100":
                         href === activePath,
                     }}
                   >
@@ -138,17 +116,25 @@
                   {#if expanded}
                     <ul
                       transition:slide={{ duration: 150 }}
-                      class="mt-1 space-y-1 border-l border-zinc-200 dark:border-zinc-800 pl-4"
+                      onintrostart={() => {
+                        isSliding = true;
+                      }}
+                      onintroend={() => {
+                        isSliding = false;
+                        scrollToActive();
+                      }}
+                      class="mt-1 space-y-1 border-l border-zinc-200 pl-4 dark:border-zinc-800"
                     >
                       {#each category.notes as note (note.slug)}
                         {@const href = `/${category.slug}/${note.slug}`}
                         <li>
                           <a
+                            id={href}
                             use:inertia
                             {href}
                             class={{
-                              "block truncate rounded-lg p-2 text-sm text-zinc-600 dark:text-zinc-400 transition-colors duration-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-800": true,
-                              "pointer-events-none bg-zinc-200/50 dark:bg-zinc-800 font-medium text-zinc-900 dark:text-zinc-100":
+                              "block truncate rounded-lg p-2 text-sm text-zinc-600 transition-colors duration-200 hover:bg-zinc-200/50 dark:text-zinc-400 dark:hover:bg-zinc-800": true,
+                              "pointer-events-none bg-zinc-200/50 font-medium text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100":
                                 href === activePath,
                             }}
                             title={note.title}
