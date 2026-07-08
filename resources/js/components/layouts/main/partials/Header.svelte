@@ -4,6 +4,7 @@
   import { search } from "@/shared/search.svelte";
   import { inertia } from "@inertiajs/svelte";
   import { onMount } from "svelte";
+  import Github from "@/components/icons/Github.svelte";
 
   let mounted = $state(false);
   let isDark = $state(false);
@@ -29,23 +30,23 @@
   }
 </script>
 
-<header class="sticky top-0 z-50 h-16 bg-zinc-50 dark:bg-zinc-900 transition-colors duration-300">
+<header class="sticky top-0 z-50 h-16 bg-zinc-50 transition-colors duration-300 dark:bg-zinc-900">
   <nav
     aria-label="Global"
-    class="flex h-full items-center justify-between border-b border-zinc-200 dark:border-zinc-800 p-4 lg:px-8"
+    class="flex h-full items-center justify-between border-b border-zinc-200 p-4 lg:px-8 dark:border-zinc-800"
   >
-    <div class="flex items-center gap-x-2 flex-1">
+    <div class="flex flex-1 items-center gap-x-2">
       <button
         onclick={toggleSidebar}
         type="button"
-        class="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 dark:focus-visible:ring-zinc-700"
+        class="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 transition-colors duration-200 hover:bg-zinc-200/50 hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:focus-visible:ring-zinc-700"
         aria-label="Toggle Sidebar"
       >
         <span class="sr-only">Toggle Sidebar</span>
 
         {#if !mounted}
           <PanelLeftOpen class="size-5 lg:hidden" />
-          <PanelLeftClose class="size-5 hidden lg:block" />
+          <PanelLeftClose class="hidden size-5 lg:block" />
         {:else if sidebar.isOpen}
           <PanelLeftClose class="size-5" />
         {:else}
@@ -56,7 +57,7 @@
       <a
         use:inertia
         href="/"
-        class="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 dark:focus-visible:ring-zinc-700"
+        class="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 transition-colors duration-200 hover:bg-zinc-200/50 hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:focus-visible:ring-zinc-700"
         aria-label="Home"
       >
         <House class="size-5" />
@@ -66,7 +67,7 @@
       <button
         onclick={() => (search.isOpen = true)}
         type="button"
-        class="md:hidden inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 dark:focus-visible:ring-zinc-700"
+        class="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 transition-colors duration-200 hover:bg-zinc-200/50 hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 md:hidden dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:focus-visible:ring-zinc-700"
         aria-label="Search"
       >
         <Search class="size-5" />
@@ -74,17 +75,19 @@
     </div>
 
     <!-- Centered Search Trigger Button (Desktop) -->
-    <div class="hidden md:flex justify-center items-center flex-1">
+    <div class="hidden flex-1 items-center justify-center md:flex">
       <button
         onclick={() => (search.isOpen = true)}
         type="button"
-        class="flex items-center gap-x-2.5 cursor-pointer rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-zinc-800/40 px-4 py-2 text-sm text-zinc-400 dark:text-zinc-500 hover:bg-zinc-200/50 dark:hover:bg-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 dark:focus-visible:ring-zinc-700 w-72 lg:w-80 justify-between font-normal"
+        class="flex w-72 cursor-pointer items-center justify-between gap-x-2.5 rounded-lg border border-zinc-200 bg-zinc-100/50 px-4 py-2 text-sm font-normal text-zinc-400 transition-all hover:border-zinc-300 hover:bg-zinc-200/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 lg:w-80 dark:border-zinc-800 dark:bg-zinc-800/40 dark:text-zinc-500 dark:hover:border-zinc-700 dark:hover:bg-zinc-800 dark:focus-visible:ring-zinc-700"
       >
-        <div class="flex items-center gap-x-2">
+        <span class="flex items-center gap-x-2">
           <Search class="size-4 shrink-0" />
           <span class="font-normal text-zinc-500 dark:text-zinc-400">Search notes...</span>
-        </div>
-        <kbd class="pointer-events-none inline-flex h-5.5 select-none items-center gap-0.5 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-1.5 font-mono text-[11px] font-medium text-zinc-400 dark:text-zinc-500">
+        </span>
+        <kbd
+          class="pointer-events-none inline-flex h-5.5 items-center gap-0.5 rounded border border-zinc-200 bg-white px-1.5 font-mono text-[11px] font-medium text-zinc-400 select-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-500"
+        >
           <span class="text-xs">⌘</span>K
         </kbd>
       </button>
@@ -94,16 +97,20 @@
       <button
         onclick={toggleTheme}
         type="button"
-        class="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800 transition-all duration-200 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 dark:focus-visible:ring-zinc-700"
+        class="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 transition-all duration-200 hover:bg-zinc-200/50 hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 active:scale-95 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:focus-visible:ring-zinc-700"
         aria-label="Toggle Theme"
       >
         <span class="sr-only">Toggle Theme</span>
         {#if !mounted}
           <div class="size-5"></div>
         {:else if isDark}
-          <Sun class="size-5 text-amber-500 transition-transform duration-300 rotate-0 hover:rotate-12" />
+          <Sun
+            class="size-5 rotate-0 text-amber-500 transition-transform duration-300 hover:rotate-12"
+          />
         {:else}
-          <Moon class="size-5 text-indigo-600 dark:text-indigo-400 transition-transform duration-300 rotate-0 hover:-rotate-12" />
+          <Moon
+            class="size-5 rotate-0 text-indigo-600 transition-transform duration-300 hover:-rotate-12 dark:text-indigo-400"
+          />
         {/if}
       </button>
 
@@ -111,24 +118,10 @@
         href="https://github.com/yilanboy/note.docfunc"
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200/50 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 dark:focus-visible:ring-zinc-700"
+        class="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 transition-colors duration-200 hover:bg-zinc-200/50 hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:focus-visible:ring-zinc-700"
         aria-label="GitHub Repository"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="size-5"
-        >
-          <path
-            d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"
-          />
-          <path d="M9 18c-4.51 2-5-2-7-2" />
-        </svg>
+        <Github className="size-5" />
       </a>
     </div>
   </nav>
