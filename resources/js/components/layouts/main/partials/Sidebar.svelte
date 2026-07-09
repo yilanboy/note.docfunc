@@ -71,7 +71,7 @@
   </button>
 
   <div
-    class="z-10 flex grow flex-col gap-y-5 overflow-y-auto border-r border-zinc-200 bg-zinc-50 px-6 pb-4 transition-colors duration-300 dark:border-zinc-800 dark:bg-zinc-900"
+    class="z-10 flex grow flex-col gap-y-5 overflow-y-auto border-r border-zinc-200 bg-zinc-50 px-6 pb-4 transition-colors duration-300 dark:border-zinc-700 dark:bg-zinc-900"
   >
     <nav class="mt-6 flex flex-1 flex-col">
       <ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -112,7 +112,7 @@
                       isSliding = false;
                       scrollToActive();
                     }}
-                    class="mt-1 space-y-1 border-l border-zinc-200 pl-4 dark:border-zinc-800"
+                    class="mt-1 space-y-1 border-l border-zinc-200 pl-4 dark:border-zinc-700"
                   >
                     {#each category.notes as note (note.slug)}
                       {@const href = `/${category.slug}/${note.slug}`}

@@ -138,10 +138,10 @@
   <div class="pointer-events-none fixed inset-0 z-50 flex items-start justify-center p-4 pt-[10vh]">
     <div
       transition:fly={{ y: -20, duration: 200 }}
-      class="pointer-events-auto relative flex max-h-[60vh] w-full max-w-xl flex-col overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 shadow-2xl transition-colors duration-300 dark:border-zinc-800 dark:bg-zinc-900"
+      class="pointer-events-auto relative flex max-h-[60vh] w-full max-w-xl flex-col overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 shadow-2xl transition-colors duration-300 dark:border-zinc-700 dark:bg-zinc-900"
     >
       <!-- Search Input Wrapper -->
-      <div class="flex items-center border-b border-zinc-200 px-5 dark:border-zinc-800">
+      <div class="flex items-center border-b border-zinc-200 px-5 dark:border-zinc-700">
         <Search class="size-5 shrink-0 text-zinc-400 dark:text-zinc-500" />
         <input
           bind:this={searchInput}
@@ -232,17 +232,17 @@
           </p>
           <div class="flex justify-center gap-5 pt-3">
             <span
-              class="inline-flex items-center gap-1.5 rounded border border-zinc-200 bg-zinc-200/50 px-2 py-0.5 font-mono text-xs dark:border-zinc-800 dark:bg-zinc-800/50"
+              class="inline-flex items-center gap-1.5 rounded border border-zinc-200 bg-zinc-200/50 px-2 py-0.5 font-mono text-xs dark:border-zinc-700 dark:bg-zinc-800/50"
             >
               <kbd class="font-sans">↑↓</kbd> Navigate
             </span>
             <span
-              class="inline-flex items-center gap-1.5 rounded border border-zinc-200 bg-zinc-200/50 px-2 py-0.5 font-mono text-xs dark:border-zinc-800 dark:bg-zinc-800/50"
+              class="inline-flex items-center gap-1.5 rounded border border-zinc-200 bg-zinc-200/50 px-2 py-0.5 font-mono text-xs dark:border-zinc-700 dark:bg-zinc-800/50"
             >
               <kbd class="font-sans">↵</kbd> Select
             </span>
             <span
-              class="inline-flex items-center gap-1.5 rounded border border-zinc-200 bg-zinc-200/50 px-2 py-0.5 font-mono text-xs dark:border-zinc-800 dark:bg-zinc-800/50"
+              class="inline-flex items-center gap-1.5 rounded border border-zinc-200 bg-zinc-200/50 px-2 py-0.5 font-mono text-xs dark:border-zinc-700 dark:bg-zinc-800/50"
             >
               <kbd class="font-sans">esc</kbd> Close
             </span>

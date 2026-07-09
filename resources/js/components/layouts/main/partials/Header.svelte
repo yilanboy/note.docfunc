@@ -29,7 +29,7 @@
 <header class="sticky top-0 z-50 h-16 bg-zinc-50 transition-colors duration-300 dark:bg-zinc-900">
   <nav
     aria-label="Global"
-    class="flex h-full items-center justify-between border-b border-zinc-200 p-4 lg:px-8 dark:border-zinc-800"
+    class="flex h-full items-center justify-between border-b border-zinc-200 p-4 lg:px-8 dark:border-zinc-700"
   >
     <div class="flex flex-1 items-center gap-x-2">
       <button
@@ -75,7 +75,7 @@
       <button
         onclick={() => (search.isOpen = true)}
         type="button"
-        class="flex w-72 cursor-pointer items-center justify-between gap-x-2.5 rounded-lg border border-zinc-200 bg-zinc-100/50 px-4 py-2 text-sm font-normal text-zinc-400 transition-all hover:border-zinc-300 hover:bg-zinc-200/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 lg:w-80 dark:border-zinc-800 dark:bg-zinc-800/40 dark:text-zinc-500 dark:hover:border-zinc-700 dark:hover:bg-zinc-800 dark:focus-visible:ring-zinc-700"
+        class="flex w-72 cursor-pointer items-center justify-between gap-x-2.5 rounded-lg border border-zinc-200 bg-zinc-100/50 px-4 py-2 text-sm font-normal text-zinc-400 transition-all hover:border-zinc-300 hover:bg-zinc-200/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 lg:w-80 dark:border-zinc-700 dark:bg-zinc-800/40 dark:text-zinc-500 dark:hover:border-zinc-700 dark:hover:bg-zinc-800 dark:focus-visible:ring-zinc-700"
       >
         <span class="flex items-center gap-x-2">
           <Search class="size-4 shrink-0" />
