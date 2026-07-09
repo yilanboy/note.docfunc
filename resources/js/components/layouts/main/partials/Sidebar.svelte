@@ -2,7 +2,7 @@
   import { inertia, page } from "@inertiajs/svelte";
   import { ChevronRight, X } from "@lucide/svelte";
   import { fade, slide } from "svelte/transition";
-  import { untrack } from "svelte";
+  import { onMount, untrack } from "svelte";
   import { isDesktop, sidebar } from "@/shared/sidebar.svelte.js";
   import type { NoteCategory } from "@/types";
 
@@ -16,7 +16,7 @@
     activePath;
     untrack(() => {
       if (!isDesktop.current) {
-        sidebar.reset();
+        sidebar.isOpen = false;
       }
     });
   });
@@ -31,17 +31,21 @@
   function scrollToActive() {
     document.getElementById(activePath)?.scrollIntoView({ block: "center", behavior: "smooth" });
   }
+
+  onMount(() => {
+    sidebar.isOpen = isDesktop.current;
+  });
 </script>
 
 <!-- Mobile overlay. Keyed on `preference` rather than `isOpen` so server-rendered
   HTML (where the viewport is unknown) never contains a visible overlay. -->
-{#if sidebar.preference === true}
+{#if sidebar.isOpen === true && !isDesktop.current}
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div
     transition:fade={{ duration: 300 }}
     onclick={() => sidebar.reset()}
-    class="fixed inset-0 z-40 bg-black/70 lg:hidden"
+    class="fixed inset-0 z-40 bg-black/70"
   ></div>
 {/if}
 
@@ -53,13 +57,13 @@
   inert={!sidebar.isOpen}
   class={{
     "fixed inset-y-0 top-16 z-40 flex w-72 flex-col transition-transform duration-300": true,
-    "-translate-x-[calc(100%+3rem)] lg:translate-x-0": sidebar.preference === null,
-    "translate-x-0": sidebar.preference === true,
-    "-translate-x-[calc(100%+3rem)]": sidebar.preference === false,
+    "-translate-x-[calc(100%+3rem)] lg:translate-x-0": sidebar.isOpen === null,
+    "translate-x-0": sidebar.isOpen === true,
+    "-translate-x-[calc(100%+3rem)]": sidebar.isOpen === false,
   }}
 >
   <button
-    onclick={() => sidebar.reset()}
+    onclick={() => (sidebar.isOpen = false)}
     class="absolute top-3 -right-12 inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-400 transition-colors duration-200 hover:bg-zinc-800/60 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 lg:hidden"
     aria-label="Close sidebar"
   >

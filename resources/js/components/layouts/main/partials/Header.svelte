@@ -9,15 +9,6 @@
   let mounted = $state(false);
   let isDark = $state(false);
 
-  onMount(() => {
-    mounted = true;
-    isDark = document.documentElement.classList.contains("dark");
-  });
-
-  function toggleSidebar() {
-    sidebar.toggle();
-  }
-
   function toggleTheme() {
     isDark = !isDark;
     if (isDark) {
@@ -28,6 +19,11 @@
       localStorage.setItem("theme", "light");
     }
   }
+
+  onMount(() => {
+    mounted = true;
+    isDark = document.documentElement.classList.contains("dark");
+  });
 </script>
 
 <header class="sticky top-0 z-50 h-16 bg-zinc-50 transition-colors duration-300 dark:bg-zinc-900">
@@ -37,7 +33,7 @@
   >
     <div class="flex flex-1 items-center gap-x-2">
       <button
-        onclick={toggleSidebar}
+        onclick={() => sidebar.toggle()}
         type="button"
         class="inline-flex size-10 cursor-pointer items-center justify-center rounded-lg text-zinc-500 transition-colors duration-200 hover:bg-zinc-200/50 hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:focus-visible:ring-zinc-700"
         aria-label="Toggle Sidebar"

@@ -21,8 +21,10 @@
 
   <div
     class={{
-      "lg:pl-72": sidebar.isOpen,
       "transition-all duration-300 ease-in-out": true,
+      "pl-0 lg:pl-72": sidebar.isOpen === null,
+      "pl-0": sidebar.isOpen === false,
+      "lg:pl-72": sidebar.isOpen === true,
     }}
   >
     {@render children?.()}
