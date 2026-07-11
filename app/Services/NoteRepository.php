@@ -107,7 +107,7 @@ class NoteRepository
 
             // Check if all terms exist in the title (logical AND)
             foreach ($terms as $term) {
-                if (stripos($note['title'], $term) === false) {
+                if (str_contains($note['title'], $term) === false) {
                     $titleMatched = false;
                     break;
                 }
@@ -115,7 +115,7 @@ class NoteRepository
 
             // Check if all terms exist in the content (logical AND)
             foreach ($terms as $term) {
-                if (stripos($note['content'], $term) === false) {
+                if (str_contains($note['content'], $term) === false) {
                     $contentMatched = false;
                     break;
                 }

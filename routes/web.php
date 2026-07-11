@@ -13,7 +13,9 @@ Route::get('/', ShowHomeController::class)->name('home');
 Route::get('/search', SearchNotesController::class)->name('search');
 
 Route::get('/{category}', ShowCategoryController::class)
-    ->where('category', $validPathPattern);
+    ->where('category', $validPathPattern)
+    ->name('notes.category');
 
 Route::get('/{category}/{note}', ShowNoteController::class)
-    ->where(['category' => $validPathPattern, 'note' => $validPathPattern]);
+    ->where(['category' => $validPathPattern, 'note' => $validPathPattern])
+    ->name('notes.note');

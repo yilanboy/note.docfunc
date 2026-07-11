@@ -25,7 +25,7 @@ it('prioritizes title matches over content matches', function () {
     $response->assertStatus(200);
     $data = $response->json();
 
-    expect($data)->not->toBeEmpty();
     // First result should have a high score because "Boost" is in the title
-    expect($data[0]['title'])->toContain('Boost');
+    expect($data)->not->toBeEmpty()
+        ->and($data[0]['title'])->toContain('Boost');
 });
