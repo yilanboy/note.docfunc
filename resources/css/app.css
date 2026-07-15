@@ -9,6 +9,10 @@
 @source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
 
 @theme {
+    /* A little trick from this: https://x.com/calebporzio/status/2077409452571934940 */
+    /* Light theme design reference: https://x.com/calebporzio/status/2077423176942833667 */
+    --color-zinc-25: oklch(99.2% 0 0);
+
     /* Feeds --default-font-family (body) and --default-mono-font-family (code/pre). */
     --font-sans: "Inter", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, "Noto Sans TC", monospace;
