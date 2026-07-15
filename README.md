@@ -1,4 +1,8 @@
-# note.docfunc 📝
+<p align="center">
+  <img src="public/favicon.svg" alt="note.docfunc icon" width="96" height="96">
+</p>
+
+# note.docfunc
 
 [![Laravel Framework](https://img.shields.io/badge/Laravel-13-FF2D20?style=flat-square&logo=laravel)](https://laravel.com)
 [![Inertia.js](https://img.shields.io/badge/Inertia.js-v3-9553E9?style=flat-square)](https://inertiajs.com)
