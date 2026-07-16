@@ -138,7 +138,7 @@
   <div class="pointer-events-none fixed inset-0 z-50 flex items-start justify-center p-4 pt-[10vh]">
     <div
       transition:fly={{ y: -20, duration: 200 }}
-      class="pointer-events-auto relative flex max-h-[60vh] w-full max-w-xl flex-col overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 shadow-2xl transition-colors duration-300 dark:border-zinc-700 dark:bg-zinc-900"
+      class="pointer-events-auto relative flex max-h-[60vh] w-full max-w-xl flex-col overflow-hidden rounded-xl border border-zinc-200 bg-zinc-25 shadow-2xl transition-colors duration-300 dark:border-zinc-700 dark:bg-zinc-850"
     >
       <!-- Search Input Wrapper -->
       <div class="flex items-center border-b border-zinc-200 px-5 dark:border-zinc-700">
@@ -177,7 +177,7 @@
                     onmouseenter={() => (selectedIndex = idx)}
                     class={{
                       "flex w-full cursor-pointer items-start gap-4 rounded-lg border border-transparent px-4 py-3 text-left text-sm transition-colors duration-150 outline-none": true,
-                      "bg-emerald-600 text-white dark:bg-indigo-600": selectedIndex === idx,
+                      "bg-emerald-600 text-white dark:bg-lividus-600": selectedIndex === idx,
                       "bg-transparent  text-zinc-700 dark:text-zinc-300": selectedIndex !== idx,
                     }}
                   >
