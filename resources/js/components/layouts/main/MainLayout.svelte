@@ -13,7 +13,7 @@
 </script>
 
 <div
-  class="relative min-h-screen w-full bg-zinc-25 text-zinc-900 transition-colors duration-300 dark:bg-zinc-900 dark:text-zinc-100"
+  class="relative min-h-screen w-full bg-zinc-25 text-zinc-900 transition-colors duration-300 dark:bg-zinc-850 dark:text-zinc-100"
 >
   <Header />
 
