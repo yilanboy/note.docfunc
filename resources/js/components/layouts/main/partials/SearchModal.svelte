@@ -166,7 +166,7 @@
 
       <!-- Results list -->
       {#if query.trim() !== ""}
-        <div bind:this={resultsContainer} class="flex-1 overflow-y-auto p-3">
+        <div bind:this={resultsContainer} class="flex-1 scroll-p-3 overflow-y-auto p-3">
           {#if results.length > 0}
             <ul class="space-y-1.5">
               {#each results as result, idx}
@@ -176,14 +176,14 @@
                     onclick={() => navigateToResult(`/${result.category}/${result.slug}`)}
                     onmouseenter={() => (selectedIndex = idx)}
                     class={{
-                      "flex w-full cursor-pointer items-start gap-4 rounded-lg border border-transparent px-4 py-3 text-left text-sm transition-colors duration-150 outline-none": true,
+                      "flex w-full cursor-pointer items-start gap-4 rounded-lg border border-transparent px-4 py-3 text-left text-sm outline-none": true,
                       "bg-emerald-600 text-white dark:bg-lividus-600": selectedIndex === idx,
                       "bg-transparent  text-zinc-700 dark:text-zinc-300": selectedIndex !== idx,
                     }}
                   >
                     <FileText class="mt-0.5 size-5 shrink-0" />
-                    <div class="min-w-0 flex-1">
-                      <div class="flex items-center gap-1.5 font-semibold">
+                    <span class="block min-w-0 flex-1">
+                      <span class="flex items-center gap-1.5 font-semibold">
                         <span
                           class={{
                             "text-[11px] tracking-wider uppercase opacity-70": true,
@@ -195,8 +195,8 @@
                         </span>
                         <span>/</span>
                         <span class="truncate">{result.title}</span>
-                      </div>
-                      <p
+                      </span>
+                      <span
                         class={{
                           "mt-1 line-clamp-2 text-xs": true,
                           "text-zinc-200": selectedIndex === idx,
@@ -204,11 +204,15 @@
                         }}
                       >
                         {result.snippet}
-                      </p>
-                    </div>
-                    {#if selectedIndex === idx}
-                      <CornerDownLeft class="size-5 shrink-0 self-center opacity-85" />
-                    {/if}
+                      </span>
+                    </span>
+                    <CornerDownLeft
+                      class={{
+                        "size-5 shrink-0 self-center": true,
+                        "opacity-85": selectedIndex === idx,
+                        "opacity-0": selectedIndex !== idx,
+                      }}
+                    />
                   </button>
                 </li>
               {/each}
