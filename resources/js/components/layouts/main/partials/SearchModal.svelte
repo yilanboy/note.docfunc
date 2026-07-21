@@ -70,6 +70,32 @@
     }
   }
 
+  // Handlers for keys that only apply while the modal is open.
+  // Each is responsible only for its own action; preventDefault is handled centrally.
+  const openKeyHandlers: Record<string, () => void> = {
+    Escape: () => {
+      search.isOpen = false;
+    },
+    ArrowDown: () => {
+      if (results.length > 0) {
+        selectedIndex = (selectedIndex + 1) % results.length;
+      }
+      scrollResultIntoView();
+    },
+    ArrowUp: () => {
+      if (results.length > 0) {
+        selectedIndex = (selectedIndex - 1 + results.length) % results.length;
+      }
+      scrollResultIntoView();
+    },
+    Enter: () => {
+      const res = results[selectedIndex];
+      if (!res) return;
+      search.isOpen = false;
+      router.visit(`/${res.category}/${res.slug}`);
+    },
+  };
+
   function handleGlobalKeyDown(e: KeyboardEvent) {
     // Open/Close on Cmd+K or Ctrl+K
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -80,11 +106,8 @@
     }
 
     // Open on slash / (if not in an input or textarea)
-    if (
-      e.key === "/" &&
-      document.activeElement?.tagName !== "INPUT" &&
-      document.activeElement?.tagName !== "TEXTAREA"
-    ) {
+    const activeTag = document.activeElement?.tagName;
+    if (e.key === "/" && activeTag !== "INPUT" && activeTag !== "TEXTAREA") {
       e.preventDefault();
       search.isOpen = true;
 
@@ -94,28 +117,10 @@
     if (!search.isOpen) return;
 
     // Handle keys when open
-    if (e.key === "Escape") {
+    const handler = openKeyHandlers[e.key];
+    if (handler) {
       e.preventDefault();
-      search.isOpen = false;
-    } else if (e.key === "ArrowDown") {
-      e.preventDefault();
-      if (results.length > 0) {
-        selectedIndex = (selectedIndex + 1) % results.length;
-      }
-      scrollResultIntoView();
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      if (results.length > 0) {
-        selectedIndex = (selectedIndex - 1 + results.length) % results.length;
-      }
-      scrollResultIntoView();
-    } else if (e.key === "Enter") {
-      e.preventDefault();
-      if (results[selectedIndex]) {
-        const res = results[selectedIndex];
-        search.isOpen = false;
-        router.visit(`/${res.category}/${res.slug}`);
-      }
+      handler();
     }
   }
 
