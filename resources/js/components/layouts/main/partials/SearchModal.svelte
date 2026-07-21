@@ -19,15 +19,17 @@
   let searchInput = $state<HTMLInputElement | null>(null);
   let resultsContainer = $state<HTMLDivElement | null>(null);
 
+  let trimmed = $derived(query.trim());
+
   // Debounce logic for fetching search results
   let debounceTimeout: number | undefined;
 
-  $effect(() => {
-    // Whenever query changes, run this effect
-    const trimmed = query.trim();
+  // Whenever query changes, run this effect
+  function onSearchInput() {
     if (trimmed === "") {
       results = [];
       isLoading = false;
+
       return;
     }
 
@@ -46,36 +48,34 @@
         isLoading = false;
       }
     }, 200);
-  });
+  }
 
   // Focus the input automatically when the modal is opened
-  $effect(() => {
-    if (search.isOpen) {
-      query = "";
-      results = [];
-      selectedIndex = 0;
-      setTimeout(() => {
-        searchInput?.focus();
-      }, 50);
-    }
-  });
+  function focusSearchInput() {
+    query = "";
+    results = [];
+    selectedIndex = 0;
+    searchInput?.focus();
+  }
 
   // Scroll the selected item into view on keyboard navigation
-  $effect(() => {
+  function scrollResultIntoView() {
     if (search.isOpen && resultsContainer && results.length > 0) {
       // Svelte tracks selectedIndex and results automatically
       const activeEl = resultsContainer.querySelector(`[data-index="${selectedIndex}"]`);
+
       if (activeEl) {
         activeEl.scrollIntoView({ block: "nearest" });
       }
     }
-  });
+  }
 
   function handleGlobalKeyDown(e: KeyboardEvent) {
     // Open/Close on Cmd+K or Ctrl+K
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
       e.preventDefault();
       search.isOpen = !search.isOpen;
+
       return;
     }
 
@@ -87,6 +87,7 @@
     ) {
       e.preventDefault();
       search.isOpen = true;
+
       return;
     }
 
@@ -101,11 +102,13 @@
       if (results.length > 0) {
         selectedIndex = (selectedIndex + 1) % results.length;
       }
+      scrollResultIntoView();
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       if (results.length > 0) {
         selectedIndex = (selectedIndex - 1 + results.length) % results.length;
       }
+      scrollResultIntoView();
     } else if (e.key === "Enter") {
       e.preventDefault();
       if (results[selectedIndex]) {
@@ -120,6 +123,12 @@
     search.isOpen = false;
     router.visit(href);
   }
+
+  $effect(() => {
+    if (search.isOpen) {
+      focusSearchInput();
+    }
+  });
 </script>
 
 <svelte:window onkeydown={handleGlobalKeyDown} />
@@ -146,6 +155,7 @@
         <input
           bind:this={searchInput}
           bind:value={query}
+          oninput={onSearchInput}
           type="text"
           placeholder="Search notes... (esc to close)"
           class="h-14 w-full bg-transparent px-4 text-base text-zinc-900 placeholder-zinc-400 outline-none dark:text-zinc-100 dark:placeholder-zinc-500"
@@ -169,7 +179,7 @@
         <div bind:this={resultsContainer} class="flex-1 scroll-p-3 overflow-y-auto p-3">
           {#if results.length > 0}
             <ul class="space-y-1.5">
-              {#each results as result, idx}
+              {#each results as result, idx (result.category + "-" + result.slug)}
                 <li>
                   <button
                     data-index={idx}
