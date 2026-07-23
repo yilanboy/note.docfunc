@@ -15,8 +15,7 @@ class ShowCategoryController extends Controller
     public function __construct(
         private readonly NoteRepository $noteRepository,
         private readonly MarkdownConverter $markdownConverter,
-    ) {
-    }
+    ) {}
 
     /**
      * Handle the incoming request.
@@ -35,7 +34,7 @@ class ShowCategoryController extends Controller
             $html = Cache::remember(
                 'markdown:'.$readme.':'.filemtime($readme),
                 now()->addWeek(),
-                fn(): string => $this->markdownConverter->convert($readmeContent),
+                fn (): string => $this->markdownConverter->convert($readmeContent),
             );
         } else {
             $html = $this->markdownConverter->convert("# {$displayName}");

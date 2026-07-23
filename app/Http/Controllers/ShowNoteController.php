@@ -15,8 +15,7 @@ class ShowNoteController extends Controller
     public function __construct(
         private readonly NoteRepository $noteRepository,
         private readonly MarkdownConverter $markdownConverter,
-    ) {
-    }
+    ) {}
 
     /**
      * Handle the incoming request.
@@ -30,7 +29,7 @@ class ShowNoteController extends Controller
         $html = Cache::remember(
             'markdown:'.$found['path'].':'.filemtime($found['path']),
             now()->addWeek(),
-            fn(): string => $this->markdownConverter->convert(file_get_contents($found['path'])),
+            fn (): string => $this->markdownConverter->convert(file_get_contents($found['path'])),
         );
 
         return Inertia::render('Page', [
