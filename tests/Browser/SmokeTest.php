@@ -12,7 +12,7 @@ test('it renders note metadata with date and tags', function () {
 
     $page->assertNoJavascriptErrors()
         ->assertSee('建立於 2026-09-03')
-        ->assertSee('#testing');
+        ->assertSee('# testing');
 });
 
 test('it renders note metadata with updated date', function () {
@@ -21,7 +21,7 @@ test('it renders note metadata with updated date', function () {
     $page->assertNoJavascriptErrors()
         ->assertSee('建立於 2026-09-03')
         ->assertSee('更新於 2026-09-04')
-        ->assertSee('#testing');
+        ->assertSee('# testing');
 });
 
 test('it renders category metadata from category readme', function () {
@@ -29,5 +29,5 @@ test('it renders category metadata from category readme', function () {
 
     $page->assertNoJavascriptErrors()
         ->assertSee('建立於 2026-09-03')
-        ->assertSee('#testing');
+        ->assertSee('# testing');
 });
