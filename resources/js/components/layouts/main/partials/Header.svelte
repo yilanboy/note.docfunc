@@ -84,7 +84,7 @@
             <button
                 onclick={() => (search.isOpen = true)}
                 type="button"
-                class="dark:hover:bg-zinc-850 flex w-72 cursor-pointer items-center justify-between gap-x-2.5 rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-2 text-sm font-normal text-zinc-400 transition-all hover:border-zinc-300 hover:bg-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 lg:w-80 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-500 dark:hover:border-zinc-700 dark:focus-visible:ring-zinc-700"
+                class="bg-zinc-25 dark:bg-zinc-850 flex w-72 cursor-pointer items-center justify-between gap-x-2.5 rounded-lg border border-zinc-200 px-4 py-2 text-sm font-normal text-zinc-400 transition-all hover:border-zinc-200 hover:bg-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 lg:w-80 dark:border-zinc-700 dark:text-zinc-500 dark:hover:border-zinc-700 dark:hover:bg-zinc-800 dark:focus-visible:ring-zinc-700"
             >
                 <span class="flex items-center gap-x-2">
                     <Search class="size-4 shrink-0" />
@@ -93,7 +93,7 @@
                     >
                 </span>
                 <kbd
-                    class="pointer-events-none inline-flex h-5.5 items-center gap-0.5 rounded border border-zinc-200 bg-white px-1.5 font-mono text-[11px] font-medium text-zinc-400 select-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-500"
+                    class="bg-zinc-25 dark:bg-zinc-850 pointer-events-none inline-flex h-5.5 items-center gap-0.5 rounded border border-zinc-200 px-1.5 font-mono text-[11px] font-medium text-zinc-400 select-none dark:border-zinc-700 dark:text-zinc-500"
                 >
                     <span class="text-sm">⌘</span>K
                 </kbd>
