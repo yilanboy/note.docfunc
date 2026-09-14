@@ -1,3 +1,9 @@
+---
+date: '2024-11-04'
+updated: '2026-07-06'
+tags: [database]
+---
+
 # MySQL、SQLite 與 PostgreSQL 在加上 Foreign Key 上的差異。
 
 前幾天在寫 Laravel ORM 時，發現有一句關係查詢語句在 SQLite 中非常慢。

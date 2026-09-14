@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Services\MarkdownConverter;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -21,9 +22,16 @@ class ShowHomeController extends Controller
 
         abort_unless(file_exists($path), 404);
 
+        $cached = Cache::remember(
+            'markdown:'.$path.':'.filemtime($path),
+            now()->addWeek(),
+            fn (): array => $this->markdownConverter->parse(file_get_contents($path)),
+        );
+
         return Inertia::render('Page', [
             'title' => config('app.name'),
-            'html' => $this->markdownConverter->convertFile($path),
+            'html' => $cached['html'],
+            'metadata' => $cached['metadata'],
         ]);
     }
 }

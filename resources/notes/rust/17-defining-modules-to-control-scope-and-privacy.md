@@ -1,3 +1,9 @@
+---
+date: '2023-01-09'
+updated: '2026-07-06'
+tags: [rust]
+---
+
 # 定義模組 (Modules) 來控制作用域 (Scope) 與私有性 (Privacy)
 
 當編譯一個 crate 時，編譯器會從 crate 根目錄開始編譯。

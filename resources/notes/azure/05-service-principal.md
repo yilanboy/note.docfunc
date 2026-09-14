@@ -1,3 +1,9 @@
+---
+date: '2023-03-22'
+updated: '2026-07-06'
+tags: [azure]
+---
+
 # Service Principal
 
 ## 使用 Azure CLI 建立一個 Service Principal 給 Terraform 部署資源

@@ -1,3 +1,9 @@
+---
+date: '2024-12-20'
+updated: '2026-07-06'
+tags: [aws]
+---
+
 # Elastic File System
 
 AWS 彈性檔案系統 (Amazon Elastic File System，Amazon EFS) 是 AWS 提供的一種雲端儲存服務，提供無伺服器、完全彈性和加密的檔案儲存，供 AWS 運算服務和企業內部使用。

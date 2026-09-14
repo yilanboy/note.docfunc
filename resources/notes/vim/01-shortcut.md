@@ -1,3 +1,9 @@
+---
+date: '2022-12-03'
+updated: '2026-07-06'
+tags: [vim]
+---
+
 # Shortcut
 
 ## 移動

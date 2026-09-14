@@ -1,3 +1,9 @@
+---
+date: '2026-06-07'
+updated: '2026-09-02'
+tags: [laravel]
+---
+
 # 談談 Livewire 4 的 Json Attribute
 
 Livewire v4 在前幾天終於正式發佈啦！這次同樣帶來了翻天覆的的改變 😆，最大的亮點莫過於 **SFC（Single-file Component）** 了。現在你可以將前後端的邏輯都寫在同一個檔案中，讓開發體驗更接近現代化的前端框架。

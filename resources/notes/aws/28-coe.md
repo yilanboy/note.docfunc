@@ -1,3 +1,9 @@
+---
+date: '2025-10-22'
+updated: '2026-07-06'
+tags: [aws]
+---
+
 # Correction of Errors (CoE) in AWS
 
 最近 AWS 的 us-east-1 (Virginia) 區域發生了一次重大故障，影響了大量的客戶服務。也讓我知道了除了常見的 ROE（Report of Errors）報告之外，AWS 還有一個 CoE（Correction of Errors）的報告。

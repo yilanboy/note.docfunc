@@ -1,3 +1,9 @@
+---
+date: '2023-02-22'
+updated: '2026-07-06'
+tags: [azure]
+---
+
 # Azure Blob Storage
 
 在 Azure Storage Account 中，一個容器（Container）是一組相關的 Blob 對象的集合，類似於文件夾或目錄。而 Blob（Binary Large Object）則是存儲在 Azure 存儲服務中的二進制數據對象，可以是文本、圖像、音頻、視頻等任何類型的數據。

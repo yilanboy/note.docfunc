@@ -1,3 +1,9 @@
+---
+date: '2023-09-15'
+updated: '2026-09-02'
+tags: [svelte]
+---
+
 # Stores
 
 有時候你會想要在不同的 component 之間共享一個值，這時候你可以使用 store。

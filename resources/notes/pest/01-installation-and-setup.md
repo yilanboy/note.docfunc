@@ -1,3 +1,9 @@
+---
+date: '2022-12-22'
+updated: '2026-07-06'
+tags: [pest]
+---
+
 # 安裝與設定 Pest
 
 透過 composer 安裝 Pest

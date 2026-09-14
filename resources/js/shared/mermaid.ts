@@ -168,7 +168,7 @@ if (typeof window !== 'undefined' && !isObserverInitialized) {
         for (const mutation of mutations) {
             // If the class attribute changes, it's likely a theme switch.
             if (mutation.attributeName === 'class') {
-                updateMermaidThemes();
+                void updateMermaidThemes();
                 break;
             }
         }

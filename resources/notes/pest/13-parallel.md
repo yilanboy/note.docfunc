@@ -1,3 +1,9 @@
+---
+date: '2022-12-25'
+updated: '2026-07-06'
+tags: [pest]
+---
+
 # Parallel
 
 Pest 的測試預設都是使用單線程 (Single process)

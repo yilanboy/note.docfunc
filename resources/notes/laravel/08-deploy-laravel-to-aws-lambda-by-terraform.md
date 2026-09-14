@@ -1,3 +1,9 @@
+---
+date: '2026-03-04'
+updated: '2026-09-02'
+tags: [laravel]
+---
+
 # 使用 Terraform 部署 Laravel 應用程式至 AWS Lambda
 
 ## 前言

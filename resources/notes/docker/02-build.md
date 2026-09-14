@@ -1,3 +1,9 @@
+---
+date: '2023-03-03'
+updated: '2026-07-06'
+tags: [docker]
+---
+
 # 建立映像檔
 
 寫好 `Dockerfile`，就可以使用 docker 指令開始建立 image

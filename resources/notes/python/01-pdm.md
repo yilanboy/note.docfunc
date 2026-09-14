@@ -1,3 +1,9 @@
+---
+date: '2023-03-02'
+updated: '2026-07-06'
+tags: [python]
+---
+
 # PDM
 
 PDM 是一個新興的 Python 套件管理工具，它提供了一個現代化的方式來管理 Python 套件

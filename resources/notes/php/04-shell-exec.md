@@ -1,3 +1,9 @@
+---
+date: '2024-07-01'
+updated: '2026-07-06'
+tags: [php]
+---
+
 # Shell Exec
 
 在 PHP 中，你可以使用 `exec()` 來執行外部指令。

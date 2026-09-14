@@ -1,3 +1,9 @@
+---
+date: '2024-03-29'
+updated: '2026-07-06'
+tags: [aws]
+---
+
 # API Gateway
 
 - 可以將回傳結果做 cache，減少後面 server 或是 Lambda 的負擔

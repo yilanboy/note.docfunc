@@ -1,3 +1,8 @@
+---
+date: '2026-07-06'
+tags: [warp]
+---
+
 # Warp
 
 Warp 是一款由 Rust 所開發的 Mac 終端機

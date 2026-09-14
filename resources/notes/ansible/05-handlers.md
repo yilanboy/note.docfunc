@@ -1,3 +1,9 @@
+---
+date: '2025-06-05'
+updated: '2026-09-02'
+tags: [ansible]
+---
+
 # Handlers
 
 在 Ansible 中，你可以根據狀態是否變化，來觸發一些額外的操作。

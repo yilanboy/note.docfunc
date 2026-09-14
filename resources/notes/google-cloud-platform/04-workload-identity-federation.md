@@ -1,3 +1,8 @@
+---
+date: '2026-09-01'
+tags: [google-cloud-platform]
+---
+
 # Workload Identity Federation (AWS to GCP)
 
 傳統上跨雲存取（例如從 AWS Lambda 存取 GCP 資源）常使用 Service Account Key (JSON) 並存放在 Secrets Manager。然而，金鑰有外洩風險與輪替負擔。

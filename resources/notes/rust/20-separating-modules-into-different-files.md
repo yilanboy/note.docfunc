@@ -1,3 +1,9 @@
+---
+date: '2023-01-12'
+updated: '2026-07-06'
+tags: [rust]
+---
+
 # Separating Modules into Different Files
 
 通常我們不會把所有程式碼都放在一個檔案中，而是使用模組的方式將程式碼拆散並放置到不同的檔案。

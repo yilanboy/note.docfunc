@@ -1,3 +1,9 @@
+---
+date: '2025-09-04'
+updated: '2026-09-02'
+tags: [ansible]
+---
+
 # Set Fact Module
 
 `set_fact` 可以讓你在 Ansible Playbook 中定義和設置變量。這些變量在 Playbook 的後續任務中可用，並且在整個 Playbook 執行期間保持不變。

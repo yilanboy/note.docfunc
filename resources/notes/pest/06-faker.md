@@ -1,3 +1,9 @@
+---
+date: '2022-12-25'
+updated: '2026-07-06'
+tags: [pest]
+---
+
 # 使用 Faker 產生假資料
 
 Faker 可以用來生產假資料，除了常被用做 database 的 seeding 之外，測試中也同樣很常被使用

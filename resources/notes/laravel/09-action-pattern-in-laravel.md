@@ -1,3 +1,9 @@
+---
+date: '2026-06-07'
+updated: '2026-09-02'
+tags: [laravel]
+---
+
 # Laravel 中的 Action Pattern
 
 本篇為 Nuno Maduro (Laravel 核心團隊成員) 的影片 [The Action Pattern Is Key to Clean Code](https://www.youtube.com/watch?v=k_gMfdpSXQE) 的學習筆記，介紹了 Action Pattern 的核心概念、為什麼它能讓程式碼更乾淨，以及在 Laravel 開發中的最佳實踐。

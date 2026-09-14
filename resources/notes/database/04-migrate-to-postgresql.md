@@ -1,3 +1,9 @@
+---
+date: '2024-07-22'
+updated: '2026-07-06'
+tags: [database]
+---
+
 # 從 MySQL 搬家到 PostgreSQL
 
 前陣子為了省錢，將自己的 Laravel 服務改為部署到 AWS Lambda 上，資料庫不使用 AWS 上貴鬆鬆的 RDS，而是使用有提供免費方案的 PlanetScale。這個架構相當不錯，除了網站響應速度相當不錯之外，每月成本還不到 2 美金。

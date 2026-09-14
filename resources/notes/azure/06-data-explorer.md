@@ -1,3 +1,9 @@
+---
+date: '2023-10-04'
+updated: '2026-07-06'
+tags: [azure]
+---
+
 # Azure Data Explorer
 
 記錄一下使用 Azure Data Explorer (以下簡稱 ADX)的過程。

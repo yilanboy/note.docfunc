@@ -1,3 +1,9 @@
+---
+date: '2026-09-03'
+updated: '2026-09-04'
+tags: [testing]
+---
+
 # Mermaid Diagram Testing
 
 This note tests mermaid diagram rendering and zooming.

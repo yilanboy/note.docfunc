@@ -1,3 +1,9 @@
+---
+date: '2025-12-01'
+updated: '2026-07-06'
+tags: [php]
+---
+
 # Static Analysis
 
 靜態分析 (Static Analysis) 是指在不執行程式的情況下，透過程式碼的分析，來找出程式碼中的錯誤。

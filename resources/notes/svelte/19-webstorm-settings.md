@@ -1,3 +1,9 @@
+---
+date: '2024-10-08'
+updated: '2026-07-06'
+tags: [svelte]
+---
+
 # WebStorm IDE 設定
 
 目前寫 SvelteKit 是用 JetBrains 的 WebStorm 來進行開發。這裡記錄一些對於 WebStorm 的設定。

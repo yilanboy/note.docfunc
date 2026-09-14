@@ -1,3 +1,9 @@
+---
+date: '2024-01-10'
+updated: '2026-09-02'
+tags: [svelte]
+---
+
 # Actions
 
 Actions 本質上是元素級生命週期 (element-level lifecycle) 的函式，會在元素被建立時呼叫。常常用在

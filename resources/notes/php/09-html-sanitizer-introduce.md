@@ -1,3 +1,9 @@
+---
+date: '2025-06-30'
+updated: '2026-07-06'
+tags: [php]
+---
+
 # 使用 HTML Sanitizer 來過濾不安全的 HTML 內容
 
 只要網站有能讓使用者輸入文字的地方，例如常見的所見即所得（WYSIWYG）編輯器，就需要設定一個機制來過濾掉不安全的 HTML 內容以避免 XSS（Cross-site scripting）攻擊。

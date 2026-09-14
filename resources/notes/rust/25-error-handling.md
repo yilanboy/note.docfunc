@@ -1,3 +1,9 @@
+---
+date: '2023-04-18'
+updated: '2026-07-06'
+tags: [rust]
+---
+
 # Error Handling
 
 Rust 的錯誤有兩個主要類別。

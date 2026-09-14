@@ -1,3 +1,9 @@
+---
+date: '2024-09-23'
+updated: '2026-07-06'
+tags: [python]
+---
+
 # 從憑證取得 Serial Number
 
 你可以使用 Python 從公有憑證中取得 Serial Number。

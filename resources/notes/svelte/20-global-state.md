@@ -1,3 +1,9 @@
+---
+date: '2025-11-20'
+updated: '2026-09-02'
+tags: [svelte]
+---
+
 # Global state
 
 Svelte 5 的 `$state` 除了可以在元件內部使用之外，還可以用來創建全域狀態 (global state)，讓你可以在多個元件之間共享狀態。

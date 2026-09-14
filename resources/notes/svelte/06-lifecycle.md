@@ -1,3 +1,9 @@
+---
+date: '2023-09-12'
+updated: '2026-09-02'
+tags: [svelte]
+---
+
 # Lifecycle
 
 每個 Component 都有自己的生命週期，當 Component 被建立、更新或銷毀時，會觸發不同的生命週期方法。

@@ -22,27 +22,22 @@ class ShowCategoryController extends Controller
      */
     public function __invoke(string $category): Response
     {
-        abort_unless(is_dir(config('notes.path')."/{$category}"), 404);
+        $readme = config('notes.path')."/{$category}/README.md";
+
+        abort_unless(file_exists($readme), 404);
 
         $displayName = $this->noteRepository->displayName($category);
 
-        $readme = config('notes.path')."/{$category}/README.md";
-
-        if (file_exists($readme)) {
-            $readmeContent = file_get_contents($readme);
-
-            $html = Cache::remember(
-                'markdown:'.$readme.':'.filemtime($readme),
-                now()->addWeek(),
-                fn (): string => $this->markdownConverter->convert($readmeContent),
-            );
-        } else {
-            $html = $this->markdownConverter->convert("# {$displayName}");
-        }
+        $cached = Cache::remember(
+            'markdown:'.$readme.':'.filemtime($readme),
+            now()->addWeek(),
+            fn (): array => $this->markdownConverter->parse(file_get_contents($readme)),
+        );
 
         return Inertia::render('Page', [
             'title' => $displayName,
-            'html' => $html,
+            'html' => $cached['html'],
+            'metadata' => $cached['metadata'],
         ]);
     }
 }

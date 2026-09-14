@@ -1,3 +1,9 @@
+---
+date: '2026-04-28'
+updated: '2026-09-02'
+tags: [aws]
+---
+
 # 透過 AWS Athena 查詢 DynamoDB 資料
 
 ## 前言

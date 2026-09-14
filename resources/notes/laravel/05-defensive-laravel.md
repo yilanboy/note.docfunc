@@ -1,3 +1,9 @@
+---
+date: '2025-11-26'
+updated: '2026-07-06'
+tags: [laravel]
+---
+
 # 防禦性 Laravel 開發
 
 本篇為 Laracasts 的教學影片 [Defensive Laravel](https://laracasts.com/series/defensive-laravel) 的學習筆記，內容主要在介紹如何利用防禦性開發技巧來提升 Laravel 應用程式的穩定性與安全性。

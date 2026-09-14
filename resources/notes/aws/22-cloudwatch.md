@@ -1,3 +1,9 @@
+---
+date: '2024-07-01'
+updated: '2026-07-06'
+tags: [aws]
+---
+
 # CloudWatch
 
 CloudWatch 可以用來觀察 AWS 其他服務的狀況，例如 EC2 機器的運行狀態或是 Lambda 函式執行的結果。

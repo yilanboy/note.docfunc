@@ -95,7 +95,7 @@
                 <kbd
                     class="pointer-events-none inline-flex h-5.5 items-center gap-0.5 rounded border border-zinc-200 bg-white px-1.5 font-mono text-[11px] font-medium text-zinc-400 select-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-500"
                 >
-                    <span class="text-xs">⌘</span>K
+                    <span class="text-sm">⌘</span>K
                 </kbd>
             </button>
         </div>

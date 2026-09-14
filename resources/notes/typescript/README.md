@@ -1,3 +1,8 @@
+---
+date: '2026-07-06'
+tags: [typescript]
+---
+
 # TypeScript
 
 由微軟開發的靜態強型別語言，目的在優化前端開發。

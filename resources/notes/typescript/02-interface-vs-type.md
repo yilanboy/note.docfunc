@@ -1,3 +1,9 @@
+---
+date: '2025-05-29'
+updated: '2026-09-02'
+tags: [typescript]
+---
+
 # Interface 與 Type 在 TypeScript 中的差異
 
 在 TypeScript 中，你可以用 `interface` 和 `type` 這兩個關鍵字，來定義一個自己的類別。

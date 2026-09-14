@@ -1,3 +1,9 @@
+---
+date: '2025-09-25'
+updated: '2026-07-06'
+tags: [aws]
+---
+
 # AWS Athena
 
 AWS Athena 是一個無伺服器的互動式查詢服務，讓使用者可以透過標準 SQL 語法直接分析儲存在 Amazon S3 中的資料，無需預先配置或管理任何基礎設施。Athena 基於開源的 Presto 分散式 SQL 查詢引擎，原生支援多種資料格式，包括 CSV、JSON、ORC、Avro 和 Parquet 等。

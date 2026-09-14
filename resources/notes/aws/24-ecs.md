@@ -1,3 +1,9 @@
+---
+date: '2024-11-28'
+updated: '2026-07-06'
+tags: [aws]
+---
+
 # Elastic Container Service (ECS)
 
 為 AWS 的容器服務，容器的 Image 可以放在 AWS ECR (Elastic Container Repository)。

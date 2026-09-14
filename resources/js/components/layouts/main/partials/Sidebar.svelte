@@ -13,6 +13,7 @@
 
     // Auto-close sidebar on mobile when route path changes (closed is the mobile default)
     $effect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         activePath;
         untrack(() => {
             if (!isDesktop.current) {
@@ -24,6 +25,7 @@
     // Snap back to the viewport default when the breakpoint is crossed, so a
     // manual open/close on one side of the breakpoint doesn't leak to the other.
     $effect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         isDesktop.current;
         untrack(() => sidebar.reset());
     });
@@ -138,12 +140,15 @@
                                                 >
                                                     {#if note.order !== null && note.order !== undefined}
                                                         <span
-                                                            class="mr-2 w-6 shrink-0 text-right font-mono text-xs font-semibold tabular-nums text-emerald-600 dark:text-lividus-400"
+                                                            class="dark:text-lividus-400 mr-2 w-6 shrink-0 text-right font-mono text-sm font-semibold text-emerald-600 tabular-nums"
                                                         >
                                                             {note.order}.
                                                         </span>
                                                     {/if}
-                                                    <span class="min-w-0 truncate">{note.title}</span>
+                                                    <span
+                                                        class="min-w-0 truncate"
+                                                        >{note.title}</span
+                                                    >
                                                 </a>
                                             </li>
                                         {/each}

@@ -1,3 +1,9 @@
+---
+date: '2022-11-30'
+updated: '2026-09-02'
+tags: [network]
+---
+
 # CA 憑證
 
 紀錄使用 certbot 向 Let's Encrypt 申請網域 `example.com` 憑證的流程

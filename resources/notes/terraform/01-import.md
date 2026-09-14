@@ -1,3 +1,9 @@
+---
+date: '2024-06-04'
+updated: '2026-07-06'
+tags: [terraform]
+---
+
 # Terraform Import
 
 隨著 DevOps 概念的普及，越來越多公司都開始使用 IaC (Infrastructure as Code) 工具來管理他們日益漸多的基礎建設資源。小弟我在工作上也很常使用 Terraform 這個 IaC 工具來管理雲端資源。理由無它，不論是建立資源還是刪除資源都很方便，還能避免自己忘記刪除不必要的資源，減少支出成本。

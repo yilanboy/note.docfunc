@@ -1,3 +1,9 @@
+---
+date: '2025-06-23'
+updated: '2026-09-02'
+tags: [laravel]
+---
+
 # 在 Inertia.js 中防止登出後返回敏感頁面
 
 最近開始在用 [Inertia.js](https://inertiajs.com/) 搭配 Laravel 與 Svelte 寫網頁。不用不知道，一用嚇一跳，有了 Inertia.js 當做前後端的粘合劑，我除了不用寫 API 以外，還可以在前後端都使用自己喜歡具工具，開發起來真的非常舒服。

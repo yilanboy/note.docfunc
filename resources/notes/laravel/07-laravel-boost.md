@@ -1,3 +1,9 @@
+---
+date: '2026-02-25'
+updated: '2026-07-06'
+tags: [laravel]
+---
+
 # Laravel Boost
 
 Laravel Boost 是 Laravel 團隊推出的一款幫助我們開發者快速開發 Laravel 應用程序的套件。裡面包含多種給 AI Agent 使用的工具，例如 AI Guidelines、Agent Skills、Boost MCP Server Configuration 等等。

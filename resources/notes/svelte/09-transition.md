@@ -1,3 +1,9 @@
+---
+date: '2024-01-09'
+updated: '2026-09-02'
+tags: [svelte]
+---
+
 # Transition
 
 Svelte 的 `transition` 可以為元素的變化提供一個簡單的效果。

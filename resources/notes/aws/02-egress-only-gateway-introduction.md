@@ -1,3 +1,9 @@
+---
+date: '2023-08-05'
+updated: '2026-07-06'
+tags: [aws]
+---
+
 # Egress Only Gateway
 
 Egress only gateway 是 VPC 的一個 component，可以讓 VPC 內的 instance 連線到 internet，但是不允許 internet 連線到 VPC 內的 instance。有點像 NAT gateway。

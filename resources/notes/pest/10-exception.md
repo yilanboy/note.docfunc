@@ -1,3 +1,9 @@
+---
+date: '2022-12-25'
+updated: '2026-07-06'
+tags: [pest]
+---
+
 # 斷定是否會拋出例外 (Exception)
 
 如果要測試一個流程在遭遇問題時是否會拋出例外 (Exception)，斷定中也有 `expectException()` 的方法可以使用

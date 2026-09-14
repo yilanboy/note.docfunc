@@ -1,3 +1,9 @@
+---
+date: '2023-01-09'
+updated: '2026-07-06'
+tags: [warp]
+---
+
 # 整合 Starship
 
 如果你有使用 [starship](https://starship.rs/) 客製命令提示字元 (prompt) 的話。

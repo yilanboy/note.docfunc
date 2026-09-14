@@ -1,3 +1,9 @@
+---
+date: '2024-04-02'
+updated: '2026-07-06'
+tags: [aws]
+---
+
 # Simple Notification Service (SNS)
 
 - SNS 是一個全託管的消息訂閱服務，訂閱者可以是 AWS SQS、Lambda、HTTP endpoint、email address 或是 mobile SMS (簡訊)。

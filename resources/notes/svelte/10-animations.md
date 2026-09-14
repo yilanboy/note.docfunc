@@ -1,3 +1,9 @@
+---
+date: '2024-01-10'
+updated: '2026-09-02'
+tags: [svelte]
+---
+
 # Animations
 
 剛剛的 `crossfade` 雖然可以讓 Todo List 在勾選項目時有移動的效果，但其他項目的遞補移動卻沒有。

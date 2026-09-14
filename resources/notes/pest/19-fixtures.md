@@ -1,3 +1,8 @@
+---
+date: '2026-09-03'
+tags: [pest]
+---
+
 # Test Fixtures
 
 最近藉著 AI Coding，幫自己的 Markdown 筆記架設了一個漂亮的靜態展示網頁。畫面上除了能正確為程式碼區塊進行語法高亮（Syntax Highlighting），甚至還支援用 Mermaid 繪製流程圖。看著自己的筆記能被如此精美地呈現，讓做筆記這件事變得更有成就感。

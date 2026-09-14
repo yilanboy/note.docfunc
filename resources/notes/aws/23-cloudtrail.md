@@ -1,3 +1,8 @@
+---
+date: '2026-07-06'
+tags: [aws]
+---
+
 # CloudTrail
 
 - 紀錄 AWS API 的呼叫紀錄，並且可以將紀錄送至 S3 或是 CloudWatch

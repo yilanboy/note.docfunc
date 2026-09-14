@@ -1,3 +1,9 @@
+---
+date: '2023-02-09'
+updated: '2026-09-02'
+tags: [azure]
+---
+
 # Azure CLI
 
 安裝 azure cli (MacOS)

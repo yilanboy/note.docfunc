@@ -1,3 +1,9 @@
+---
+date: '2023-10-21'
+updated: '2026-07-06'
+tags: [windows]
+---
+
 # 設定 windows 開發環境
 
 嘗試一下不使用 WSL2，直接在 Windows 上設定開發環境。

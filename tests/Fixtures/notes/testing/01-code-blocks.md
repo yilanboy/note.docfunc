@@ -1,3 +1,8 @@
+---
+date: '2026-09-03'
+tags: [testing]
+---
+
 # Code Blocks Testing
 
 This note contains code blocks in various programming languages for testing highlighting and toolbar features.

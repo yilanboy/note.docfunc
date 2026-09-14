@@ -255,7 +255,7 @@
                                             </span>
                                             <span
                                                 class={{
-                                                    'mt-1 line-clamp-2 text-xs': true,
+                                                    'mt-1 line-clamp-2 text-sm': true,
                                                     'text-zinc-200':
                                                         selectedIndex === idx,
                                                     'text-zinc-500 dark:text-zinc-400':
@@ -303,17 +303,17 @@
                     </p>
                     <div class="flex justify-center gap-5 pt-3">
                         <span
-                            class="inline-flex items-center gap-1.5 rounded border border-zinc-200 bg-zinc-200/50 px-2 py-0.5 font-mono text-xs dark:border-zinc-700 dark:bg-zinc-800/50"
+                            class="inline-flex items-center gap-1.5 rounded border border-zinc-200 bg-zinc-200/50 px-2 py-0.5 font-mono text-sm dark:border-zinc-700 dark:bg-zinc-800/50"
                         >
                             <kbd class="font-sans">↑↓</kbd> Navigate
                         </span>
                         <span
-                            class="inline-flex items-center gap-1.5 rounded border border-zinc-200 bg-zinc-200/50 px-2 py-0.5 font-mono text-xs dark:border-zinc-700 dark:bg-zinc-800/50"
+                            class="inline-flex items-center gap-1.5 rounded border border-zinc-200 bg-zinc-200/50 px-2 py-0.5 font-mono text-sm dark:border-zinc-700 dark:bg-zinc-800/50"
                         >
                             <kbd class="font-sans">↵</kbd> Select
                         </span>
                         <span
-                            class="inline-flex items-center gap-1.5 rounded border border-zinc-200 bg-zinc-200/50 px-2 py-0.5 font-mono text-xs dark:border-zinc-700 dark:bg-zinc-800/50"
+                            class="inline-flex items-center gap-1.5 rounded border border-zinc-200 bg-zinc-200/50 px-2 py-0.5 font-mono text-sm dark:border-zinc-700 dark:bg-zinc-800/50"
                         >
                             <kbd class="font-sans">esc</kbd> Close
                         </span>

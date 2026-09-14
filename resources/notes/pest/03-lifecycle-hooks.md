@@ -1,3 +1,9 @@
+---
+date: '2022-12-25'
+updated: '2026-07-06'
+tags: [pest]
+---
+
 # Pest 提供的 Lifecycle Hook 方法
 
 在 PHPUnit 中，我們可以使用 `setUp()` 方法，在測試開始前進行一些前置作業

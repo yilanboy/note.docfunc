@@ -1,3 +1,9 @@
+---
+date: '2023-01-09'
+updated: '2026-07-06'
+tags: [warp]
+---
+
 # 安裝 Warp
 
 Mac 用戶可以使用 Homebrew 安裝 warp

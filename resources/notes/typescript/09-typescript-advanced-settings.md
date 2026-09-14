@@ -1,3 +1,9 @@
+---
+date: '2026-03-26'
+updated: '2026-07-06'
+tags: [typescript]
+---
+
 # TypeScript 進階設定指南 (Strict Mode 以外的實用設定)
 
 > Gemini 生成。

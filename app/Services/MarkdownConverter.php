@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use ArrayAccess;
 use Illuminate\Support\Str;
+use Spatie\YamlFrontMatter\YamlFrontMatter;
 
 class MarkdownConverter
 {
@@ -38,5 +40,19 @@ class MarkdownConverter
     public function convertFile(string $path): string
     {
         return $this->convert(file_get_contents($path));
+    }
+
+    /**
+     * @return array<string, string|array|ArrayAccess|mixed>
+     */
+    public function parse(string $markdown): array
+    {
+        $document = YamlFrontMatter::parse($markdown);
+
+        return [
+            'metadata' => $document->matter(),
+            'content' => $document->body(),
+            'html' => $this->convert($document->body()),
+        ];
     }
 }

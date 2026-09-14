@@ -1,3 +1,9 @@
+---
+date: '2024-01-12'
+updated: '2026-09-02'
+tags: [svelte]
+---
+
 # Miscellaneous
 
 ## The `@debug` tag

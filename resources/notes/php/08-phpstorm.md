@@ -1,3 +1,9 @@
+---
+date: '2025-06-09'
+updated: '2026-08-12'
+tags: [php]
+---
+
 # PHPStorm
 
 PHPStorm 為 Jetbrains 推出的 PHP IDE，是寫 PHP 的好幫手，這裡記錄一些我習慣在 PHPStorm 中調整的設定。

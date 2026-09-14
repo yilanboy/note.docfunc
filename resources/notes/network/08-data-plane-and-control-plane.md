@@ -1,3 +1,9 @@
+---
+date: '2025-02-19'
+updated: '2026-07-06'
+tags: [network]
+---
+
 # Data Plane 與 Control Plane
 
 TL;DR。Data Plane (資料平面) 講的是資料傳輸的部分，讓封包從一個點傳送到另外一個點。

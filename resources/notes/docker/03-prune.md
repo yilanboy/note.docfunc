@@ -1,3 +1,9 @@
+---
+date: '2023-04-23'
+updated: '2026-07-06'
+tags: [docker]
+---
+
 # 清理用不到的 Docker 資源 (容器、映像檔與資料存儲)
 
 在使用 `docker build` 多次建立 image 時，即使 `image:tag` 相同，先前 build 出來的 image 也不會被刪除，而是呈現 untag 的狀態

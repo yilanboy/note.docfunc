@@ -1,3 +1,9 @@
+---
+date: '2026-08-17'
+updated: '2026-08-19'
+tags: [laravel]
+---
+
 # 使用 Cloudflare R2 儲存
 
 Laravel 沒有內建 Cloudflare R2 驅動程式，不過由於 R2 的 API 與 Amazon S3 API 相容，因此可以使用 Laravel 的 S3 驅動程式存取 R2 儲存空間。

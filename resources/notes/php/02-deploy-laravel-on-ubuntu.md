@@ -1,3 +1,9 @@
+---
+date: '2024-01-17'
+updated: '2026-07-06'
+tags: [php]
+---
+
 # 在 Ubuntu 上面部署 Laravel
 
 最近想將 Laravel 部署在 Ubuntu 上，記錄一下 PHP 8.3 的安裝方式。

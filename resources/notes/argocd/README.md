@@ -1,3 +1,9 @@
+---
+date: '2026-07-06'
+updated: '2026-09-02'
+tags: [argocd]
+---
+
 # Argo CD
 
 Argo CD 是用於 Kubernetes 的宣告式 (Declarative) GitOps 持續交付工具。

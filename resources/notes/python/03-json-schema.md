@@ -1,3 +1,9 @@
+---
+date: '2025-12-02'
+updated: '2026-07-06'
+tags: [python]
+---
+
 # JSON Schema
 
 JSON Schema 是一個可以用來檢查 JSON 格式是否符合預期的套件。

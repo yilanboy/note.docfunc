@@ -1,3 +1,9 @@
+---
+date: '2026-08-06'
+updated: '2026-09-02'
+tags: [typescript]
+---
+
 # Temporal API 使用方式
 
 `Temporal` 是 JavaScript 全新的日期時間處理 API（TC39 Stage 3 提案），目標是取代長年被詬病的 `Date` 物件。

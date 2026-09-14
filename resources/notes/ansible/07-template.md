@@ -1,3 +1,9 @@
+---
+date: '2025-09-17'
+updated: '2026-09-02'
+tags: [ansible]
+---
+
 # Template Module
 
 Ansible 的 Template 套件支援使用 Jinja Template，可以動態生成配置檔案。

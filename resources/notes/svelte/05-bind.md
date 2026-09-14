@@ -1,3 +1,9 @@
+---
+date: '2023-09-04'
+updated: '2026-09-02'
+tags: [svelte]
+---
+
 # Bind
 
 ## Text Inputs

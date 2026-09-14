@@ -1,3 +1,9 @@
+---
+date: '2022-12-08'
+updated: '2026-07-06'
+tags: [rust]
+---
+
 # 引用與借用 (References and Borrowing)
 
 我們可以在函式的參數加上 `&`，允許函式使用變數的值但卻不給其所有權，`&` 這個符號就代表這裡使用引用 (references)。

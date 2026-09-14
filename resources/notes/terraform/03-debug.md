@@ -1,3 +1,9 @@
+---
+date: '2025-05-28'
+updated: '2026-09-02'
+tags: [terraform]
+---
+
 # 分享前輩的 Terraform Debug 小技巧
 
 前幾天 Azure 又害我加班了，一怒之下，我決定寫一篇文章宣洩情緒外加紀錄這次前輩教我的 Terraform Debug 小技巧。

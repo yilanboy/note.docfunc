@@ -1,3 +1,9 @@
+---
+date: '2024-08-05'
+updated: '2026-07-06'
+tags: [git]
+---
+
 # Angular Commit Message Format
 
 由 Angular 團隊制定的 commit message 規範。

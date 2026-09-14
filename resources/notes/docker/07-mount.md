@@ -1,3 +1,9 @@
+---
+date: '2025-02-06'
+updated: '2026-07-06'
+tags: [docker]
+---
+
 # Mount
 
 在 Docker 中，你可以透過 `--mount` 來將主機上的某個資料夾掛載到 Docker 容器中。

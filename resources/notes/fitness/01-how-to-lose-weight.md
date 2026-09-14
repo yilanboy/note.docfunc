@@ -1,3 +1,9 @@
+---
+date: '2026-07-06'
+updated: '2026-07-07'
+tags: [fitness]
+---
+
 # 如何減脂？
 
 看了 [Bruce 的影片](https://www.youtube.com/watch?v=t07FDJ5gDyU) 後，整理一下影片中關於減脂的重點。

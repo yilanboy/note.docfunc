@@ -1,3 +1,8 @@
+---
+date: '2026-07-06'
+tags: [ghostty]
+---
+
 # Ghostty
 
 Ghostty 是一款啟動快速、功能豐富的跨平台終端模擬器，使用平臺本機的 UI 和 GPU 進行加速。

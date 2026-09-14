@@ -1,3 +1,9 @@
+---
+date: '2024-04-30'
+updated: '2026-09-02'
+tags: [network]
+---
+
 # VXLAN
 
 最近工作上碰到一個專案要使用 VXLAN 來做 BGP (Border Gateway Protocol) 通訊，藉此完成路由訊息的交換。因為網路相關內容一直都是我的罩門，剛好可以藉此機會來了解一下什麼是 VXLAN。

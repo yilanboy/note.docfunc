@@ -1,3 +1,9 @@
+---
+date: '2023-12-26'
+updated: '2026-07-06'
+tags: [rust]
+---
+
 # Closures
 
 Rust 的閉包（closures）是個你能賦值給變數或作為其他函式引數的匿名函式。

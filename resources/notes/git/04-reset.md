@@ -1,3 +1,9 @@
+---
+date: '2024-08-06'
+updated: '2026-07-06'
+tags: [git]
+---
+
 # Reset
 
 如果你想移除所有尚未 commit 的修改時，可以使用 `git reset` 指令。

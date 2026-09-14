@@ -1,3 +1,9 @@
+---
+date: '2024-03-25'
+updated: '2026-07-06'
+tags: [aws]
+---
+
 # AWS Identity and Access Management (IAM)
 
 為 AWS 上面管理資源存取權限的全球服務，不分地區。

@@ -1,3 +1,9 @@
+---
+date: '2024-10-27'
+updated: '2026-07-06'
+tags: [database]
+---
+
 # Check
 
 在 PostgreSQL 中，可以使用 `CHECK` 來避免某些錯誤的資料被寫入。

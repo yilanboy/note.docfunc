@@ -1,3 +1,9 @@
+---
+date: '2023-03-07'
+updated: '2026-09-02'
+tags: [azure]
+---
+
 # App Function
 
 Azure 的無伺服器 (serverless) 服務

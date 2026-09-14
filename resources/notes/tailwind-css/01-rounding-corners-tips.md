@@ -1,3 +1,9 @@
+---
+date: '2025-03-06'
+updated: '2026-07-06'
+tags: [tailwind-css]
+---
+
 # 利用科學與 CSS 變數來設定邊框圓角
 
 Tailwind CSS 的作者最近開始製作一系列的影片 - Build UIs that don't suck，

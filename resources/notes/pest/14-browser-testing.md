@@ -1,3 +1,9 @@
+---
+date: '2025-09-16'
+updated: '2026-07-06'
+tags: [pest]
+---
+
 # 瀏覽器測試 (Browser Testing)
 
 Pest 4 整合了 [Playwright](https://playwright.dev/) 開始支援瀏覽器測試 (Browser Testing)，讓你可以使用 Pest 來撰寫瀏覽器測試。

@@ -1,3 +1,8 @@
+---
+date: '2026-07-06'
+tags: [pest]
+---
+
 # Pest
 
 Pest 是一個 PHP 的測試框架，由 Laravel 維護團隊中的 Nuno 所開發。

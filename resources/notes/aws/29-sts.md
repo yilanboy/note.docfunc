@@ -1,3 +1,9 @@
+---
+date: '2025-11-20'
+updated: '2026-07-06'
+tags: [aws]
+---
+
 # AWS STS (Security Token Service)
 
 STS 是 AWS 非常基礎的一項服務，主要用來產生臨時的安全認證 (Temporary Security Credentials)，這些認證可以用來存取 AWS 資源。

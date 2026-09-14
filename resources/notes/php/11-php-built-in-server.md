@@ -1,3 +1,9 @@
+---
+date: '2026-05-20'
+updated: '2026-07-06'
+tags: [php]
+---
+
 # 使用 PHP 內建的 Local Server
 
 PHP 從 5.4 開始就內建了一個輕量的 Web Server，

@@ -1,3 +1,9 @@
+---
+date: '2022-11-30'
+updated: '2026-07-06'
+tags: [rust]
+---
+
 # Cargo 筆記
 
 Cargo 為 Rust 為的套件管理工具，可以使用 Cargo 來新建專案與安裝套件。

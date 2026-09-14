@@ -1,3 +1,9 @@
+---
+date: '2023-10-20'
+updated: '2026-07-06'
+tags: [database]
+---
+
 # Generated Columns
 
 某天看到一個影片，是 PlanetScale 介紹如何在 MySQL 中使用 Generated Columns 來阻擋分身信箱的註冊。

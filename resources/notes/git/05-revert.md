@@ -1,3 +1,9 @@
+---
+date: '2024-09-30'
+updated: '2026-07-06'
+tags: [git]
+---
+
 # Revert
 
 與 `git reset` 不同，你可以用新增一個 commit 的方式來取消上一次 commit 的修改。

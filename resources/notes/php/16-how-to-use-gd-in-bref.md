@@ -1,3 +1,9 @@
+---
+date: '2026-06-18'
+updated: '2026-07-06'
+tags: [php]
+---
+
 # 在 Bref (Laravel on Lambda) 使用 GD 擴充套件
 
 > 情境：用 Bref 把 Laravel 跑在 AWS Lambda（`provided.al2023`、arm64、PHP 8.5）。

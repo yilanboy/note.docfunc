@@ -1,3 +1,9 @@
+---
+date: '2025-02-19'
+updated: '2026-07-06'
+tags: [rust]
+---
+
 # `RefCell<T>` 與內部可變性模式 (Interior Mutability)
 
 **內部可變性 (Interior Mutability)** 是 Rust 中的一個設計模式，它允許你即使在有不可變參考 (immutable reference) 的情況下也能改變數據。這通常是透過在資料結構中使用 `unsafe` 程式碼來繞過 Rust 正常的借用規則（Borrowing Rules）來實現的。

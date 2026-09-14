@@ -1,3 +1,9 @@
+---
+date: '2025-12-11'
+updated: '2026-09-02'
+tags: [typescript]
+---
+
 # Utility Types in TypeScript
 
 TypeScript 提供了一些內建的 Utility Types，可以幫助我們更方便地操作型別。

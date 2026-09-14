@@ -1,3 +1,9 @@
+---
+date: '2026-07-06'
+updated: '2026-09-02'
+tags: [svelte]
+---
+
 # Forwarding Attributes
 
 在 Laravel 中，我們可以使用 `$attributes` 來接收任何寫在 Component 上的屬性。

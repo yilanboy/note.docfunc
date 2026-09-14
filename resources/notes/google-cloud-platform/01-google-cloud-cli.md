@@ -1,3 +1,9 @@
+---
+date: '2023-04-30'
+updated: '2026-07-06'
+tags: [google-cloud-platform]
+---
+
 # Google Cloud CLI
 
 紀錄 Google Cloud CLI 安裝流程。

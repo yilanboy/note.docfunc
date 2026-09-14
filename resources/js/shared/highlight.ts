@@ -102,7 +102,7 @@ export async function highlightCodeBlocks(
             // 1. Language badge
             const langBadge = document.createElement('span');
             langBadge.className =
-                'inline-flex h-7 select-none items-center justify-center rounded-md border border-zinc-200/90 bg-white px-2.5 font-mono text-xs font-semibold text-zinc-700 shadow-2xs dark:border-zinc-700 dark:bg-zinc-800/90 dark:text-zinc-300';
+                'inline-flex h-7 select-none items-center justify-center rounded-md border border-zinc-200/90 bg-white px-2.5 font-mono text-sm font-semibold text-zinc-700 shadow-2xs dark:border-zinc-700 dark:bg-zinc-800/90 dark:text-zinc-300';
             langBadge.textContent = language;
             toolbar.appendChild(langBadge);
 

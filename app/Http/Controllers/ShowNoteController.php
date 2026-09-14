@@ -26,15 +26,16 @@ class ShowNoteController extends Controller
 
         abort_unless($found !== null, 404);
 
-        $html = Cache::remember(
+        $cached = Cache::remember(
             'markdown:'.$found['path'].':'.filemtime($found['path']),
             now()->addWeek(),
-            fn (): string => $this->markdownConverter->convert(file_get_contents($found['path'])),
+            fn (): array => $this->markdownConverter->parse(file_get_contents($found['path'])),
         );
 
         return Inertia::render('Page', [
             'title' => $found['title'],
-            'html' => $html,
+            'html' => $cached['html'],
+            'metadata' => $cached['metadata'],
         ]);
     }
 }

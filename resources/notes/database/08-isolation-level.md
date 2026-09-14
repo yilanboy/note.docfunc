@@ -1,3 +1,9 @@
+---
+date: '2025-04-18'
+updated: '2026-09-02'
+tags: [database]
+---
+
 # 資料庫隔離級別 (Transaction Isolation Level)
 
 ## 什麼是交易 (Transaction)？

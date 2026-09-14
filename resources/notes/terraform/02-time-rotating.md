@@ -1,3 +1,9 @@
+---
+date: '2024-09-18'
+updated: '2026-07-06'
+tags: [terraform]
+---
+
 # Time Rotating
 
 Terraform 中有提供一個叫做 `time_rotating` 的資源，讓你可以超過一定時間後，重新部署資源。

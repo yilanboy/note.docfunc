@@ -1,3 +1,8 @@
+---
+date: '2026-07-29'
+tags: [pest]
+---
+
 # Pest 5: TIA Engine
 
 Pest 5 引入了 TIA（Test Impact Analysis，測試影響分析）引擎，旨在透過僅選擇性地重新運行受最近代碼更改影響的測試來加速測試套件。

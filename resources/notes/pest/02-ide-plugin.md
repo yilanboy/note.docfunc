@@ -1,3 +1,9 @@
+---
+date: '2022-12-24'
+updated: '2026-09-02'
+tags: [pest]
+---
+
 # IDE Plugin
 
 Pest 官方有提供多種 IDE 的 plugin，詳細可以上官方網站查看 : [Pest - IDE plugins](https://pestphp.com/docs/ide-plugins)

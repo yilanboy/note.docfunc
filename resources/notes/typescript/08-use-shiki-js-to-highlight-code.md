@@ -1,3 +1,9 @@
+---
+date: '2026-01-05'
+updated: '2026-09-02'
+tags: [typescript]
+---
+
 # 使用 Shiki.js 對程式碼著色
 
 前陣子將自己部落格上面的程式碼語法著色工具換成 Shiki.js，雖然 Highlight.js 使用起來並沒有太大的問題，我甚至還使用 Highlight.js 的 API 自己寫了 Laravel Blade 與 HCL 的語法著色套件，但 Highlight.js 目前看下來已經沒有什麼人在幫忙維護了，而且 Shiki.js 支援的語法、主題、還有功能都比 Highlight.js 多，所幸就換成 Shiki.js 了。

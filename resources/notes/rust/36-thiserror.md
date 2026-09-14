@@ -1,3 +1,9 @@
+---
+date: '2024-02-07'
+updated: '2026-07-06'
+tags: [rust]
+---
+
 # `thiserror`
 
 `thiserror` 是一個用來定義自定義錯誤類型的庫，它提供了一個巨集 `Error` 來定義錯誤類型，並且可以自動實現 `std::error::Error` trait。

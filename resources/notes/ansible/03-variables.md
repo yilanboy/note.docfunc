@@ -1,3 +1,9 @@
+---
+date: '2023-08-10'
+updated: '2026-09-02'
+tags: [ansible]
+---
+
 # Variables
 
 在 playbook 中可以使用 `vars` 來定義變數，例如：

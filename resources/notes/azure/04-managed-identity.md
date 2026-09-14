@@ -1,3 +1,9 @@
+---
+date: '2023-03-10'
+updated: '2026-07-06'
+tags: [azure]
+---
+
 # Azure Managed Identity
 
 當應用程式需要訪問 Azure 資源時，經常需要一組認證，例如使用者名稱和密碼、憑證等等。然而，管理和存儲這些認證可能會帶來風險，例如認證資料外洩、密碼不當管理等等。為了解決這些問題，Azure 提供了 Managed Identity 服務

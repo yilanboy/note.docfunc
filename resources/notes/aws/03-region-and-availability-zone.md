@@ -1,3 +1,9 @@
+---
+date: '2023-09-21'
+updated: '2026-07-06'
+tags: [aws]
+---
+
 # Region and Availability Zone
 
 ## Region

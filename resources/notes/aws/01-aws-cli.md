@@ -1,3 +1,9 @@
+---
+date: '2023-08-05'
+updated: '2026-07-06'
+tags: [aws]
+---
+
 # AWS CLI
 
 AWS CLI 是一個用來操作 AWS 的指令列工具，可以用來建立還有管理 EC2、S3、IAM 等服務。

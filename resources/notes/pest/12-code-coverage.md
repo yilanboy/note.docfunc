@@ -1,3 +1,9 @@
+---
+date: '2022-12-25'
+updated: '2026-07-06'
+tags: [pest]
+---
+
 # 查看測試覆蓋度 (Code Coverage)
 
 Laravel 在 `test` 指令中可以使用 `--coverage` 顯示程式碼的測試覆蓋度

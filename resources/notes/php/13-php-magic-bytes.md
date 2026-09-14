@@ -1,3 +1,9 @@
+---
+date: '2026-06-08'
+updated: '2026-07-06'
+tags: [php]
+---
+
 # 在 PHP 中判斷 Magic Bytes
 
 ## 什麼是 Magic Bytes

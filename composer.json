@@ -10,14 +10,15 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
+        "ext-intl": "*",
+        "ext-mbstring": "*",
         "inertiajs/inertia-laravel": "^3.0",
         "laravel-lang/common": "^6.8",
         "laravel/framework": "^13.0",
         "laravel/octane": "^2.17",
         "laravel/tinker": "^3.0",
         "laravel/wayfinder": "^0.1.5",
-        "ext-intl": "*",
-        "ext-mbstring": "*"
+        "spatie/yaml-front-matter": "^2.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

@@ -1,3 +1,9 @@
+---
+date: '2026-04-03'
+updated: '2026-07-07'
+tags: [github]
+---
+
 # GitHub CLI (gh) 使用筆記
 
 本筆記整理了 GitHub CLI (`gh`) 的常用指令。

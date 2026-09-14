@@ -1,3 +1,9 @@
+---
+date: '2022-12-22'
+updated: '2026-07-06'
+tags: [rust]
+---
+
 # Packages 與 Crates
 
 Crate 是 Rust 編譯器能執行成功的最小程式碼量。

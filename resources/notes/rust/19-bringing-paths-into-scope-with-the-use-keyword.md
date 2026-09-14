@@ -1,3 +1,9 @@
+---
+date: '2023-01-11'
+updated: '2026-07-06'
+tags: [rust]
+---
+
 # Bringing Paths into Scope with the use Keyword
 
 雖然我們可以使用絕對路徑來呼叫項目，但如果每一次呼叫都寫一長串路徑，會讓程式碼顯得有些冗長。

@@ -1,3 +1,8 @@
+---
+date: '2026-07-06'
+tags: [aws]
+---
+
 # Auto Scaling Group (ASG)
 
 - ASG 的 Policy 種類：

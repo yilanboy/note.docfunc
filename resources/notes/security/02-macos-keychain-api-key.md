@@ -1,3 +1,8 @@
+---
+date: '2026-08-13'
+tags: [security]
+---
+
 # 使用 macOS Keychain 透過命令列管理 API Key 與 Token
 
 使用 macOS 內建的 `security` 命令列工具，將 API Key 或 Token 安全地儲存在系統鑰匙圈（Keychain）。這能避免把敏感憑證直接寫進 `.zshrc`、程式碼或版本控制系統。

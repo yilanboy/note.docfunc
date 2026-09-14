@@ -1,3 +1,9 @@
+---
+date: '2023-09-02'
+updated: '2026-09-02'
+tags: [svelte]
+---
+
 # Svelte 5 的即時反應 (Reactivity)
 
 Svelte 5 引入了 **runes** 來控制即時反應，使其更加明確和強大。核心概念是使用 `$state` 來宣告反應性狀態。

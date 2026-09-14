@@ -1,3 +1,9 @@
+---
+date: '2024-03-25'
+updated: '2026-07-06'
+tags: [aws]
+---
+
 # AWS Certificate Service
 
 AWS 相關的憑證管理服務。

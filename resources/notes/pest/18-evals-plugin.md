@@ -1,3 +1,9 @@
+---
+date: '2026-07-29'
+updated: '2026-09-02'
+tags: [pest]
+---
+
 # Pest 5: Evals Plugin
 
 Pest 的 "Evals" Plugin 是一個專為測試與大型語言模型（LLM）互動的軟體而設計的工具。與傳統測試檢查「精確相等」不同，"evals" 用於衡量 AI 輸出的「品質」。

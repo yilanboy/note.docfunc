@@ -1,3 +1,9 @@
+---
+date: '2025-06-30'
+updated: '2026-09-02'
+tags: [docker]
+---
+
 # Logging Drivers
 
 Docker 本身可以使用多種不同的 Logging Drivers 來記錄容器輸出的日誌。

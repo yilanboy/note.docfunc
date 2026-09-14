@@ -1,3 +1,9 @@
+---
+date: '2026-06-04'
+updated: '2026-09-02'
+tags: [pest]
+---
+
 # 修復不穩定的瀏覽器測試 (Flaky Browser Tests)
 
 ## 1. 不穩定情況 (The Flaky Situation)

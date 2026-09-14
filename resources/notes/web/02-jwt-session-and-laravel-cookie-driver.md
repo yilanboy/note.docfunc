@@ -1,3 +1,9 @@
+---
+date: '2026-05-11'
+updated: '2026-07-06'
+tags: [web]
+---
+
 # JWT、Session 與 Laravel Cookie Session Driver 的比較
 
 最近在重新整理身份驗證（Authentication）相關的知識，發現自己對「Session 到底存在哪裡」、「JWT 為什麼難以撤銷」、「Laravel 那個 Cookie Driver 到底跟 JWT 差在哪」這幾件事一直模模糊糊。趁這次把幾份規範與框架文件讀過一遍，我想把傳統 Server-side Session、JWT（JSON Web Token）與 Laravel Cookie Session Driver 三種方案做一個完整的比較筆記，順便釐清自己過去的一些誤解。

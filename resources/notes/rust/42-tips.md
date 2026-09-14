@@ -1,3 +1,9 @@
+---
+date: '2025-11-25'
+updated: '2026-09-02'
+tags: [rust]
+---
+
 # Rust Tips
 
 記錄一些在使用 Rust 時的小技巧與建議。

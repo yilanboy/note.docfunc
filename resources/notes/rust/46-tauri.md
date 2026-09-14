@@ -1,3 +1,9 @@
+---
+date: '2026-02-02'
+updated: '2026-09-02'
+tags: [rust]
+---
+
 # Tauri
 
 [Tauri](https://v2.tauri.app/) 是一個用於開發桌面與行動應用程式的跨平台框架。其架構與 Electron 類似，允許開發者使用 Web 技術建構前端，並利用 Rust 處理後端邏輯。相比 Electron，Tauri 構建的應用程式體積更輕巧、效能更出色，且具備更高的安全性。

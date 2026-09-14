@@ -1,3 +1,9 @@
+---
+date: '2024-04-17'
+updated: '2026-07-06'
+tags: [database]
+---
+
 # Slotted Counter Pattern
 
 某天在上班途中滑推特的時候，看到一個很有趣的資料庫計數器設計 Tips。常見的計數器 (counter) 更新操作，是當用戶觸發某些條件後，就將後端資料庫記錄的數量加 1。

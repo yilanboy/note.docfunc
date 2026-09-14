@@ -1,3 +1,9 @@
+---
+date: '2026-04-28'
+updated: '2026-09-02'
+tags: [security]
+---
+
 # 在升級 Laravel 13 時認識的「小工具鏈攻擊」
 
 前陣子 Laravel 13 正式發布！所以我也開始來升級自己部落格的 Laravel 版本了。沒想到在進入 AI 時代後，連升級框架都能請 AI 代勞。Laravel 官方推出的 Laravel Boost 套件提供了升級 Laravel 13 的 Skill 文件，只要將你的 Laravel Boost 套件升級到 2.0，並設定好 Skill 文件：

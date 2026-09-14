@@ -1,3 +1,9 @@
+---
+date: '2023-06-19'
+updated: '2026-09-02'
+tags: [k8s]
+---
+
 # Reloader
 
 為開源專案，當更新 `ConfigMap` 與 `Secret` 時，會重新建立與之相依的 `Pod`，讓 `Pod` 使用最新的設定。

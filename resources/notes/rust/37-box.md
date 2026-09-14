@@ -1,3 +1,9 @@
+---
+date: '2024-02-07'
+updated: '2026-07-06'
+tags: [rust]
+---
+
 # 使用 `Box<T>` 指向堆積上的資料
 
 Rust 中有一個智慧指標（Smart Pointer）功能叫做 Box。

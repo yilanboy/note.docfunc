@@ -1,3 +1,9 @@
+---
+date: '2024-04-30'
+updated: '2026-07-06'
+tags: [network]
+---
+
 # Switch
 
 網路交換器（Switch）是一種網路裝置，用於連接多個裝置，例如電腦、印表機、伺服器等，以便這些裝置之間可以互相通信。Switch 是一種二層（Data Link Layer）裝置，主要負責將數據包（Data Frame）從來源裝置轉發到目的裝置。

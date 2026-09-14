@@ -1,3 +1,9 @@
+---
+date: '2023-02-24'
+updated: '2026-07-06'
+tags: [rust]
+---
+
 # Hash Map
 
 Hash Map 是常見的一種資料集合。

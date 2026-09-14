@@ -1,3 +1,9 @@
+---
+date: '2023-07-12'
+updated: '2026-07-06'
+tags: [grafana]
+---
+
 # Use Node Exporter to monitor the host
 
 在主機上安裝 Node Exporter，以便 Prometheus 可以收集主機的監控資料。

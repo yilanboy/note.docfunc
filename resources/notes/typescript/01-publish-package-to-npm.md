@@ -1,3 +1,9 @@
+---
+date: '2025-01-21'
+updated: '2026-09-02'
+tags: [typescript]
+---
+
 # 發佈一個由 TypeScript 寫成的套件
 
 最近用 TypeScript 寫了一個前端套件推送到 NPM 上面，除了自己讓自己使用，也分享給別人使用。

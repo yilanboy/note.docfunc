@@ -1,3 +1,8 @@
+---
+date: '2026-07-06'
+tags: [ghostty]
+---
+
 # 我的 Ghostty 設定
 
 在 MacOS 上，使用快捷鍵 `Cmd + ,` 可以快速開啟用來設定 Ghostty 的設定檔。

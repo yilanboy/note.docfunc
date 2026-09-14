@@ -1,3 +1,9 @@
+---
+date: '2023-10-18'
+updated: '2026-09-01'
+tags: [google-cloud-platform]
+---
+
 # Service Account
 
 Service Account 有點類似 Azure 的 Managed Identity。

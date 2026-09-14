@@ -1,3 +1,8 @@
+---
+date: '2026-07-06'
+tags: [google-cloud-platform]
+---
+
 # Google Cloud Platform
 
 Google 的雲端平台，簡稱 GCP。之前曾試著在上面架設自己的網站，使用上相當舒服。

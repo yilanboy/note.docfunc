@@ -1,3 +1,9 @@
+---
+date: '2025-12-02'
+updated: '2026-07-06'
+tags: [laravel]
+---
+
 # Laravel Pennant
 
 Laravel Pennant 是一個用來管理功能旗標 (Feature Flag) 的輕量套件。

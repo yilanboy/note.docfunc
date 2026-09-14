@@ -1,3 +1,9 @@
+---
+date: '2024-03-21'
+updated: '2026-09-02'
+tags: [github]
+---
+
 # Defining Outputs for Jobs
 
 如果你想設定一個變數讓後續的 Job 使用，可以使用 GitHub Action 提供的 `GITHUB_OUTPUT` 環境變數。

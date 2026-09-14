@@ -1,3 +1,8 @@
+---
+date: '2026-07-06'
+tags: [ansible]
+---
+
 # Ansible
 
 Ansible 是一套知名的 IaC (Infrastructure as Code) 工具。

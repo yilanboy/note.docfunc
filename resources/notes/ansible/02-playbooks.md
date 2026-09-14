@@ -1,3 +1,9 @@
+---
+date: '2023-08-09'
+updated: '2026-09-02'
+tags: [ansible]
+---
+
 # Playbooks
 
 Ansible playbooks 提供了一個更進階的方式來管理主機上的設定，它是一個 YAML 格式的檔案。

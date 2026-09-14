@@ -1,3 +1,9 @@
+---
+date: '2026-06-07'
+updated: '2026-07-06'
+tags: [php]
+---
+
 # 讓 Packagist / Composer 排除不必要的檔案
 
 當你的 PHP 套件在被人用 `composer require` 安裝時，應該把說明文件（如 README），還有開發用的檔案從中排除。

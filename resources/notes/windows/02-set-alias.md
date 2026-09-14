@@ -1,3 +1,9 @@
+---
+date: '2025-08-23'
+updated: '2026-07-06'
+tags: [windows]
+---
+
 # 設定指令的 Alias
 
 在 Linux 的 Bash 中，你可以用 `alias` 來設定指令的別名。

@@ -1,3 +1,9 @@
+---
+date: '2024-05-08'
+updated: '2026-07-06'
+tags: [aws]
+---
+
 # CloudFront (AWS CDN Service)
 
 CloudFront 是 AWS 的 CDN (Content Delivery Network) 服務，可以用來加速靜態和動態的 Web 內容分發。CloudFront 會將你的內容複製到多個位於全球各地的 Edge Location，當用戶訪問你的網站時，會自動將用戶導向到離用戶最近的 Edge Location，這樣可以減少網頁載入的時間。

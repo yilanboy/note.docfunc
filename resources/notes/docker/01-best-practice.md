@@ -1,3 +1,9 @@
+---
+date: '2023-02-21'
+updated: '2026-09-02'
+tags: [docker]
+---
+
 # Docker Best Practice
 
 詢問 ChatGPT 有關於使用 Docker 的最佳實踐

@@ -1,3 +1,9 @@
+---
+date: '2024-08-05'
+updated: '2026-09-02'
+tags: [github]
+---
+
 # Use Schedule to Backup PostgreSQL
 
 在將資料庫從 PlanetScale 換到 Neon 之後，接下來就要來思考如何備份資料了。

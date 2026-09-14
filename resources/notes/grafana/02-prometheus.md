@@ -1,3 +1,9 @@
+---
+date: '2023-07-12'
+updated: '2026-09-02'
+tags: [grafana]
+---
+
 # Prometheus
 
 Prometheus 是一個由 Grafana Lab 開發並維護的開源監控系統，用於記錄和查詢系統的監控資料。Prometheus 透過 HTTP 協定來收集監控資料，並且提供一個簡單的查詢語言 PromQL 來查詢監控資料。

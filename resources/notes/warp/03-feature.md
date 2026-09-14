@@ -1,3 +1,9 @@
+---
+date: '2023-01-09'
+updated: '2026-07-06'
+tags: [warp]
+---
+
 # Warp 相關功能
 
 ## Autosuggestions 與 Syntax Highlighting

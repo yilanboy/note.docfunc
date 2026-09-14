@@ -1,3 +1,9 @@
+---
+date: '2026-06-28'
+updated: '2026-07-06'
+tags: [git]
+---
+
 # Trunk Based Development
 
 Trunk Based Development（主幹開發，簡稱 TBD）是一種 Git 分支策略。它的核心精神是：**所有開發者都圍繞著同一條主幹分支（trunk，通常就是 `main`）進行協作，並且頻繁地（至少每天一次）將自己的修改整合回主幹。**

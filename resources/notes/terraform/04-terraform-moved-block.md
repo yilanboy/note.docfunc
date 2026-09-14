@@ -1,3 +1,9 @@
+---
+date: '2026-05-01'
+updated: '2026-09-02'
+tags: [terraform]
+---
+
 # 使用 Terraform `moved` Block 重新命名資源
 
 ## 簡介

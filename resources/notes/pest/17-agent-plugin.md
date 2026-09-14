@@ -1,3 +1,9 @@
+---
+date: '2026-07-29'
+updated: '2026-09-02'
+tags: [pest]
+---
+
 # Pest 5: The Agent Plugin
 
 Pest 5 的 Agent Plugin 提供了一種讓 AI 編碼代理 (AI coding agents) 直接從命令列運行一次性的測試程式碼片段來驗證其變更的方法。這為 AI 提供了一個明確的「通過」或「失敗」的結果，形成了一個完整的反饋循環。

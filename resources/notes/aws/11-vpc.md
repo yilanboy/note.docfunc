@@ -1,3 +1,9 @@
+---
+date: '2024-03-29'
+updated: '2026-07-06'
+tags: [aws]
+---
+
 # Virtual Private Cloud (VPC)
 
 - NACL 預設允許所有進入與出去的流量，要修改流量出入的規則時，建議新增一個 Custom NACL Rule，而不是修改預設設定。

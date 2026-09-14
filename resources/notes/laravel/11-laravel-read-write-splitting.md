@@ -1,3 +1,9 @@
+---
+date: '2026-07-28'
+updated: '2026-09-02'
+tags: [laravel]
+---
+
 # Laravel 讀寫分離、Sticky Reads 與 Transaction 底層機制筆記
 
 ## 1. 核心觀念總覽

@@ -1,3 +1,9 @@
+---
+date: '2023-11-15'
+updated: '2026-07-06'
+tags: [aws]
+---
+
 # Elastic Load Balancer
 
 最近在準備 SAA 認證，所以就來整理一下 AWS 的 Elastic Load Balancer 相關筆記。
