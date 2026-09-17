@@ -4,6 +4,7 @@ use App\Http\Controllers\SearchNotesController;
 use App\Http\Controllers\ShowCategoryController;
 use App\Http\Controllers\ShowHomeController;
 use App\Http\Controllers\ShowNoteController;
+use App\Http\Controllers\ShowNoteOgImageController;
 use Illuminate\Support\Facades\Route;
 
 // Use a scoped variable instead of a global constant to prevent "already defined" errors when routes are loaded multiple times during tests or in Octane.
@@ -16,6 +17,10 @@ Route::get('/search', SearchNotesController::class)->name('search');
 Route::get('/{category}', ShowCategoryController::class)
     ->where('category', $validPathPattern)
     ->name('notes.category');
+
+Route::get('/{category}/{note}/og.webp', ShowNoteOgImageController::class)
+    ->where(['category' => $validPathPattern, 'note' => $validPathPattern])
+    ->name('notes.note.og');
 
 Route::get('/{category}/{note}', ShowNoteController::class)
     ->where(['category' => $validPathPattern, 'note' => $validPathPattern])

@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Laravel\Head\Enums\OgType;
+use Laravel\Head\Enums\TwitterCard;
+use Laravel\Head\ErrorPages;
+use Laravel\Head\Facades\Head;
+use Laravel\Head\HeadBuilder;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,9 +34,36 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        $this->configureHead();
 
         JsonResource::withoutWrapping();
         Model::shouldBeStrict();
+    }
+
+    /**
+     * Configure default document head metadata and social sharing tags.
+     */
+    protected function configureHead(): void
+    {
+        Head::defaults(function (HeadBuilder $head): void {
+            $head
+                ->title(config('app.name'), suffix: ' - '.config('app.name'))
+                ->canonical()
+                ->og(
+                    siteName: config('app.name'),
+                    type: OgType::Website,
+                )
+                ->twitter(
+                    card: TwitterCard::SummaryWithLargeImage,
+                );
+        });
+
+        Head::errors(function (ErrorPages $errors): void {
+            $errors->status(404, fn (HeadBuilder $head): HeadBuilder => $head
+                ->title('Page Not Found')
+                ->description('找不到該頁面。')
+            );
+        });
     }
 
     /**

@@ -31,10 +31,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>{title}</title>
-</svelte:head>
-
 <main class="mx-auto w-full max-w-3xl px-4 py-8 lg:px-8">
     <article
         {@attach processContent}

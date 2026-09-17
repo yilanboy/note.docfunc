@@ -1,4 +1,6 @@
 import { createInertiaApp } from '@inertiajs/svelte';
 import '@tailwindplus/elements';
 
-void createInertiaApp();
+void createInertiaApp({
+    serverHead: true,
+});
