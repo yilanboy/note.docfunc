@@ -50,8 +50,8 @@ class AppServiceProvider extends ServiceProvider
                 ->title(config('app.name'), suffix: ' - '.config('app.name'))
                 ->canonical()
                 ->og(
-                    siteName: config('app.name'),
                     type: OgType::Website,
+                    siteName: config('app.name'),
                 )
                 ->twitter(
                     card: TwitterCard::SummaryWithLargeImage,
