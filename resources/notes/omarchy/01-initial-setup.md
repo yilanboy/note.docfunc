@@ -5,7 +5,7 @@ tags: [omarchy]
 
 # Omarchy 初始化設定指南
 
-本筆記彙整新安裝 **Omarchy**（基於 Arch Linux + Hyprland / Wayland）後的初始化環境配置，包含中文字型安裝、繁體中文輸入法（Fcitx5 + 新酷音）、鍵盤按鍵映射（Alt 與 Super 對調、Caps Lock 轉 Ctrl）、Foot 終端機字體與顯示調整，以及 Mise 套件管理工具的清理技巧。
+本筆記彙整新安裝 **Omarchy**（基於 Arch Linux + Hyprland / Wayland）後的初始化環境配置，包含繁體中文輸入法（Fcitx5 + 新酷音）、預設應用程式設定（Ghostty 終端機、Firefox 瀏覽器）、鍵盤按鍵映射（Alt 與 Super 對調、Caps Lock 轉 Ctrl）、Foot 終端機字體與顯示調整，以及 Mise 套件管理工具的清理技巧。
 
 ---
 
@@ -19,88 +19,92 @@ Omarchy 是一套鍵盤導向的桌面環境配置，底層採用 Hyprland (Wayl
 
 ---
 
-## 2. 安裝中文字體（解決缺字與豆腐方塊）
+## 2. 繁體中文輸入法安裝與設定 (Fcitx5 + Chewing)
 
-新系統若缺少中文字型，終端機與各應用程式可能會顯示為空白方塊或缺字。建議安裝 Google Noto CJK 與開源思源字型：
+### 2.1 什麼是 Fcitx5 與相關套件架構？
 
-```bash
-# 1. 安裝 Google Noto CJK 字型與 Emoji（涵蓋繁體中文、簡體中文、日韓文與圖示）
-sudo pacman -S --needed noto-fonts-cjk noto-fonts-emoji
+**Fcitx5**（小企鵝輸入法 5）是 Linux / Wayland 下主流的高效能**輸入法框架（Input Method Framework）**。在 Linux 桌面中，要讓各類應用程式順暢打中文，需要核心服務、介面橋接模組與輸入法引擎相互搭配：
 
-# 2. （可選）安裝思源黑體 / 思源宋體繁體中文版
-sudo pacman -S --needed adobe-source-han-sans-tw-fonts adobe-source-han-serif-tw-fonts
-
-# 3. 重新整理系統字型快取
-fc-cache -fv
-```
+| 套件名稱 | 角色定位 | 作用說明 |
+| :--- | :--- | :--- |
+| **`fcitx5`** | 核心服務本體 (Daemon) | 負責後台常駐行程、鍵盤快捷鍵攔截切換、選字浮動視窗管理與 D-Bus 通訊。 |
+| **`fcitx5-gtk`** | GTK 橋接模組 | 提供 GTK2/GTK3/GTK4 應用的輸入法擴充（`im-fcitx5.so`），**PhpStorm 等 JetBrains IDE 及 GTK 軟體必備**。 |
+| **`fcitx5-qt`** | Qt 橋接模組 | 讓所有基於 Qt 框架開發的軟體（如 KDE 工具、VirtualBox）能正確呼叫 Fcitx5 輸入。 |
+| **`fcitx5-chewing`** | 注音輸入引擎 | 新酷音繁體中文輸入法引擎。 |
+| **`fcitx5-configtool`**| GUI 設定工具 | 提供圖形化介面來新增/刪除輸入法、調整快捷鍵與選字排版。 |
 
 ---
 
-## 3. 繁體中文輸入法安裝與設定 (Fcitx5 + Chewing)
+### 2.2 安裝與設定步驟
 
-因為 Omarchy 已經預先常駐 Fcitx5 服務，只需安裝輸入法引擎與設定工具即可啟用。
+為了確保所有 GUI 應用程式（包含 JetBrains 系列、瀏覽器、Qt/GTK 軟體）都能正常啟動且能正常輸入中文，建議完整安裝核心與橋接套件：
 
-### 步驟 A：安裝輸入法引擎與配置工具
+#### 步驟 1：安裝套件
 
-以台灣最常見的「新酷音注音」為例：
-
+可使用 `pacman` 一次安裝完整所需套件：
 ```bash
-sudo pacman -S --needed fcitx5-chewing fcitx5-configtool
+sudo pacman -S fcitx5 fcitx5-gtk fcitx5-qt fcitx5-chewing fcitx5-configtool
 ```
+*(亦可按下 `Super + Space` 透過 Omarchy 選單中的 **Install** -> **Package** 逐一選取安裝)*
 
-> **其他輸入法選項**：
-> - **Rime（中州韻）**：支援注音、倉頡、拼音等多種方案：
->   ```bash
->   sudo pacman -S --needed fcitx5-rime rime-data fcitx5-configtool
->   ```
-> - **倉頡 / 速成**：
->   ```bash
->   sudo pacman -S --needed fcitx5-table-extra fcitx5-configtool
->   ```
+#### 步驟 2：啟用新酷音輸入法
 
-### 步驟 B：啟用輸入法
-
-#### 方法 1：圖形介面設定（推薦）
-
-1. 在終端機執行或透過應用程式啟動器開啟設定工具：
+1. 開啟輸入法設定介面：
    ```bash
    fcitx5-configtool
    ```
 2. 切換至 **「輸入法 (Input Method)」** 分頁。
 3. 取消勾選下方的 **「僅顯示目前語言 (Only Show Current Language)」**。
-4. 搜尋 **Chewing**（新酷音）。
-5. 選取後點擊 **`>`** 按鈕加入左側清單（放置在 `Keyboard - English (US)` 下方）。
-6. 點擊右下角 **「套用 (Apply)」**。
+4. 搜尋 **Chewing**（新酷音），選取後點擊加入至右側清單並儲存套用。
+5. 預設切換輸入法快捷鍵為 `Ctrl + Space`。
 
-#### 方法 2：命令列直接寫入設定檔
+---
 
-如果偏好直接透過終端機配置：
+### 2.3 常見問題：為什麼缺少 fcitx5 / fcitx5-gtk 會導致 PhpStorm 無法啟動？
 
+若未安裝完整套件，常會發現 **PhpStorm 等 JetBrains 系列軟體完全無法開啟或啟動時直接閃退**，其主要原因如下：
+
+1. **Omarchy 預設注入的環境變數**：
+   Omarchy 在登入會話中預先設定了輸入法環境變數：
+   ```bash
+   GTK_IM_MODULE=fcitx
+   QT_IM_MODULE=fcitx
+   XMODIFIERS=@im=fcitx
+   ```
+2. **JetBrains Runtime (JBR) 動態加載失敗崩潰**：
+   * PhpStorm 運行在客製化的 JetBrains Runtime (JBR) 上，JBR 底層在 Linux 上依賴 GTK 進行視窗組件渲染與輸入法整合。
+   * 當 `GTK_IM_MODULE=fcitx` 生效時，GTK 初始化輸入法模組會使用 `dlopen` 去尋找動態庫 `im-fcitx5.so`。
+   * 若系統**缺少 `fcitx5-gtk` 或 `fcitx5` 本體**，GTK / X11 (XOpenIM) 無法載入對應模組或無法與輸入法 Daemon 建立連線，會直接拋出未捕捉的錯誤或產生 Segmentation Fault (`SIGSEGV`)，導致 JVM 啟動時立刻崩潰退場。
+
+#### 驗證與應急啟動方式
+
+若在尚未安裝 Fcitx5 模組的環境下需要應急開啟 PhpStorm，可以在終端機啟動時清空輸入法環境變數：
 ```bash
-# 1. 將 chewing 加入 profile
-cat << 'EOF' >> ~/.config/fcitx5/profile
-
-[Groups/0/Items/1]
-Name=chewing
-EOF
-
-# 2. 重新載入 Fcitx5 服務
-fcitx5 -r -d
+GTK_IM_MODULE= QT_IM_MODULE= XMODIFIERS= phpstorm
 ```
+若清空變數後能正常啟動，即證明閃退是由「缺少環境變數所指定的 Fcitx5 模組」所引起。安裝 `fcitx5`、`fcitx5-gtk` 與 `fcitx5-qt` 即可徹底解決。
 
-### 步驟 C：切換與常用快捷鍵
+---
 
-* **切換輸入法**：預設為 `Ctrl + Space`。
-* **調整快捷鍵**：可在 `fcitx5-configtool` 中的 **「全域選項 (Global Options)」->「切換輸入法」** 自訂（如改為 `Super + Space`）。
+## 3. 安裝與設定預設應用程式 (Terminal & Browser)
 
-### 常見問題排除
+### 3.1 預設終端機更換為 Ghostty
 
-1. **按 `Ctrl + Space` 無法切換**：
-   - 確認 Fcitx5 是否正在運作：`pgrep fcitx5`。
-   - 若未啟動，手動在背景執行：`fcitx5 -d`。
-2. **部分應用程式無法輸入中文**：
-   - 檢查 `~/.config/fcitx5/profile` 清單中是否已正確加入 `chewing`。
-   - 登出桌面會話（Logout）並重新登入，確保 Wayland/Qt/GTK 的 IM 通訊重新對齊。
+1. 按下 `Super + Space` 開啟 Omarchy 選單。
+2. 選擇 **Install** -> **Terminal** 安裝 **Ghostty**。
+3. 在終端機執行指令將 Ghostty 設為預設終端機：
+   ```bash
+   omarchy default terminal ghostty
+   ```
+
+### 3.2 預設瀏覽器更換為 Firefox
+
+1. 按下 `Super + Space` 開啟 Omarchy 選單。
+2. 選擇 **Install** -> **Browser** 安裝 **Firefox**。
+3. 在終端機執行指令將 Firefox 設為預設瀏覽器：
+   ```bash
+   omarchy default browser firefox
+   ```
 
 ---
 
