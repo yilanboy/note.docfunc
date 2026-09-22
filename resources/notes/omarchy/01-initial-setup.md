@@ -5,7 +5,7 @@ tags: [omarchy]
 
 # Omarchy 初始化設定指南
 
-本筆記彙整新安裝 **Omarchy**（基於 Arch Linux + Hyprland / Wayland）後的初始化環境配置，包含繁體中文輸入法（Fcitx5 + 新酷音）、預設應用程式設定（Ghostty 終端機、Firefox 瀏覽器）、鍵盤按鍵映射（Alt 與 Super 對調、Caps Lock 轉 Ctrl）、Foot 終端機字體與顯示調整，以及 Mise 套件管理工具的清理技巧。
+本筆記彙整新安裝 **Omarchy**（基於 Arch Linux + Hyprland / Wayland）後的初始化環境配置，包含繁體中文輸入法（Fcitx5 + 新酷音）、預設應用程式設定（Ghostty 終端機、Firefox 瀏覽器）、鍵盤按鍵映射（Alt 與 Super 對調、Caps Lock 轉 Ctrl）、Foot 終端機字體與顯示調整、Mise 套件管理工具的清理技巧、軟體移除後應用程式選單（.desktop 捷徑）殘留清理，以及 PHP Extension 擴充模組的安裝與設定。
 
 ---
 
@@ -276,3 +276,129 @@ mise ls gemini
 # 2. 確認路徑解析已找不到該執行檔
 mise which gemini
 ```
+
+---
+
+## 7. 軟體移除後應用程式選單（App Launcher）殘留清理
+
+在 Omarchy 中透過選單的 **Remove > Package**、終端機執行 `pacman -R` 移除軟體，或手動刪除獨立安裝的工具（例如 **JetBrains Toolbox**、**Alacritty**）後，常會遇到**按下 `Super + Space` 開啟應用程式選單時，該軟體依然出現在清單中**（通常伴隨破損或預設齒輪圖示），點擊後無任何反應。
+
+此為 Linux 桌面常見現象，社群亦有相同回報（參見 [omacom/omarchy#3574](https://github.com/omacom/omarchy/issues/3574)）。
+
+### 7.1 問題原因
+
+Linux 桌面環境（遵循 XDG Desktop Entry 規範）主要透過讀取以下路徑下的 `.desktop` 捷徑檔案來呈現應用程式選單：
+
+1. **系統全域路徑**：`/usr/share/applications/`
+2. **使用者個人路徑**：`~/.local/share/applications/`
+3. **開機自啟動路徑**：`~/.config/autostart/`
+
+**為何解除安裝後選單項目依舊存在？**
+- **套件管理員限制**：`pacman` / `paru` 僅維護系統全域目錄（`/usr/share/...`），**無法也不會主動修改或刪除使用者家目錄（`~`）下的檔案**。
+- **軟體自行建立使用者捷徑**：許多軟體在安裝或初次啟動時（例如 JetBrains Toolbox、Chrome/PWA、手動下載的 AppImage），會自動將 `.desktop` 檔寫入使用者的 `~/.local/share/applications/` 以及 `~/.config/autostart/`。
+- **主程式已刪除但捷徑殘留**：當主程式已被移除，但使用者目錄中的 `.desktop` 檔仍存在時，Omarchy 的啟動器（如 Walker）重新掃描依舊會讀取到該項目，造成「程式已刪除卻仍顯示在選單」的狀況。
+
+### 7.2 解決步驟：以 JetBrains Toolbox 為例
+
+#### 步驟 1：搜尋殘留的 `.desktop` 檔案
+
+在終端機中搜尋系統與使用者目錄中與該軟體相關的桌面捷徑與自啟動檔：
+
+```bash
+find /usr/share/applications ~/.local/share/applications ~/.config/autostart -iname "*jetbrains*" -o -iname "*toolbox*" 2>/dev/null
+```
+
+常見殘留檔案如下：
+- `~/.local/share/applications/jetbrains-toolbox.desktop`（選單顯示來源）
+- `~/.local/share/applications/jetbrainsd.desktop`（背景 Daemon 協定捷徑）
+- `~/.config/autostart/jetbrains-toolbox.desktop`（開機自動啟動項）
+
+#### 步驟 2：刪除殘留捷徑與自啟動
+
+直接刪除使用者層級的 `.desktop` 捷徑：
+
+```bash
+# 1. 刪除應用程式選單捷徑
+rm -f ~/.local/share/applications/jetbrains-toolbox.desktop
+rm -f ~/.local/share/applications/jetbrainsd.desktop
+
+# 2. 刪除開機自啟動設定
+rm -f ~/.config/autostart/jetbrains-toolbox.desktop
+```
+
+#### 步驟 3：（可選）清理使用者設定與快取目錄
+
+若確定不再使用該軟體，可一併清除殘留的使用者快取與配置檔案：
+
+```bash
+rm -rf ~/.local/share/JetBrains ~/.config/JetBrains ~/.cache/JetBrains
+```
+
+### 7.3 通用清理原則（適用於 Alacritty 等其他軟體）
+
+遇到任何移除後仍然卡在選單上的軟體，皆可透過通用指令清理：
+
+```bash
+# 1. 搜尋該軟體的 .desktop 檔
+find /usr/share/applications ~/.local/share/applications -iname "*<軟體名稱>*"
+
+# 2. 刪除使用者目錄下的殘留捷徑
+rm -f ~/.local/share/applications/<軟體名稱>.desktop
+```
+
+刪除後，重新開啟 Omarchy 選單（`Super + Space`），殘留的圖示與項目即會立即消失。
+
+---
+
+## 8. PHP Extension 擴充模組安裝與設定
+
+Omarchy 基於 Arch Linux，其 PHP 擴充套件的管理機制與 Ubuntu / Debian 或 macOS (Homebrew) 略有不同：
+
+- **預先編譯的內建模組**：許多常見擴充（例如 `sockets`、`bcmath`、`curl`、`intl`、`zip` 等）其編譯本體（`.so` 檔案）已經隨 `php` 主套件安裝於 `/usr/lib/php/modules/` 中，但預設並未載入（在 `/etc/php/php.ini` 中處於被註解狀態 `;extension=...`）。
+- **獨立拆分的外部套件**：部分擴充（例如 `gd`、`imagick`、`redis` 等）則被拆分為獨立的 pacman 系統套件（如 `php-gd`），需要透過 `sudo pacman -S` 額外安裝才會產生 `.so` 模組檔。
+- **設定檔管理原則**：雖然可以直接修改 `/etc/php/php.ini`，但在 Linux 環境下，最推薦且最易維護的做法是**在 `/etc/php/conf.d/` 目錄下為每個擴充模組建立獨立的 `.ini` 設定檔**，避免日後系統更新時覆寫主要設定。
+
+### 8.1 啟用系統內建模組（以 `sockets` 為例）
+
+Laravel Octane 或其他網路通訊套件常會需要 `sockets` 擴充。該模組檔案已經存在於系統中，只需建立設定檔啟用：
+
+1. **確認模組檔案存在**：
+   ```bash
+   ls /usr/lib/php/modules/sockets.so
+   ```
+2. **在 `conf.d` 建立設定檔啟用**：
+   ```bash
+   echo "extension=sockets" | sudo tee /etc/php/conf.d/sockets.ini
+   ```
+
+### 8.2 安裝並啟用獨立模組套件（以 `gd` 為例）
+
+圖片處理相關需求通常需要 `gd` 擴充，由於它未隨預設套件安裝，需先安裝後再啟用：
+
+1. **安裝 `php-gd` 套件**：
+   ```bash
+   sudo pacman -S php-gd
+   ```
+   *(安裝後可於 `/usr/lib/php/modules/gd.so` 確認模組已產生)*
+
+2. **在 `conf.d` 建立設定檔啟用**：
+   ```bash
+   echo "extension=gd" | sudo tee /etc/php/conf.d/gd.ini
+   ```
+
+### 8.3 驗證與生效
+
+1. **檢查擴充模組是否載入成功**：
+   ```bash
+   php -m | grep -E 'sockets|gd'
+   ```
+   若成功載入，終端機會分別列出 `sockets` 與 `gd`。
+
+2. **確認設定檔讀取狀況**：
+   ```bash
+   php --ini
+   ```
+   在輸出中的 `Additional .ini files parsed` 區塊，可以看到新建立的 `sockets.ini` 與 `gd.ini` 已被正常讀取。
+
+3. **服務重啟注意事項**：
+   若系統上有運行常駐型 Web 伺服器或背景 Worker（例如 Laravel Octane、FrankenPHP、Swoole 或 PHP-FPM），修改後記得重啟該服務以重新加載擴充。
