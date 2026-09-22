@@ -65,8 +65,13 @@ tags: [zed]
         "PHP": {
             "formatter": {
                 "external": {
-                    "command": "/path/to/your/home/bin/php-format",
-                    "arguments": ["{buffer_path}"]
+                    "command": "mago",
+                    "arguments": [
+                        "format",
+                        "--stdin-input",
+                        "--stdin-filepath",
+                        "{buffer_path}"
+                    ]
                 }
             }
         }
@@ -148,64 +153,29 @@ Keymap 設定（包含 Vim 模式）：
 ]
 ```
 
-## PHP 自動格式化（使用 Global Pint）
+## PHP 自動格式化（使用 Mago）
 
-Zed 的外部 Formatter 機制會將 buffer 內容透過 `stdin` 傳入，並期望從 `stdout` 接收格式化後的結果。但 Laravel Pint 預設是直接修改檔案，因此需要透過一個 Shell Script 暫存檔機制來橋接。
+Zed 的外部 Formatter 機制會將 buffer 內容透過 `stdin` 傳入，並期望從 `stdout` 接收格式化後的結果。
+這部分 Mago 有提供
 
-此外，透過 Zed 傳入 `arguments: ["{buffer_path}"]`，腳本可以得知當前編輯檔案的原始路徑，用以尋找專案中的 `pint.json` 設定檔，讓 Global Pint 也能套用專案特有的規則。
+此外，透過 Zed 傳入 `arguments: ["{buffer_path}"]`，腳本可以得知當前編輯檔案的原始路徑，
+Mago 會自動根據專案中的 `mago.toml` 設定檔對 PHP 檔案進行排版。
 
-### 1. 全域安裝 Pint
-
-```bash
-composer global require laravel/pint
-```
-
-### 2. 建立 Wrapper Script (`~/bin/php-format`)
-
-簡化後的腳本統一使用全域的 Pint，若專案有 `pint.json` 則會自動帶入 `--config`：
+### 全域安裝 Mago（MacOS）
 
 ```bash
-#!/bin/bash
-
-FILE="$1"
-GLOBAL_PINT="$HOME/.composer/vendor/bin/pint"
-
-# 若 PATH 中已有 pint 亦可直接呼叫
-if ! [ -x "$GLOBAL_PINT" ] && command -v pint > /dev/null 2>&1; then
-    GLOBAL_PINT="pint"
-fi
-
-# 依 buffer_path 向上尋找專案的 pint.json（若有的話）
-CONFIG_FLAG=""
-if [ -n "$FILE" ]; then
-    DIR="$(dirname "$FILE")"
-    while [ "$DIR" != "/" ]; do
-        if [ -f "$DIR/pint.json" ]; then
-            CONFIG_FLAG="--config=$DIR/pint.json"
-            break
-        fi
-        DIR="$(dirname "$DIR")"
-    done
-fi
-
-TEMP=$(mktemp /tmp/php-format.XXXXXX.php)
-cat > "$TEMP"
-
-"$GLOBAL_PINT" "$TEMP" $CONFIG_FLAG > /dev/null 2>&1
-
-cat "$TEMP"
-rm -f "$TEMP"
+brew install mago
 ```
 
-賦予執行權限：
+初次使用可以使用 `mago init` 建立專案設定檔：
 
 ```bash
-chmod +x ~/bin/php-format
+mago init
 ```
 
-### 3. Zed Formatter 設定
+### Zed Formatter 設定
 
-在 `~/.config/zed/settings.json` 加入 `languages` 區段（注意 Zed 不會展開 `~`，請填寫完整家目錄絕對路徑，例如 `/path/to/your/home/bin/php-format`）：
+在 `~/.config/zed/settings.json` 加入 `languages`：
 
 ```json
 {
@@ -213,8 +183,13 @@ chmod +x ~/bin/php-format
         "PHP": {
             "formatter": {
                 "external": {
-                    "command": "/path/to/your/home/bin/php-format",
-                    "arguments": ["{buffer_path}"]
+                    "command": "mago",
+                    "arguments": [
+                        "format",
+                        "--stdin-input",
+                        "--stdin-filepath",
+                        "{buffer_path}"
+                    ]
                 }
             }
         }
@@ -225,22 +200,21 @@ chmod +x ~/bin/php-format
 - **`{buffer_path}`**：Zed 內建巨集，會將當前正在編輯的檔案完整絕對路徑作為 `$1` 傳入腳本。
 - 由於設定中已包含 `"format_on_save": "on"`，存檔時即會自動完成格式化。
 
-> 參考資料：[How to set up PHP autoformatting in Zed using Pint and PHP CS Fixer](https://freek.dev/3014-how-to-set-up-php-autoformatting-in-zed-using-pint-and-php-cs-fixer)
-
 ## 透過 Oxc 擴充套件排版 Svelte 檔案
 
 若專案使用 Svelte（例如搭配 Vite Plus / Oxc）並希望透過 Zed 的 **Oxc** 擴充套件（提供 `oxfmt` 語言伺服器）進行檔案格式化，可以在專案根目錄的 `.zed/settings.json` 中針對 `Svelte` 語言進行設定。
 
-### 1. 安裝 Zed 擴充套件
+### 安裝 Zed 擴充套件
 
 在 Zed 的 Extensions 管理器（`Cmd+Shift+X` / `Ctrl+Shift+X`）中安裝：
 
 - **Svelte**
 - **Oxc**
 
-### 2. 專案設定 (`.zed/settings.json`)
+### 使用 Oxc 的專案設定
 
-在專案根目錄建立或編輯 `.zed/settings.json`，在 `languages` 中加入 `Svelte` 區段：
+Oxc 擴充套件會在專案根目錄建立 `.zed/settings.json` 檔案，裡面有多種前端語言的排版設定。
+預設沒有 Svelte 語言的設定，需要在 `languages` 中加入 `Svelte` 區段：
 
 ```json
 {
@@ -265,12 +239,3 @@ chmod +x ~/bin/php-format
 - **`format_on_save`**：設為 `"on"`，存檔時自動執行排版。
 - **`prettier.allowed`**：設為 `false`，停用 Prettier 格式化，避免與 `oxfmt` 衝突或被搶先接管。
 - **`formatter`**：指定由 Oxc 提供的 `oxfmt` 語言伺服器負責排版。
-
-> [!TIP]
-> 若專案使用 `.oxfmtrc.json` 進行格式化規則設定，請確保設定檔中已開啟 Svelte 支援：
->
-> ```json
-> {
->     "svelte": true
-> }
-> ```
