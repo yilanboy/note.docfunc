@@ -29,8 +29,15 @@
         "svelte-check": "^4.7.6",
         "tailwindcss": "^4.3.3",
         "typescript": "^6.0.3",
-        "vite": "8.0.0",
-        "vite-plus": "0.3.0"
+        "vite": "catalog:",
+        "vite-plus": "catalog:"
+    },
+    "devEngines": {
+        "packageManager": {
+            "name": "pnpm",
+            "version": "12.8.1",
+            "onFail": "download"
+        }
     },
     "engines": {
         "node": ">=26",
