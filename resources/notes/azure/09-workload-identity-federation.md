@@ -1,3 +1,8 @@
+---
+date: '2026-10-01'
+tags: [azure, aws]
+---
+
 # 跨雲端身分同盟：AWS 透過 Workload Identity Federation 免金鑰（Keyless）存取 Azure 資源實務筆記
 
 之前寫過一篇[使用 Workload Identity Federation 跨雲端存取 GCP 的資源 ](../google-cloud-platform/04-workload-identity-federation.md) 的筆記，這次輪到 Azure 了，以我自己工作中的專案為例，簡單的紀錄該如何透過 Workload Identity Federation 跨雲端存取 Azure 資源，並且不使用任何金鑰與憑證。

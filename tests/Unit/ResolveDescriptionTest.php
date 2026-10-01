@@ -45,7 +45,7 @@ it('falls back to app name when html has no body text', function () {
 it('can be invoked as a callable', function () {
     $action = app(ResolveDescription::class);
 
-    $description = $action('<p>Callable test paragraph</p>');
+    $description = $action->handle('<p>Callable test paragraph</p>');
 
     expect($description)->toBe('Callable test paragraph');
 });
