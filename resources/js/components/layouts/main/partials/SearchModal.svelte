@@ -9,17 +9,10 @@
     } from '@lucide/svelte';
     import { fade, fly } from 'svelte/transition';
     import { search } from '@/shared/search.svelte';
-
-    interface Result {
-        category: string;
-        categoryName: string;
-        slug: string;
-        title: string;
-        snippet: string;
-    }
+    import { searchEngine, type SearchResult } from '@/shared/searchEngine';
 
     let query = $state('');
-    let results = $state<Result[]>([]);
+    let results = $state<SearchResult[]>([]);
     let isLoading = $state(false);
     let selectedIndex = $state(0);
     let searchInput = $state<HTMLInputElement | null>(null);
@@ -27,35 +20,19 @@
 
     let trimmed = $derived(query.trim());
 
-    // Debounce logic for fetching search results
-    let debounceTimeout: number | undefined;
-
-    // Whenever query changes, run this effect
     function onSearchInput() {
         if (trimmed === '') {
             results = [];
-            isLoading = false;
-
+            selectedIndex = 0;
             return;
         }
 
-        isLoading = true;
-        clearTimeout(debounceTimeout);
-        debounceTimeout = window.setTimeout(async () => {
-            try {
-                const response = await fetch(
-                    `/search?q=${encodeURIComponent(trimmed)}`,
-                );
-                if (response.ok) {
-                    results = await response.json();
-                    selectedIndex = 0;
-                }
-            } catch (err) {
-                console.error('Search error:', err);
-            } finally {
-                isLoading = false;
-            }
-        }, 200);
+        if (searchEngine.isReady()) {
+            results = searchEngine.search(trimmed);
+            selectedIndex = 0;
+        } else {
+            isLoading = true;
+        }
     }
 
     // Focus the input automatically when the modal is opened
@@ -147,6 +124,22 @@
     $effect(() => {
         if (search.isOpen) {
             focusSearchInput();
+            if (!searchEngine.isReady()) {
+                isLoading = true;
+                searchEngine
+                    .init()
+                    .then(() => {
+                        isLoading = false;
+                        if (trimmed !== '') {
+                            results = searchEngine.search(trimmed);
+                            selectedIndex = 0;
+                        }
+                    })
+                    .catch((err) => {
+                        console.error('Search init error:', err);
+                        isLoading = false;
+                    });
+            }
         }
     });
 </script>
@@ -250,7 +243,7 @@
                                                 </span>
                                                 <span>/</span>
                                                 <span class="truncate"
-                                                    >{result.title}</span
+                                                    >{@html result.highlightedTitle}</span
                                                 >
                                             </span>
                                             <span
@@ -262,7 +255,7 @@
                                                         selectedIndex !== idx,
                                                 }}
                                             >
-                                                {result.snippet}
+                                                {@html result.highlightedSnippet}
                                             </span>
                                         </span>
                                         <CornerDownLeft

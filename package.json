@@ -21,6 +21,7 @@
         "@tailwindplus/elements": "^1.0.22",
         "@types/node": "^26.5.1",
         "@typescript/native": "npm:typescript@^7.0.2",
+        "flexsearch": "^0.8.212",
         "laravel-vite-plugin": "^3.2.0",
         "mermaid": "^11.17.2",
         "playwright": "^1.63.0",
