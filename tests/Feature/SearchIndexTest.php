@@ -47,6 +47,22 @@ it('returns 304 Not Modified when If-None-Match matches ETag', function () {
         ->and($secondResponse->headers->get('ETag'))->toBe($etag);
 });
 
+it('returns 304 Not Modified when If-None-Match matches weak ETag', function () {
+    $firstResponse = $this->getJson('/search-index.json');
+    $firstResponse->assertStatus(200);
+
+    $etag = $firstResponse->headers->get('ETag');
+    expect($etag)->not->toBeNull();
+
+    $secondResponse = $this->withHeaders([
+        'If-None-Match' => 'W/'.$etag,
+    ])->get('/search-index.json');
+
+    $secondResponse->assertStatus(304);
+    expect($secondResponse->getContent())->toBe('')
+        ->and($secondResponse->headers->get('ETag'))->toBe($etag);
+});
+
 it('returns 200 when If-None-Match does not match', function () {
     $response = $this->withHeaders([
         'If-None-Match' => '"outdated-or-invalid-etag"',

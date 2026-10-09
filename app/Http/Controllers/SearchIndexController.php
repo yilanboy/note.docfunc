@@ -10,7 +10,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SearchIndexController extends Controller
 {
-    public function __construct(private readonly NoteRepository $noteRepository) {}
+    public function __construct(
+        private readonly NoteRepository $noteRepository,
+    ) {}
 
     /**
      * Return search index JSON with HTTP ETag caching.
@@ -19,7 +21,10 @@ class SearchIndexController extends Controller
     {
         $etag = md5($this->noteRepository->fingerprint());
 
-        if (in_array('"'.$etag.'"', $request->getETags(), true) || in_array($etag, $request->getETags(), true) || $request->headers->get('If-None-Match') === '"'.$etag.'"') {
+        if (
+            in_array('"'.$etag.'"', $request->getETags(), true) ||
+            in_array('W/"'.$etag.'"', $request->getETags(), true)
+        ) {
             return response('', Response::HTTP_NOT_MODIFIED, [
                 'ETag' => '"'.$etag.'"',
                 'Cache-Control' => 'public, max-age=0, must-revalidate',

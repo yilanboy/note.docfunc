@@ -113,7 +113,7 @@ class NoteRepository
                 }
 
                 return $index;
-            }
+            },
         );
     }
 
@@ -201,6 +201,11 @@ class NoteRepository
     {
         $files = glob(config('notes.path').'/*/*.md');
 
-        return count($files).':'.max([0, ...array_map(filemtime(...), $files)]);
+        return
+            count($files)
+            .':'
+            .max(
+                [0, ...array_map(filemtime(...), $files)],
+            );
     }
 }
