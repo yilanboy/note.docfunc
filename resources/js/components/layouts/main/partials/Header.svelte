@@ -84,6 +84,7 @@
             <button
                 onclick={() => (search.isOpen = true)}
                 type="button"
+                aria-label="Search notes"
                 class="bg-zinc-25 dark:bg-zinc-850 flex w-72 cursor-pointer items-center justify-between gap-x-2.5 rounded-lg border border-zinc-200 px-4 py-2 text-sm font-normal text-zinc-400 transition-all hover:border-zinc-200 hover:bg-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-200 lg:w-80 dark:border-zinc-700 dark:text-zinc-500 dark:hover:border-zinc-700 dark:hover:bg-zinc-800 dark:focus-visible:ring-zinc-700"
             >
                 <span class="flex items-center gap-x-2">

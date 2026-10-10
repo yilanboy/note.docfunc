@@ -6,7 +6,6 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
-use Normalizer;
 
 class NoteRepository
 {
@@ -84,91 +83,11 @@ class NoteRepository
     }
 
     /**
-     * Search notes by keyword in title and content.
-     *
-     * @return array<int, array{category: string, categoryName: string, slug: string, title: string, snippet: string}>
-     */
-    public function search(string $query): array
-    {
-        $query = $this->normalizeSearchText($query);
-        if ($query === '') {
-            return [];
-        }
-
-        $terms = $this->searchTerms($query);
-        if (empty($terms)) {
-            return [];
-        }
-
-        $results = [];
-        $searchIndex = $this->getSearchIndex();
-        $chineseFragments = $this->chineseFragments($query);
-
-        foreach ($searchIndex as $note) {
-            $title = $note['searchTitle'];
-            $content = $note['searchContent'];
-
-            $exactTitleMatch = str_contains($title, $query);
-            $exactContentMatch = str_contains($content, $query);
-            $titleTermsMatched = $this->containsAllTerms($title, $terms);
-            $contentTermsMatched = $this->containsAllTerms($content, $terms);
-            $chineseMatch = false;
-            $matchedChineseFragments = 0;
-
-            if (! $exactTitleMatch && ! $exactContentMatch && $chineseFragments !== []) {
-                $titleChineseFragments = $this->matchingFragmentCount($title, $chineseFragments);
-                $contentChineseFragments = $this->matchingFragmentCount($content, $chineseFragments);
-                $matchedChineseFragments = max($titleChineseFragments, $contentChineseFragments);
-                $chineseMatch = $matchedChineseFragments >= (int) ceil(count($chineseFragments) / 2);
-            }
-
-            if (! $titleTermsMatched && ! $contentTermsMatched && ! $chineseMatch) {
-                continue;
-            }
-
-            $score = 0;
-            if ($exactTitleMatch) {
-                $score += 100;
-            }
-
-            if ($exactContentMatch) {
-                $score += 20;
-            }
-
-            if ($titleTermsMatched) {
-                $score += 10;
-            }
-
-            if ($contentTermsMatched) {
-                $score += 1;
-            }
-
-            if ($chineseMatch) {
-                $score += $matchedChineseFragments;
-            }
-
-            $results[] = [
-                'category' => $note['category'],
-                'categoryName' => $note['categoryName'],
-                'slug' => $note['slug'],
-                'title' => $note['title'],
-                'snippet' => $this->generateSnippet($note['content'], $query),
-                'score' => $score,
-            ];
-        }
-
-        // Sort by search score descending
-        usort($results, fn ($a, $b) => $b['score'] <=> $a['score']);
-
-        return array_values($results);
-    }
-
-    /**
      * Build a cached search index of all notes.
      *
-     * @return array<int, array{category: string, categoryName: string, slug: string, title: string, content: string, searchTitle: string, searchContent: string}>
+     * @return array<int, array{category: string, categoryName: string, slug: string, title: string, content: string}>
      */
-    public function getSearchIndex(): array
+    public function searchIndex(): array
     {
         return Cache::remember(
             'notes:search_index:'.$this->fingerprint(),
@@ -183,130 +102,49 @@ class NoteRepository
                     }
 
                     $category = basename(dirname($path));
-                    $title = $this->title($path);
-                    $content = file_get_contents($path);
 
                     $index[] = [
                         'category' => $category,
                         'categoryName' => $this->displayName($category),
                         'slug' => $this->slug($path),
-                        'title' => $title,
-                        'content' => $content,
-                        'searchTitle' => $this->normalizeSearchText($title),
-                        'searchContent' => $this->normalizeSearchText($content),
+                        'title' => $this->title($path),
+                        'content' => $this->searchableContent(file_get_contents($path)),
                     ];
                 }
 
                 return $index;
-            }
+            },
         );
     }
 
     /**
-     * Extract a text snippet around the search query.
+     * Extract clean searchable text from Markdown content.
      */
-    private function generateSnippet(string $content, string $query): string
+    public function searchableContent(string $markdown): string
     {
-        // Strip Markdown headers/formatting characters for a clean text preview
-        $clean = preg_replace('/[#*`_\-]/', '', $content);
-        $clean = $this->normalizeSearchText($clean ?? '');
-        $query = $this->normalizeSearchText($query);
+        // 1. Remove YAML frontmatter
+        $text = preg_replace('/^---\s*[\r\n].*?[\r\n]---\s*[\r\n]/s', '', $markdown);
 
-        $pos = mb_stripos($clean, $query, 0, 'UTF-8');
-        if ($pos === false) {
-            return mb_substr($clean, 0, 120).'...';
-        }
+        // 2. Remove first H1 header (title is indexed separately)
+        $text = preg_replace('/^#\s+[^\r\n]+[\r\n]+/m', '', $text ?? '', 1);
 
-        $start = max(0, $pos - 40);
-        $length = min(mb_strlen($clean) - $start, 120);
-        $snippet = mb_substr($clean, $start, $length);
+        // 3. Replace images ![alt](url) with alt
+        $text = preg_replace('/!\[([^\]]*)\]\([^)]+\)/', '$1', $text ?? '');
 
-        if ($start > 0) {
-            $snippet = '...'.$snippet;
-        }
-        if ($start + $length < mb_strlen($clean)) {
-            $snippet .= '...';
-        }
+        // 4. Replace links [text](url) with text
+        $text = preg_replace('/\[([^\]]+)\]\([^)]+\)/', '$1', $text ?? '');
 
-        return $snippet;
-    }
+        // 5. Remove markdown formatting characters like #, *, _, `, >, etc. but keep code/text
+        $text = preg_replace('/```[a-zA-Z0-9_-]*/', '', $text ?? '');
+        $text = str_replace(['```', '`', '**', '__', '~~'], '', $text ?? '');
+        $text = preg_replace('/^#+\s+/m', '', $text ?? '');
+        $text = preg_replace('/^>\s+/m', '', $text ?? '');
 
-    /**
-     * Normalize text before comparing it during a search.
-     */
-    private function normalizeSearchText(string $text): string
-    {
-        $normalized = Normalizer::normalize($text, Normalizer::FORM_C);
-        $normalized = is_string($normalized) ? $normalized : $text;
-        $normalized = mb_convert_kana($normalized, 'as', 'UTF-8');
-        $normalized = mb_strtolower($normalized, 'UTF-8');
+        // 6. Normalize whitespace
+        $text = preg_replace('/[ \t]+/', ' ', $text ?? '');
+        $text = preg_replace("/\n\s*\n/", "\n", $text ?? '');
 
-        return preg_replace('/\s+/u', ' ', trim($normalized)) ?? trim($normalized);
-    }
-
-    /**
-     * Split a normalized query by any Unicode whitespace character.
-     *
-     * @return array<int, string>
-     */
-    private function searchTerms(string $query): array
-    {
-        $terms = preg_split('/\s+/u', $query, -1, PREG_SPLIT_NO_EMPTY);
-
-        return array_values(array_unique($terms ?: []));
-    }
-
-    /**
-     * Return overlapping two-character fragments for Chinese-only queries.
-     *
-     * @return array<int, string>
-     */
-    private function chineseFragments(string $query): array
-    {
-        if (str_contains($query, ' ') || preg_match('/[^\p{Han}\s]/u', $query) === 1) {
-            return [];
-        }
-
-        preg_match_all('/\p{Han}+/u', $query, $matches);
-        $fragments = [];
-
-        foreach ($matches[0] as $run) {
-            $characters = mb_str_split($run);
-
-            for ($index = 0, $last = count($characters) - 1; $index < $last; $index++) {
-                $fragments[] = $characters[$index].$characters[$index + 1];
-            }
-        }
-
-        return array_values(array_unique($fragments));
-    }
-
-    /**
-     * Determine whether every query term occurs in the searchable text.
-     *
-     * @param  array<int, string>  $terms
-     */
-    private function containsAllTerms(string $text, array $terms): bool
-    {
-        return array_all($terms, fn ($term) => str_contains($text, $term));
-    }
-
-    /**
-     * Count the Chinese fragments that occur in searchable text.
-     *
-     * @param  array<int, string>  $fragments
-     */
-    private function matchingFragmentCount(string $text, array $fragments): int
-    {
-        $matches = 0;
-
-        foreach ($fragments as $fragment) {
-            if (str_contains($text, $fragment)) {
-                $matches++;
-            }
-        }
-
-        return $matches;
+        return trim($text ?? '');
     }
 
     /**
@@ -359,10 +197,15 @@ class NoteRepository
      * A cheap change detector for the whole notes directory, so the cached
      * tree is rebuilt whenever a note is added, renamed, or edited.
      */
-    private function fingerprint(): string
+    public function fingerprint(): string
     {
         $files = glob(config('notes.path').'/*/*.md');
 
-        return count($files).':'.max([0, ...array_map(filemtime(...), $files)]);
+        return
+            count($files)
+            .':'
+            .max(
+                [0, ...array_map(filemtime(...), $files)],
+            );
     }
 }
