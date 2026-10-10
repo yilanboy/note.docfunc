@@ -35,6 +35,9 @@ export function tokenizeSearch(str: string): string[] {
         if (!word) continue;
         tokens.add(word);
 
+        // \u4e00-\u9fa5 CJK Unified Ideographs
+        // \u3040-\u30ff Hiragana and Katakana
+        // \uac00-\ud7af Korean syllables
         const cjkRegex = /[\u4e00-\u9fa5\u3040-\u30ff\uac00-\ud7af]+/g;
         let match: RegExpExecArray | null;
         while ((match = cjkRegex.exec(word)) !== null) {
