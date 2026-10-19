@@ -32,6 +32,7 @@ Omarchy 是一套鍵盤導向的桌面環境配置，底層採用 Hyprland (Wayl
 | **`fcitx5-qt`**         | Qt 橋接模組           | 讓所有基於 Qt 框架開發的軟體（如 KDE 工具、VirtualBox）能正確呼叫 Fcitx5 輸入。                         |
 | **`fcitx5-chewing`**    | 注音輸入引擎          | 新酷音繁體中文輸入法引擎。                                                                              |
 | **`fcitx5-configtool`** | GUI 設定工具          | 提供圖形化介面來新增/刪除輸入法、調整快捷鍵與選字排版。                                                 |
+| **`chewing-editor`**    | 注音編輯器            | 提供注音詞庫編輯功能。                                                                                  |
 
 ---
 
@@ -294,6 +295,7 @@ Linux 桌面環境（遵循 XDG Desktop Entry 規範）主要透過讀取以下�
 3. **開機自啟動路徑**：`~/.config/autostart/`
 
 **為何解除安裝後選單項目依舊存在？**
+
 - **套件管理員限制**：`pacman` / `paru` 僅維護系統全域目錄（`/usr/share/...`），**無法也不會主動修改或刪除使用者家目錄（`~`）下的檔案**。
 - **軟體自行建立使用者捷徑**：許多軟體在安裝或初次啟動時（例如 JetBrains Toolbox、Chrome/PWA、手動下載的 AppImage），會自動將 `.desktop` 檔寫入使用者的 `~/.local/share/applications/` 以及 `~/.config/autostart/`。
 - **主程式已刪除但捷徑殘留**：當主程式已被移除，但使用者目錄中的 `.desktop` 檔仍存在時，Omarchy 的啟動器（如 Walker）重新掃描依舊會讀取到該項目，造成「程式已刪除卻仍顯示在選單」的狀況。
@@ -309,6 +311,7 @@ find /usr/share/applications ~/.local/share/applications ~/.config/autostart -in
 ```
 
 常見殘留檔案如下：
+
 - `~/.local/share/applications/jetbrains-toolbox.desktop`（選單顯示來源）
 - `~/.local/share/applications/jetbrainsd.desktop`（背景 Daemon 協定捷徑）
 - `~/.config/autostart/jetbrains-toolbox.desktop`（開機自動啟動項）
@@ -363,42 +366,52 @@ Omarchy 基於 Arch Linux，其 PHP 擴充套件的管理機制與 Ubuntu / Debi
 Laravel Octane 或其他網路通訊套件常會需要 `sockets` 擴充。該模組檔案已經存在於系統中，只需建立設定檔啟用：
 
 1. **確認模組檔案存在**：
-   ```bash
-   ls /usr/lib/php/modules/sockets.so
-   ```
+    ```bash
+    ls /usr/lib/php/modules/sockets.so
+    ```
 2. **在 `conf.d` 建立設定檔啟用**：
-   ```bash
-   echo "extension=sockets" | sudo tee /etc/php/conf.d/sockets.ini
-   ```
+    ```bash
+    echo "extension=sockets" | sudo tee /etc/php/conf.d/sockets.ini
+    ```
 
 ### 8.2 安裝並啟用獨立模組套件（以 `gd` 為例）
 
 圖片處理相關需求通常需要 `gd` 擴充，由於它未隨預設套件安裝，需先安裝後再啟用：
 
 1. **安裝 `php-gd` 套件**：
-   ```bash
-   sudo pacman -S php-gd
-   ```
-   *(安裝後可於 `/usr/lib/php/modules/gd.so` 確認模組已產生)*
+
+    ```bash
+    sudo pacman -S php-gd
+    ```
+
+    _(安裝後可於 `/usr/lib/php/modules/gd.so` 確認模組已產生)_
 
 2. **在 `conf.d` 建立設定檔啟用**：
-   ```bash
-   echo "extension=gd" | sudo tee /etc/php/conf.d/gd.ini
-   ```
+    ```bash
+    echo "extension=gd" | sudo tee /etc/php/conf.d/gd.ini
+    ```
 
 ### 8.3 驗證與生效
 
 1. **檢查擴充模組是否載入成功**：
-   ```bash
-   php -m | grep -E 'sockets|gd'
-   ```
-   若成功載入，終端機會分別列出 `sockets` 與 `gd`。
+
+    ```bash
+    php -m | grep -E 'sockets|gd'
+    ```
+
+    若成功載入，終端機會分別列出 `sockets` 與 `gd`。
 
 2. **確認設定檔讀取狀況**：
-   ```bash
-   php --ini
-   ```
-   在輸出中的 `Additional .ini files parsed` 區塊，可以看到新建立的 `sockets.ini` 與 `gd.ini` 已被正常讀取。
+
+    ```bash
+    php --ini
+    ```
+
+    在輸出中的 `Additional .ini files parsed` 區塊，可以看到新建立的 `sockets.ini` 與 `gd.ini` 已被正常讀取。
 
 3. **服務重啟注意事項**：
    若系統上有運行常駐型 Web 伺服器或背景 Worker（例如 Laravel Octane、FrankenPHP、Swoole 或 PHP-FPM），修改後記得重啟該服務以重新加載擴充。
+
+## 參考資料
+
+- [Ubuntu繁體中文輸入法？改用Fcitx5來輸入中文吧！](https://ivonblog.com/posts/ubuntu-fcitx5/)
