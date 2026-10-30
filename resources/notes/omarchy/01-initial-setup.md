@@ -115,7 +115,10 @@ GTK_IM_MODULE= QT_IM_MODULE= XMODIFIERS= phpstorm
 
 ## 4. 鍵盤鍵位映射與修飾鍵對調 (Hyprland / XKB)
 
-為了符合慣用的鍵盤佈局（如 Mac 鍵位習慣），可在 Hyprland 的 XKB 設定中將 **Alt 與 Super (Win/Cmd) 對調**，並將 **Caps Lock 映射為 Ctrl**。
+為了符合慣用的鍵盤佈局（如 Mac 鍵位習慣），可在 Hyprland 的 XKB 設定中將 **Alt 與 Super (Win/Cmd) 對調**，
+如果習慣使用 Caps Lock 作為 Ctrl，也可以將 **Caps Lock 映射為 Ctrl**。
+
+> 如果鍵盤支援的話，也可以直接修改鍵盤的鍵位。
 
 ### 設定檔位置
 
@@ -132,6 +135,8 @@ hl.config({
         -- 1. ctrl:nocaps: Caps Lock 轉為 Ctrl
         -- 2. altwin:swap_alt_win: Alt 與 Super 鍵位置對調
         kb_options = "ctrl:nocaps,altwin:swap_alt_win",
+        -- 3. scroll_factor: 滑鼠滾動速度調整，預設為 1.0，我個人覺得滾動太慢了
+        scroll_factor = 2.0,
     },
 })
 ```
