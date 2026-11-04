@@ -1,6 +1,6 @@
 ---
 date: '2023-04-30'
-updated: '2026-07-06'
+updated: '2026-11-04'
 tags: [google-cloud-platform]
 ---
 
