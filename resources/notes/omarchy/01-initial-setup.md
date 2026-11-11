@@ -1,15 +1,16 @@
 ---
-date: '2026-09-21'
+date: "2026-09-21"
+updated: "2026-11-11"
 tags: [omarchy]
 ---
 
 # Omarchy 初始化設定指南
 
-本筆記彙整新安裝 **Omarchy**（基於 Arch Linux + Hyprland / Wayland）後的初始化環境配置，包含繁體中文輸入法（Fcitx5 + 新酷音）、預設應用程式設定（Ghostty 終端機、Firefox 瀏覽器）、鍵盤按鍵映射（Alt 與 Super 對調、Caps Lock 轉 Ctrl）、Foot 終端機字體與顯示調整、Mise 套件管理工具的清理技巧、軟體移除後應用程式選單（.desktop 捷徑）殘留清理，以及 PHP Extension 擴充模組的安裝與設定。
+本筆記彙整新安裝 **Omarchy**（基於 Arch Linux + Hyprland / Wayland）後的初始化環境配置，包含繁體中文輸入法（Fcitx5 + 新酷音）、預設應用程式設定（Ghostty 終端機、Firefox 瀏覽器）、鍵盤按鍵映射（Alt 與 Super 對調、Caps Lock 轉 Ctrl）、Foot 終端機字體與顯示調整、Starship 提示字元與主題色彩設定、Mise 套件管理工具的清理技巧、軟體移除後應用程式選單（.desktop 捷徑）殘留清理，以及 PHP Extension 擴充模組的安裝與設定。
 
 ---
 
-## 1. 系統特點與環境說明
+## 系統特點與環境說明
 
 Omarchy 是一套鍵盤導向的桌面環境配置，底層採用 Hyprland (Wayland) 與 `uwsm` 會話管理：
 
@@ -19,9 +20,9 @@ Omarchy 是一套鍵盤導向的桌面環境配置，底層採用 Hyprland (Wayl
 
 ---
 
-## 2. 繁體中文輸入法安裝與設定 (Fcitx5 + Chewing)
+## 繁體中文輸入法安裝與設定 (Fcitx5 + Chewing)
 
-### 2.1 什麼是 Fcitx5 與相關套件架構？
+### 什麼是 Fcitx5 與相關套件架構？
 
 **Fcitx5**（小企鵝輸入法 5）是 Linux / Wayland 下主流的高效能**輸入法框架（Input Method Framework）**。在 Linux 桌面中，要讓各類應用程式順暢打中文，需要核心服務、介面橋接模組與輸入法引擎相互搭配：
 
@@ -36,11 +37,11 @@ Omarchy 是一套鍵盤導向的桌面環境配置，底層採用 Hyprland (Wayl
 
 ---
 
-### 2.2 安裝與設定步驟
+### 安裝與設定步驟
 
 為了確保所有 GUI 應用程式（包含 JetBrains 系列、瀏覽器、Qt/GTK 軟體）都能正常啟動且能正常輸入中文，建議完整安裝核心與橋接套件：
 
-#### 步驟 1：安裝套件
+#### 安裝套件
 
 可使用 `pacman` 一次安裝完整所需套件：
 
@@ -50,12 +51,14 @@ sudo pacman -S fcitx5 fcitx5-gtk fcitx5-qt fcitx5-chewing fcitx5-configtool
 
 _(亦可按下 `Super + Space` 透過 Omarchy 選單中的 **Install** -> **Package** 逐一選取安裝)_
 
-#### 步驟 2：啟用新酷音輸入法
+#### 啟用新酷音輸入法
 
 1. 開啟輸入法設定介面：
+
     ```bash
     fcitx5-configtool
     ```
+
 2. 切換至 **「輸入法 (Input Method)」** 分頁。
 3. 取消勾選下方的 **「僅顯示目前語言 (Only Show Current Language)」**。
 4. 搜尋 **Chewing**（新酷音），選取後點擊加入至右側清單並儲存套用。
@@ -63,17 +66,19 @@ _(亦可按下 `Super + Space` 透過 Omarchy 選單中的 **Install** -> **Pack
 
 ---
 
-### 2.3 常見問題：為什麼缺少 fcitx5 / fcitx5-gtk 會導致 PhpStorm 無法啟動？
+### 常見問題：為什麼缺少 fcitx5 / fcitx5-gtk 會導致 PhpStorm 無法啟動？
 
 若未安裝完整套件，常會發現 **PhpStorm 等 JetBrains 系列軟體完全無法開啟或啟動時直接閃退**，其主要原因如下：
 
 1. **Omarchy 預設注入的環境變數**：
    Omarchy 在登入會話中預先設定了輸入法環境變數：
+
     ```bash
     GTK_IM_MODULE=fcitx
     QT_IM_MODULE=fcitx
     XMODIFIERS=@im=fcitx
     ```
+
 2. **JetBrains Runtime (JBR) 動態加載失敗崩潰**：
     - PhpStorm 運行在客製化的 JetBrains Runtime (JBR) 上，JBR 底層在 Linux 上依賴 GTK 進行視窗組件渲染與輸入法整合。
     - 當 `GTK_IM_MODULE=fcitx` 生效時，GTK 初始化輸入法模組會使用 `dlopen` 去尋找動態庫 `im-fcitx5.so`。
@@ -91,29 +96,31 @@ GTK_IM_MODULE= QT_IM_MODULE= XMODIFIERS= phpstorm
 
 ---
 
-## 3. 安裝與設定預設應用程式 (Terminal & Browser)
+## 安裝與設定預設應用程式 (Terminal & Browser)
 
-### 3.1 預設終端機更換為 Ghostty
+### 預設終端機更換為 Ghostty
 
 1. 按下 `Super + Space` 開啟 Omarchy 選單。
 2. 選擇 **Install** -> **Terminal** 安裝 **Ghostty**。
 3. 在終端機執行指令將 Ghostty 設為預設終端機：
+
     ```bash
     omarchy default terminal ghostty
     ```
 
-### 3.2 預設瀏覽器更換為 Firefox
+### 預設瀏覽器更換為 Firefox
 
 1. 按下 `Super + Space` 開啟 Omarchy 選單。
 2. 選擇 **Install** -> **Browser** 安裝 **Firefox**。
 3. 在終端機執行指令將 Firefox 設為預設瀏覽器：
+
     ```bash
     omarchy default browser firefox
     ```
 
 ---
 
-## 4. 鍵盤鍵位映射與修飾鍵對調 (Hyprland / XKB)
+## 鍵盤鍵位映射與修飾鍵對調 (Hyprland / XKB)
 
 為了符合慣用的鍵盤佈局（如 Mac 鍵位習慣），可在 Hyprland 的 XKB 設定中將 **Alt 與 Super (Win/Cmd) 對調**，
 如果習慣使用 Caps Lock 作為 Ctrl，也可以將 **Caps Lock 映射為 Ctrl**。
@@ -153,15 +160,36 @@ hl.config({
 ### 套用與注意事項
 
 1. **套用變更**：儲存檔案後通常會自動熱重載；若未生效可執行：
+
     ```bash
     hyprctl reload
     ```
+
 2. **避免衝突**：若設定檔原本含有 `compose:caps`，請移除以避免與 `ctrl:nocaps` 發生衝突。
 3. **快捷鍵影響**：此設定是在底層（XKB）對調，因此 Omarchy 系統中所有依賴 `Super` 的快捷鍵（例如視窗切換、選單呼叫）將直接跟隨對調後的實體鍵（即 Mac 鍵盤上的 Command 位置）。
 
 ---
 
-## 5. Foot 終端機字體與顯示設定
+## 取消預設的快捷鍵綁定
+
+如果你不喜歡 Omarchy 預設提供的快捷鍵綁定，可以在 `~/.config/hypr/bindings.lua` 中進行自訂。
+
+例如取消預設綁定的 `SUPER + BACKSPACE`（原為切換視窗透明度）：
+
+```lua
+hl.unbind("SUPER + BACKSPACE")
+```
+
+修改之後 Hyprland 通常會自動載入設定，不過你也可以手動重新載入以確認無語法錯誤：
+
+```bash
+hyprctl reload
+hyprctl configerrors
+```
+
+---
+
+## Foot 終端機字體與顯示設定
 
 Omarchy 預設使用 Foot 作為終端模擬器，可透過設定檔或系統指令進行外觀與字型調整。
 
@@ -202,10 +230,13 @@ font-italic=JetBrainsMono Nerd Font:slant=italic:size=16
 除了手動編輯 `foot.ini`，也可利用 Omarchy 內建指令或選單進行全局連動調整：
 
 - **全局文字大小（連動 Shell、GTK 應用與終端機）**：
+
     ```bash
     omarchy display text size 16
     ```
+
 - **更換全局系統等寬字體**：
+
     ```bash
     # 查詢可用字型清單
     omarchy font list
@@ -213,16 +244,77 @@ font-italic=JetBrainsMono Nerd Font:slant=italic:size=16
     # 套用指定字型
     omarchy font set <字體名稱>
     ```
+
 - **選單介面操作**：
-  按下 `Super + Space`：
-    - 前往 **Style > Font** 選擇字型。
-    - 前往 **Display** 調整文字縮放比例。
+    - 按下 `Super + Space`：
+        - 前往 **Style > Font** 選擇字型。
+        - 前往 **Display** 調整文字縮放比例。
 
 > **注意**：執行 `omarchy font set` 或透過選單更換字型主題時，系統可能會覆寫 `foot.ini`。若發現字體大小跑掉，可重新確認該檔案中的 `:size` 設定。
 
 ---
 
-## 6. Mise 工具管理與 Agent 徹底移除
+## Starship 終端機提示字元與主題色彩設定
+
+Omarchy 預設採用 **Starship** 作為跨 Shell 的提示字元（Prompt）引擎。其設計哲學是以簡約、乾淨為主，僅保留當前路徑、Git 狀態與提示符號，避免在畫面上堆疊過多不必要的資訊（如時間、主機名稱與使用者帳號）。
+
+為了讓終端機的文字與符號色彩能夠無縫跟隨 Omarchy 的整體主題變換（例如透過 `omarchy theme-set` 或選單切換深淺配色），Starship 預設使用終端機調色盤的 ANSI 色彩名稱。若想進一步客製化提示字元的顯示內容、符號或顏色，可依循以下方式修改。
+
+### 設定檔位置
+
+- **路徑**：`~/.config/starship.toml`
+- 若目錄下尚未存在該檔案，直接新增即可，Starship 會自動以自訂設定覆蓋系統預設行為。
+
+### 設定內容範例
+
+編輯 `~/.config/starship.toml`：
+
+```toml
+# 自訂提示字元模組與顯示順序（僅顯示目錄、Git 分支、Git 狀態與輸入符號）
+format = "$directory$git_branch$git_status$character"
+
+[character]
+# 輸入提示符號，使用 ANSI 色彩能跟隨 Omarchy 主題調色盤自動變換
+success_symbol = "[❯](bold cyan)"
+error_symbol = "[✗](bold red)"
+
+[directory]
+truncation_length = 3
+truncation_symbol = "…/"
+style = "bold cyan"
+# 針對 Git 專案根目錄的樣式設定
+repo_root_style = "bold cyan"
+
+[git_branch]
+symbol = " "
+style = "bold purple"
+
+[git_status]
+style = "bold yellow"
+# 常見 Git 狀態符號客製化
+modified = "*"
+staged = "+"
+untracked = "?"
+ahead = "⇡"
+behind = "⇣"
+
+# （可選）顯示執行時間過長指令的時間（超過 2 秒才顯示）
+[cmd_duration]
+min_time = 2_000
+style = "bright-black"
+format = "took [$duration]($style) "
+```
+
+### 色彩與主題連動技巧
+
+1. **優先使用 ANSI 色彩名稱**：
+   在 `starship.toml` 中盡量指定標準色彩名稱（如 `cyan`、`bold cyan`、`green`、`yellow`、`purple`、`bright-black` 等），而非寫死 Hex 色碼（如 `"#89b4fa"`）。這樣當你在 Omarchy 中切換系統主題時，終端機色彩調色盤（Color Palette）改變，Starship 的文字與圖示顏色就會自動同步更新。
+2. **即時熱重載生效**：
+   Starship 在終端機中每次按下 `Enter` 產生新一行 Prompt 時，都會即時重新讀取 `starship.toml`，**無需重啟終端機或重新載入 Shell**，修改儲存後立即生效。
+
+---
+
+## Mise 工具管理與 Agent 徹底移除
 
 Omarchy 內建整合 Mise 來管理 CLI 工具。在使用過程中，若直接使用 `mise uninstall` 移除工具（例如 AI CLI Agent `gemini`），常會發生在 `mise ls` 中持續殘留 `(missing)` 狀態的問題。
 
@@ -237,7 +329,7 @@ Omarchy 內建整合 Mise 來管理 CLI 工具。在使用過程中，若直接�
 
 ### 徹底移除方法
 
-#### 方法 A：使用命令列（推薦）
+#### 使用命令列（推薦）
 
 使用 `mise unuse`（或縮寫 `mise rm`），這會同時移除二進位檔案與設定檔宣告：
 
@@ -251,24 +343,29 @@ Omarchy 內建整合 Mise 來管理 CLI 工具。在使用過程中，若直接�
 
 - **單一專案工具（Local）：**
   在專案目錄下執行：
+
     ```bash
     mise unuse gemini
     # 或
     mise rm gemini
     ```
 
-#### 方法 B：手動編輯設定檔
+#### 手動編輯設定檔
 
 1. 開啟全域設定檔：
+
     ```bash
     nano ~/.config/mise/config.toml
     ```
+
 2. 在 `[tools]` 區塊中，刪除該工具的宣告行：
+
     ```toml
     [tools]
     # 刪除不需要的工具，例如：
     gemini = { version = "latest", allow_builds = ["@github/keytar", "node-pty"] }
     ```
+
 3. 存檔後退出。
 
 ### 驗證清除結果
@@ -285,13 +382,13 @@ mise which gemini
 
 ---
 
-## 7. 軟體移除後應用程式選單（App Launcher）殘留清理
+## 軟體移除後應用程式選單（App Launcher）殘留清理
 
 在 Omarchy 中透過選單的 **Remove > Package**、終端機執行 `pacman -R` 移除軟體，或手動刪除獨立安裝的工具（例如 **JetBrains Toolbox**、**Alacritty**）後，常會遇到**按下 `Super + Space` 開啟應用程式選單時，該軟體依然出現在清單中**（通常伴隨破損或預設齒輪圖示），點擊後無任何反應。
 
 此為 Linux 桌面常見現象，社群亦有相同回報（參見 [omacom/omarchy#3574](https://github.com/omacom/omarchy/issues/3574)）。
 
-### 7.1 問題原因
+### 問題原因
 
 Linux 桌面環境（遵循 XDG Desktop Entry 規範）主要透過讀取以下路徑下的 `.desktop` 捷徑檔案來呈現應用程式選單：
 
@@ -305,9 +402,9 @@ Linux 桌面環境（遵循 XDG Desktop Entry 規範）主要透過讀取以下�
 - **軟體自行建立使用者捷徑**：許多軟體在安裝或初次啟動時（例如 JetBrains Toolbox、Chrome/PWA、手動下載的 AppImage），會自動將 `.desktop` 檔寫入使用者的 `~/.local/share/applications/` 以及 `~/.config/autostart/`。
 - **主程式已刪除但捷徑殘留**：當主程式已被移除，但使用者目錄中的 `.desktop` 檔仍存在時，Omarchy 的啟動器（如 Walker）重新掃描依舊會讀取到該項目，造成「程式已刪除卻仍顯示在選單」的狀況。
 
-### 7.2 解決步驟：以 JetBrains Toolbox 為例
+### 解決步驟：以 JetBrains Toolbox 為例
 
-#### 步驟 1：搜尋殘留的 `.desktop` 檔案
+#### 搜尋殘留的 `.desktop` 檔案
 
 在終端機中搜尋系統與使用者目錄中與該軟體相關的桌面捷徑與自啟動檔：
 
@@ -321,7 +418,7 @@ find /usr/share/applications ~/.local/share/applications ~/.config/autostart -in
 - `~/.local/share/applications/jetbrainsd.desktop`（背景 Daemon 協定捷徑）
 - `~/.config/autostart/jetbrains-toolbox.desktop`（開機自動啟動項）
 
-#### 步驟 2：刪除殘留捷徑與自啟動
+#### 刪除殘留捷徑與自啟動
 
 直接刪除使用者層級的 `.desktop` 捷徑：
 
@@ -334,7 +431,7 @@ rm -f ~/.local/share/applications/jetbrainsd.desktop
 rm -f ~/.config/autostart/jetbrains-toolbox.desktop
 ```
 
-#### 步驟 3：（可選）清理使用者設定與快取目錄
+#### （可選）清理使用者設定與快取目錄
 
 若確定不再使用該軟體，可一併清除殘留的使用者快取與配置檔案：
 
@@ -342,7 +439,7 @@ rm -f ~/.config/autostart/jetbrains-toolbox.desktop
 rm -rf ~/.local/share/JetBrains ~/.config/JetBrains ~/.cache/JetBrains
 ```
 
-### 7.3 通用清理原則（適用於 Alacritty 等其他軟體）
+### 通用清理原則（適用於 Alacritty 等其他軟體）
 
 遇到任何移除後仍然卡在選單上的軟體，皆可透過通用指令清理：
 
@@ -358,7 +455,7 @@ rm -f ~/.local/share/applications/<軟體名稱>.desktop
 
 ---
 
-## 8. PHP Extension 擴充模組安裝與設定
+## PHP Extension 擴充模組安裝與設定
 
 Omarchy 基於 Arch Linux，其 PHP 擴充套件的管理機制與 Ubuntu / Debian 或 macOS (Homebrew) 略有不同：
 
@@ -366,20 +463,23 @@ Omarchy 基於 Arch Linux，其 PHP 擴充套件的管理機制與 Ubuntu / Debi
 - **獨立拆分的外部套件**：部分擴充（例如 `gd`、`imagick`、`redis` 等）則被拆分為獨立的 pacman 系統套件（如 `php-gd`），需要透過 `sudo pacman -S` 額外安裝才會產生 `.so` 模組檔。
 - **設定檔管理原則**：雖然可以直接修改 `/etc/php/php.ini`，但在 Linux 環境下，最推薦且最易維護的做法是**在 `/etc/php/conf.d/` 目錄下為每個擴充模組建立獨立的 `.ini` 設定檔**，避免日後系統更新時覆寫主要設定。
 
-### 8.1 啟用系統內建模組（以 `sockets` 為例）
+### 啟用系統內建模組（以 `sockets` 為例）
 
 Laravel Octane 或其他網路通訊套件常會需要 `sockets` 擴充。該模組檔案已經存在於系統中，只需建立設定檔啟用：
 
 1. **確認模組檔案存在**：
+
     ```bash
     ls /usr/lib/php/modules/sockets.so
     ```
+
 2. **在 `conf.d` 建立設定檔啟用**：
+
     ```bash
     echo "extension=sockets" | sudo tee /etc/php/conf.d/sockets.ini
     ```
 
-### 8.2 安裝並啟用獨立模組套件（以 `gd` 為例）
+### 安裝並啟用獨立模組套件（以 `gd` 為例）
 
 圖片處理相關需求通常需要 `gd` 擴充，由於它未隨預設套件安裝，需先安裝後再啟用：
 
@@ -392,11 +492,12 @@ Laravel Octane 或其他網路通訊套件常會需要 `sockets` 擴充。該模
     _(安裝後可於 `/usr/lib/php/modules/gd.so` 確認模組已產生)_
 
 2. **在 `conf.d` 建立設定檔啟用**：
+
     ```bash
     echo "extension=gd" | sudo tee /etc/php/conf.d/gd.ini
     ```
 
-### 8.3 驗證與生效
+### 驗證與生效
 
 1. **檢查擴充模組是否載入成功**：
 
@@ -420,3 +521,4 @@ Laravel Octane 或其他網路通訊套件常會需要 `sockets` 擴充。該模
 ## 參考資料
 
 - [Ubuntu繁體中文輸入法？改用Fcitx5來輸入中文吧！](https://ivonblog.com/posts/ubuntu-fcitx5/)
+- [How can I disable or rebind the top-bar toggle shortcut?](https://github.com/omacom/omarchy/discussions/15736)
