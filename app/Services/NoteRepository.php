@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Exceptions\MarkdownReadException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
@@ -19,7 +20,7 @@ class NoteRepository
         return Cache::remember(
             'notes:tree:'.$this->fingerprint(),
             now()->addWeek(),
-            fn (): array => collect(glob(config('notes.path').'/*', GLOB_ONLYDIR))
+            fn (): array => collect($this->glob(config('notes.path').'/*', GLOB_ONLYDIR))
                 ->map(fn (string $directory): array => [
                     'slug' => basename($directory),
                     'displayName' => $this->displayName(basename($directory)),
@@ -39,7 +40,7 @@ class NoteRepository
      */
     public function notes(string $category): array
     {
-        return collect(glob(config('notes.path')."/{$category}/*.md"))
+        return collect($this->glob(config('notes.path')."/{$category}/*.md"))
             ->reject(fn (string $path): bool => basename($path) === 'README.md')
             ->map(fn (string $path): array => [
                 'slug' => $this->slug($path),
@@ -60,7 +61,7 @@ class NoteRepository
      */
     public function find(string $category, string $slug): ?array
     {
-        foreach (glob(config('notes.path')."/{$category}/*.md") as $path) {
+        foreach ($this->glob(config('notes.path')."/{$category}/*.md") as $path) {
             if (basename($path) !== 'README.md' && $this->slug($path) === $slug) {
                 return [
                     'path' => $path,
@@ -94,12 +95,16 @@ class NoteRepository
             now()->addWeek(),
             function (): array {
                 $index = [];
-                $files = glob(config('notes.path').'/*/*.md');
+                $files = $this->glob(config('notes.path').'/*/*.md');
 
                 foreach ($files as $path) {
                     if (basename($path) === 'README.md') {
                         continue;
                     }
+
+                    $contents = file_get_contents($path);
+
+                    throw_if($contents === false, MarkdownReadException::class, $path);
 
                     $category = basename(dirname($path));
 
@@ -108,7 +113,7 @@ class NoteRepository
                         'categoryName' => $this->displayName($category),
                         'slug' => $this->slug($path),
                         'title' => $this->title($path),
-                        'content' => $this->searchableContent(file_get_contents($path)),
+                        'content' => $this->searchableContent($contents),
                     ];
                 }
 
@@ -137,7 +142,7 @@ class NoteRepository
         // 5. Remove markdown formatting characters like #, *, _, `, >, etc. but keep code/text
         $text = preg_replace('/```[a-zA-Z0-9_-]*/', '', $text ?? '');
         $text = str_replace(['```', '`', '**', '__', '~~'], '', $text ?? '');
-        $text = preg_replace('/^#+\s+/m', '', $text ?? '');
+        $text = preg_replace('/^#+\s+/m', '', $text);
         $text = preg_replace('/^>\s+/m', '', $text ?? '');
 
         // 6. Normalize whitespace
@@ -180,6 +185,10 @@ class NoteRepository
     {
         $handle = fopen($path, 'r');
 
+        if ($handle === false) {
+            return Str::headline($this->slug($path));
+        }
+
         try {
             while (($line = fgets($handle)) !== false) {
                 if (str_starts_with($line, '# ')) {
@@ -194,18 +203,30 @@ class NoteRepository
     }
 
     /**
+     * Match paths against a glob pattern, returning an empty list on failure.
+     *
+     * @return list<string>
+     */
+    private function glob(string $pattern, int $flags = 0): array
+    {
+        $paths = glob($pattern, $flags);
+
+        return $paths === false ? [] : $paths;
+    }
+
+    /**
      * A cheap change detector for the whole notes directory, so the cached
      * tree is rebuilt whenever a note is added, renamed, or edited.
      */
     public function fingerprint(): string
     {
-        $files = glob(config('notes.path').'/*/*.md');
+        $files = $this->glob(config('notes.path').'/*/*.md');
 
         return
             count($files)
             .':'
             .max(
-                [0, ...array_map(filemtime(...), $files)],
+                [0, ...array_map(fn (string $file): int => filemtime($file) ?: 0, $files)],
             );
     }
 }
