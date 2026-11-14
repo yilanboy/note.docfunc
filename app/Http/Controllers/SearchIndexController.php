@@ -19,11 +19,11 @@ class SearchIndexController extends Controller
      */
     public function __invoke(Request $request): Response
     {
-        $etag = md5($this->noteRepository->fingerprint());
+        $etag = hash('xxh128', $this->noteRepository->fingerprint());
 
         if (
-            in_array('"'.$etag.'"', $request->getETags(), true) ||
-            in_array('W/"'.$etag.'"', $request->getETags(), true)
+            in_array('"'.$etag.'"', $request->getETags(), true)
+            || in_array('W/"'.$etag.'"', $request->getETags(), true)
         ) {
             return response('', Response::HTTP_NOT_MODIFIED, [
                 'ETag' => '"'.$etag.'"',

@@ -35,7 +35,7 @@ class ShowCategoryController extends Controller
         $cached = Cache::remember(
             'markdown:'.$readme.':'.filemtime($readme),
             now()->addWeek(),
-            fn (): array => $this->markdownConverter->parse(file_get_contents($readme)),
+            fn (): array => $this->markdownConverter->parseFile($readme),
         );
 
         $description = $this->resolveDescription->handle($cached['html']);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Exceptions\MarkdownReadException;
 use ArrayAccess;
 use Illuminate\Support\Str;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
@@ -35,14 +36,8 @@ class MarkdownConverter
     }
 
     /**
-     * Convert a Markdown file into HTML, cached until the file changes.
-     */
-    public function convertFile(string $path): string
-    {
-        return $this->convert(file_get_contents($path));
-    }
-
-    /**
+     * Parse a Markdown string into metadata, content, and HTML.
+     *
      * @return array<string, string|array|ArrayAccess|mixed>
      */
     public function parse(string $markdown): array
@@ -54,5 +49,23 @@ class MarkdownConverter
             'content' => $document->body(),
             'html' => $this->convert($document->body()),
         ];
+    }
+
+    /**
+     * Parse a Markdown file into metadata, content, and HTML.
+     *
+     * @return array<string, string|array|ArrayAccess|mixed>
+     *
+     * @throws MarkdownReadException
+     */
+    public function parseFile(string $path): array
+    {
+        throw_if(! is_file($path) || ! is_readable($path), MarkdownReadException::class, $path);
+
+        $contents = file_get_contents($path);
+
+        throw_if($contents === false, MarkdownReadException::class, $path);
+
+        return $this->parse($contents);
     }
 }

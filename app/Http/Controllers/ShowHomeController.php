@@ -25,13 +25,12 @@ class ShowHomeController extends Controller
     public function __invoke(): Response
     {
         $path = config('notes.path').'/README.md';
-
         abort_unless(file_exists($path), 404);
 
         $cached = Cache::remember(
             'markdown:'.$path.':'.filemtime($path),
             now()->addWeek(),
-            fn (): array => $this->markdownConverter->parse(file_get_contents($path)),
+            fn (): array => $this->markdownConverter->parseFile($path),
         );
 
         $description = $this->resolveDescription->handle($cached['html']);

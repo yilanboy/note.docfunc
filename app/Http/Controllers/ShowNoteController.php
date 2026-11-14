@@ -33,7 +33,7 @@ class ShowNoteController extends Controller
         $cached = Cache::remember(
             'markdown:'.$found['path'].':'.filemtime($found['path']),
             now()->addWeek(),
-            fn (): array => $this->markdownConverter->parse(file_get_contents($found['path'])),
+            fn (): array => $this->markdownConverter->parseFile($found['path']),
         );
 
         $description = $this->resolveDescription->handle($cached['html']);
