@@ -7,6 +7,8 @@ arch()
 
 arch()->preset()->laravel();
 
+arch()->preset()->security();
+
 it('should contains README.md under root directory', function () {
     expect(file_exists(base_path('README.md')))->toBeTrue();
 });
