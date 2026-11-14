@@ -1,5 +1,6 @@
 ---
 date: '2026-11-13'
+updated: '2026-11-14'
 tags: [pest]
 ---
 
@@ -10,7 +11,6 @@ Pest 在 v3 加入了變異測試，用來提升測試的可靠性與穩固性�
 變異測試（Mutation Testing）是一種透過對程式碼進行微小變異，來檢驗測試品質與有效度的方法。
 如果對程式碼的變異沒有導致你的測試失敗，就代表你的測試有地方沒有涵蓋到，這時候我們就可以把漏掉的地方補起來。
 
-> [!NOTE]
 > 執行變異測試需要搭配程式碼覆蓋率驅動，環境必須安裝並啟用 **Xdebug 3.0+** 或 **PCOV**。
 
 ## 基本用法
@@ -18,8 +18,6 @@ Pest 在 v3 加入了變異測試，用來提升測試的可靠性與穩固性�
 想要進行 Mutation Testing 相當簡單，只需要在測試檔案上方加入 `mutates()` 或 `covers()` 即可。
 
 ```php
-<?php
-
 covers(TodoController::class); // or mutates(TodoController::class);
 
 it('list todos', function () {
@@ -43,8 +41,6 @@ php artisan test --mutate
 如果你的測試涵蓋不只一個類別，也可以在 `covers()` 中使用陣列（或以逗號分隔多個參數）傳遞多個類別。
 
 ```php
-<?php
-
 use App\Http\Controllers\TodoController;
 use App\Actions\GetTodos;
 
@@ -67,7 +63,9 @@ it('list todos', function () {
 - `TodoShowTest` 測試了 `TodoController` 中的 `show` 方法。
 
 那麼當你在 `TodosTest` 中對 `TodoController` 執行變異測試時，大概率會失敗。
-**因為變異測試會對 `show` 方法進行變異，但是 `TodosTest` 並不會執行到 `show` 方法**。
+
+**因為變異測試會對 `show` 方法進行變異，但是 `TodosTest` 的測試範圍並沒有涵蓋到 `show` 方法**，
+這就會讓 `show` 方法的變異無法被測試到，導致變異測試失敗。
 
 為了解決這個問題，在執行變異測試時可以加上 `--covered-only` 參數，這樣就只會對有被測試覆蓋到的部分進行變異測試。
 
