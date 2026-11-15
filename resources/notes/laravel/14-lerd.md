@@ -1,6 +1,7 @@
 ---
 date: "2026-11-11"
-tags: [laravel, lerd, omarchy]
+updated: "2026-11-15"
+tags: [laravel, lerd, omarchy, zed]
 ---
 
 # Lerd 安裝筆記 (Omarchy)
@@ -128,6 +129,49 @@ lerd pest:browser remove
 - **解法**：
     1. 將不同頁面的測試**拆分成獨立的測試案例**，每個案例只包含單一 `visit()`。
     2. 若要測試同一頁面流程內的換頁導覽，應使用 `->click(...)` 點擊畫面上的連結或按鈕進行跳轉，而非多次呼叫 `visit()`。
+
+### Q3: Zed 使用 Laravel 官方擴充套件出現 `Inertia view [...] not found.` 或 LSP 找不到 PHP？
+
+- **現象**：在 Zed 安裝 Laravel 官方擴充套件（`Laravel (Official)` / `laravel/lsp`）後，對存在的 Inertia 頁面仍報錯 `Inertia view [...] not found.`，或自動補全與跳轉失效；透過 `dev: open language server logs` → `laravel` 可看到 `PHP runner error`（如 `/usr/local/bin/php: No such file or directory`，`exitCode: 127`）。
+- **原因**：`laravel/lsp` 的 `phpEnvironment: "auto"` 預設只會偵測 Herd、Valet、Sail、Lando、DDEV 與系統預設 PHP，並不認識 Lerd；且從桌面啟動的 Zed 常讀不到 Shell `$PATH` 裡的 Lerd shim，導致 LSP 退回呼叫 `/usr/local/bin/php` 而失敗，進而無法執行 Laravel 腳本讀取 `config/inertia.php` 等設定。
+- **解法**：在 Zed 設定檔透過 `lsp.laravel.initialization_options.phpCommand` 明確指定 PHP 執行指令：
+    1. **全域設定（推薦，所有 Lerd 專案共用）**：先在終端機執行 `which php` 確認 Lerd shim 路徑（通常為 `~/.local/share/lerd/bin/php`），再寫入 `~/.config/zed/settings.json`：
+
+        ```json
+        {
+          "lsp": {
+            "laravel": {
+              "initialization_options": {
+                "phpCommand": ["/home/allen/.local/share/lerd/bin/php"]
+              }
+            }
+          }
+        }
+        ```
+
+    2. **專案層級直接指定 Podman 容器（備用）**：若 shim 無法在非互動式 LSP 下執行，可在專案 `.zed/settings.json` 直接呼叫對應版本的容器，並務必加上 `-w` 指定專案根目錄：
+
+        ```json
+        {
+          "lsp": {
+            "laravel": {
+              "initialization_options": {
+                "phpCommand": [
+                  "podman",
+                  "exec",
+                  "-i",
+                  "-w",
+                  "/path/to/your/project",
+                  "lerd-php85-fpm",
+                  "php"
+                ]
+              }
+            }
+          }
+        }
+        ```
+
+    3. 存檔後按 `Ctrl+Shift+P` 執行 `zed: restart language server` 重新啟動 Laravel LSP 即可。
 
 ## 參考資料
 
