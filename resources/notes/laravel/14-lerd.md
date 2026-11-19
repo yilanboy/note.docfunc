@@ -1,6 +1,6 @@
 ---
-date: "2026-11-11"
-updated: "2026-11-15"
+date: '2026-11-11'
+updated: '2026-11-19'
 tags: [laravel, lerd, omarchy, zed]
 ---
 
@@ -110,7 +110,52 @@ lerd pest:browser remove
 
 ---
 
-## 6. 疑難雜症專區 (Troubleshooting)
+## 6. Zed 編輯器整合設定
+
+在 Zed 中搭配 Lerd 開發 Laravel 專案時，需要針對 **LSP 分工**與 **PHP 執行路徑**進行額外設計，才能兼顧框架輔助與語言分析的穩定性。
+
+### 雙 LSP 分工與語言伺服器選擇
+
+在 Zed 中開發 Laravel 時，官方的 **Laravel LSP**（`Laravel (Official)` / `laravel/lsp`）只負責**框架層級**的補全與跳轉（如 `route`、`view`、`config`、翻譯鍵等），仍須搭配一個**通用 PHP LSP** 來負責類別、型別與定義跳轉。
+
+- **為何不用預設的 `phpactor`**：`phpactor` 在 Lerd 的容器環境下容易卡在工作區索引並逾時。
+- **為何需要明確排除其他 PHP LSP**：Zed 的 PHP 擴充套件在設定 `"..."` 時，除了 `phpactor` 之外，還會一併拉起同為通用 PHP LSP 的 `phptools` 與 `$PATH` 內的 `phpantom_lsp`，導致多套 PHP LSP 同時搶資源或失敗。
+- **最佳做法（保留 `phpantom` + `laravel`）**：Lerd 預設會安裝 `phpantom_lsp`，所以我們可以使用 `phpantom` 處理通用 PHP 語言能力，同時透過 `"..."` 自動保留已安裝的官方 `laravel` LSP（無需另外寫出 `"laravel"`），讓兩者互補並存。
+
+### `~/.config/zed/settings.json` 建議配置
+
+將 `languages.PHP.language_servers` 與 Laravel LSP 的 `phpCommand`（指向 Lerd 的 PHP shim，詳見下方 Q3）一併設定於全域設定檔：
+
+```json
+{
+    "languages": {
+        "PHP": {
+            "language_servers": [
+                "phpantom",
+                "!intelephense",
+                "!phpactor",
+                "!phptools",
+                "..."
+            ]
+        }
+    },
+    "lsp": {
+        "laravel": {
+            "initialization_options": {
+                "phpCommand": ["/home/allen/.local/share/lerd/bin/php"]
+            }
+        }
+    }
+}
+```
+
+> `language_servers` 中的 `"!phpactor"`、`"!phptools"`、`"!intelephense"` 用來停用其他通用 PHP LSP；結尾的 `"..."` 則會自動展開並保留其餘適用的語言伺服器（包含官方 `laravel` LSP），無需手動加上 `"laravel"`。
+
+存檔後按 `Ctrl+Shift+P` 執行 `editor: restart language server` 重新啟動語言伺服器即可。
+
+---
+
+## 7. 疑難雜症專區 (Troubleshooting)
 
 ### Q1: Pest Browser 測試截圖上的中文字全部變成空白？
 
@@ -139,39 +184,17 @@ lerd pest:browser remove
 
         ```json
         {
-          "lsp": {
-            "laravel": {
-              "initialization_options": {
-                "phpCommand": ["/home/allen/.local/share/lerd/bin/php"]
-              }
+            "lsp": {
+                "laravel": {
+                    "initialization_options": {
+                        "phpCommand": ["/home/allen/.local/share/lerd/bin/php"]
+                    }
+                }
             }
-          }
         }
         ```
 
-    2. **專案層級直接指定 Podman 容器（備用）**：若 shim 無法在非互動式 LSP 下執行，可在專案 `.zed/settings.json` 直接呼叫對應版本的容器，並務必加上 `-w` 指定專案根目錄：
-
-        ```json
-        {
-          "lsp": {
-            "laravel": {
-              "initialization_options": {
-                "phpCommand": [
-                  "podman",
-                  "exec",
-                  "-i",
-                  "-w",
-                  "/path/to/your/project",
-                  "lerd-php85-fpm",
-                  "php"
-                ]
-              }
-            }
-          }
-        }
-        ```
-
-    3. 存檔後按 `Ctrl+Shift+P` 執行 `zed: restart language server` 重新啟動 Laravel LSP 即可。
+    2. 存檔後按 `Ctrl+Shift+P` 執行 `zed: restart language server` 重新啟動 Laravel LSP 即可。
 
 ## 參考資料
 
