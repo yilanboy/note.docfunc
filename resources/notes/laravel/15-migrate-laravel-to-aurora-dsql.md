@@ -96,7 +96,28 @@ Schema::table('posts', function (Blueprint $table) {
 });
 ```
 
-Aurora DSQL 規定對既有表新增欄位**必須是 `nullable()` 且不能有 `default` 值**（如果要加預設值，必須拆成兩步：先加 `nullable()` 無預設值欄位，再另外 `change()` 加上 `default()`，且舊資料列仍會保留 `NULL`）。
+Aurora DSQL 規定對既有表新增欄位**必須是 `nullable()` 且不能有 `default` 值**。
+
+```php
+// ✅ 做法 A（搬移全新 DSQL 庫）：直接整併進原本的 Schema::create()
+Schema::create('posts', function (Blueprint $table) {
+    $table->id();
+    $table->string('title')->index();
+    $table->mediumText('body');
+    $table->boolean('is_private')->default(false);
+    // ...
+});
+
+// ✅ 做法 B（上線後真的要對既有資料表加欄位）：拆成兩步，先加 nullable，再補 default
+Schema::table('posts', function (Blueprint $table) {
+    $table->boolean('is_private')->nullable();
+});
+
+Schema::table('posts', function (Blueprint $table) {
+    $table->boolean('is_private')->nullable()->default(false)->change();
+});
+// 注意：既有的舊資料列仍會保留 NULL，程式端或背景任務需相容處理
+```
 
 #### 雷區 2：使用 `->change()` 修改欄位型別或設為 `NOT NULL`
 
@@ -112,6 +133,31 @@ Schema::table('passkeys', function (Blueprint $table) {
 });
 ```
 
+在 Aurora DSQL 中，欄位一旦建立就**無法改變型別**，也**無法從 `NULL` 改回 `NOT NULL`**。
+
+```php
+// ✅ 做法 A（搬移全新 DSQL 庫）：直接在建表時使用最終型別與結構
+Schema::create('categories', function (Blueprint $table) {
+    $table->id();
+    $table->string('name')->index();
+    $table->text('icon')->nullable(); // 直接用 text() 而非先 string() 再改
+    // ...
+});
+
+Schema::create('passkeys', function (Blueprint $table) {
+    $table->id();
+    $table->morphs('owner'); // 建表時直接宣告 NOT NULL 的 owner_type / owner_id 與索引
+    // ...
+});
+
+// ✅ 做法 B（上線後需要改變欄位型別）：採用 Expand-and-Contract 模式
+// 1. 先新增一個正確型別的 nullable 新欄位
+Schema::table('categories', function (Blueprint $table) {
+    $table->text('icon_html')->nullable();
+});
+// 2. 由應用層雙寫並透過 Artisan 指令分批回填資料，確認無誤後再停用舊欄位
+```
+
 #### 雷區 3：在同一個 Migration 混用 DDL 與 DML
 
 ```php
@@ -123,14 +169,85 @@ Schema::table('passkeys', function (Blueprint $table) {
 DB::table('passkeys')->update(['owner_type' => 'App\Models\User']);
 ```
 
-Aurora DSQL 不允許在同一交易內混用 DDL 與 DML；即使是拆開執行，後續也無法再把 `owner_type` 改回 `NOT NULL`。
+Aurora DSQL 不允許在同一交易內混用 DDL 與 DML；此外單筆 DML 交易還有最多 **3,000 列**的限制。
 
-#### 雷區 4：舊版 `json()` 欄位與 `renameIndex()`
+```php
+// ✅ 改寫方式：DDL 與 DML 拆開成獨立步驟，大量資料回填改用分批（Chunk）處理
+// 1. 純 DDL migration（只負責結構變更）
+Schema::table('passkeys', function (Blueprint $table) {
+    $table->string('owner_type')->nullable();
+});
 
-- 若資料表只是儲存序列化 JSON、**沒有用到資料庫層的 JSON 查詢或索引**（例如 `settings.value`、`passkeys.data`），建議將 migration 欄位改為 `text()`，Model 上的 Eloquent cast（`'json'` 或 `'array'`）完全照舊保留即可，跨 SQLite / PostgreSQL / DSQL 最穩妥。
-- 歷史上曾對欄位或索引改名（例如 `renameColumn` 搭配後續的 `renameIndex()` 產生 `alter index ... rename to ...`），在全新資料庫建表時其實完全是多餘的步驟。
+// 2. 獨立的資料回填（獨立 DML migration 或 Artisan Command）
+//    每次最多處理 500 筆，避免超過 DSQL 單筆交易 3,000 列的上限
+Passkey::query()
+    ->whereNull('owner_type')
+    ->chunkById(500, function ($passkeys) {
+        Passkey::query()
+            ->whereIn('id', $passkeys->pluck('id'))
+            ->update(['owner_type' => User::class]);
+    });
+```
 
-#### 雷區 5：`down()` 中使用 `truncate()`
+#### 雷區 4：使用 `json()` 欄位型別
+
+```php
+// ❌ 跨資料庫與 DSQL 索引較容易踩雷（且本專案僅需儲存序列化字串）
+Schema::create('settings', function (Blueprint $table) {
+    $table->id();
+    $table->string('key')->unique();
+    $table->json('value');
+    $table->timestamps();
+});
+```
+
+若資料表只是儲存序列化 JSON、**沒有用到資料庫層的 JSON 查詢或索引**（例如 `settings.value`、`passkeys.data`），改用 `text()` 最安全，Model 上的 Eloquent cast 完全不需改動：
+
+```php
+// ✅ Migration 改為 text()
+Schema::create('settings', function (Blueprint $table) {
+    $table->id();
+    $table->string('key')->unique();
+    $table->text('value');
+    $table->timestamps();
+});
+
+// ✅ Model 照舊保留 'json' 或 'array' cast，Laravel 會自動序列化/反序列化
+class Setting extends Model
+{
+    protected $casts = ['value' => 'json'];
+}
+```
+
+#### 雷區 5：`renameIndex()` 與歷史欄位/索引改名
+
+```php
+// ❌ DSQL 相關語法風險：歷史先建 link 欄位與索引，之後再 renameColumn + renameIndex
+Schema::table('links', function (Blueprint $table) {
+    $table->renameIndex('links_link_index', 'links_url_index'); // 產生 alter index ... rename to ...
+});
+```
+
+```php
+// ✅ 做法 A（搬移全新 DSQL 庫）：建表時直接用最終欄位名稱與索引
+Schema::create('links', function (Blueprint $table) {
+    $table->id();
+    $table->string('title')->index();
+    $table->string('url')->index(); // 直接建立最終欄位 url 與 links_url_index
+    $table->timestamps();
+});
+
+// ✅ 做法 B（上線後真的需要更換索引名稱）：先建新索引，再刪舊索引
+Schema::table('links', function (Blueprint $table) {
+    $table->index('url', 'links_url_index'); // DsqlSchemaGrammar 編譯為 create index async
+});
+
+Schema::table('links', function (Blueprint $table) {
+    $table->dropIndex('links_link_index');
+});
+```
+
+#### 雷區 6：`down()` 中使用 `truncate()`
 
 ```php
 // ❌ Aurora DSQL 不支援 TRUNCATE
