@@ -6,7 +6,7 @@ namespace App\Actions;
 
 use Illuminate\Support\Str;
 
-class ResolveDescription
+final readonly class ResolveDescription
 {
     /**
      * Resolve a plain text description for document head and Open Graph from HTML.

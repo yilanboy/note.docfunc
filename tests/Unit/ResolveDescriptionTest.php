@@ -42,7 +42,7 @@ it('falls back to app name when html has no body text', function () {
     expect($description)->toBe('DocFunc Note');
 });
 
-it('can be invoked as a callable', function () {
+it('resolves description via handle method', function () {
     $action = app(ResolveDescription::class);
 
     $description = $action->handle('<p>Callable test paragraph</p>');

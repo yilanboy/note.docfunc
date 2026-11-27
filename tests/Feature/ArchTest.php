@@ -9,6 +9,35 @@ arch()->preset()->laravel();
 
 arch()->preset()->security();
 
+arch('actions are final readonly POPOs with a single handle entry point')
+    ->expect('App\Actions')
+    ->toBeClasses()
+    ->toBeFinal()
+    ->toBeReadonly()
+    ->toExtendNothing()
+    ->toImplementNothing()
+    ->toHaveMethod('handle')
+    ->not->toHavePublicMethodsBesides(['__construct', 'handle']);
+
+arch('actions do not use an Action suffix')
+    ->expect('App\Actions')
+    ->not->toHaveSuffix('Action');
+
+arch('actions do not depend on HTTP or presentation layers')
+    ->expect('App\Actions')
+    ->not->toUse([
+        'Illuminate\Http',
+        'Illuminate\Foundation\Http',
+        'Illuminate\Support\Facades\Session',
+        'Symfony\Component\HttpFoundation',
+        'Inertia',
+        'Laravel\Head',
+    ]);
+
+arch('services do not depend on actions')
+    ->expect('App\Services')
+    ->not->toUse('App\Actions');
+
 it('should contains README.md under root directory', function () {
     expect(file_exists(base_path('README.md')))->toBeTrue();
 });

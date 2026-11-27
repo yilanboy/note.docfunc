@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Services\NoteRepository;
+use App\Actions\ExtractSearchableContent;
 
 it('returns 200 with search index containing required note fields', function () {
     $response = $this->getJson('/search-index.json');
@@ -73,7 +73,7 @@ it('returns 200 when If-None-Match does not match', function () {
 });
 
 it('extracts clean searchable content without frontmatter or markdown syntax', function () {
-    $repo = app(NoteRepository::class);
+    $action = app(ExtractSearchableContent::class);
 
     $markdown = <<<'MD'
     ---
@@ -93,7 +93,7 @@ it('extracts clean searchable content without frontmatter or markdown syntax', f
     > Important note blockquote
     MD;
 
-    $clean = $repo->searchableContent($markdown);
+    $clean = $action->handle($markdown);
 
     expect($clean)
         ->not->toContain('date:')

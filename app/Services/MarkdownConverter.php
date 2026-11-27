@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Exceptions\MarkdownReadException;
-use ArrayAccess;
 use Illuminate\Support\Str;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
 
@@ -38,14 +37,17 @@ class MarkdownConverter
     /**
      * Parse a Markdown string into metadata, content, and HTML.
      *
-     * @return array<string, string|array|ArrayAccess|mixed>
+     * @return array{metadata: array<string, mixed>, content: string, html: string}
      */
     public function parse(string $markdown): array
     {
         $document = YamlFrontMatter::parse($markdown);
 
+        /** @var array<string, mixed> $metadata */
+        $metadata = $document->matter();
+
         return [
-            'metadata' => $document->matter(),
+            'metadata' => $metadata,
             'content' => $document->body(),
             'html' => $this->convert($document->body()),
         ];
@@ -54,7 +56,7 @@ class MarkdownConverter
     /**
      * Parse a Markdown file into metadata, content, and HTML.
      *
-     * @return array<string, string|array|ArrayAccess|mixed>
+     * @return array{metadata: array<string, mixed>, content: string, html: string}
      *
      * @throws MarkdownReadException
      */

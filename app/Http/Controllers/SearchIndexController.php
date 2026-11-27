@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\BuildSearchIndex;
 use App\Services\NoteRepository;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,6 +13,7 @@ class SearchIndexController extends Controller
 {
     public function __construct(
         private readonly NoteRepository $noteRepository,
+        private readonly BuildSearchIndex $buildSearchIndex,
     ) {}
 
     /**
@@ -31,7 +33,7 @@ class SearchIndexController extends Controller
             ]);
         }
 
-        $response = response()->json($this->noteRepository->searchIndex());
+        $response = response()->json($this->buildSearchIndex->handle());
         $response->setEtag($etag);
         $response->headers->set('Cache-Control', 'public, max-age=0, must-revalidate');
 

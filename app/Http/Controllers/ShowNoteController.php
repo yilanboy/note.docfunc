@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Actions\ResolveDescription;
-use App\Services\MarkdownConverter;
+use App\Actions\LoadMarkdownPage;
 use App\Services\NoteRepository;
-use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 use Laravel\Head\Enums\OgType;
@@ -17,8 +15,7 @@ class ShowNoteController extends Controller
 {
     public function __construct(
         private readonly NoteRepository $noteRepository,
-        private readonly MarkdownConverter $markdownConverter,
-        private readonly ResolveDescription $resolveDescription,
+        private readonly LoadMarkdownPage $loadMarkdownPage,
     ) {}
 
     /**
@@ -30,28 +27,24 @@ class ShowNoteController extends Controller
 
         abort_unless($found !== null, 404);
 
-        $cached = Cache::remember(
-            'markdown:'.$found['path'].':'.filemtime($found['path']),
-            now()->addWeek(),
-            fn (): array => $this->markdownConverter->parseFile($found['path']),
-        );
+        $page = $this->loadMarkdownPage->handle($found['path']);
 
-        $description = $this->resolveDescription->handle($cached['html']);
+        abort_unless($page !== null, 404);
 
         Head::title($found['title'])
-            ->description($description)
+            ->description($page['description'])
             ->og(
                 type: OgType::Article,
                 title: $found['title'],
-                description: $description,
+                description: $page['description'],
             );
 
         Head::ogImage(route('notes.note.og', ['category' => $category, 'note' => $note]));
 
         return Inertia::render('Page', [
             'title' => $found['title'],
-            'html' => $cached['html'],
-            'metadata' => $cached['metadata'],
+            'html' => $page['html'],
+            'metadata' => $page['metadata'],
         ]);
     }
 }

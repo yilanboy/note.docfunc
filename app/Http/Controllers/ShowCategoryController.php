@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Actions\ResolveDescription;
-use App\Services\MarkdownConverter;
+use App\Actions\LoadMarkdownPage;
 use App\Services\NoteRepository;
-use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 use Laravel\Head\Enums\OgType;
@@ -17,8 +15,7 @@ class ShowCategoryController extends Controller
 {
     public function __construct(
         private readonly NoteRepository $noteRepository,
-        private readonly MarkdownConverter $markdownConverter,
-        private readonly ResolveDescription $resolveDescription,
+        private readonly LoadMarkdownPage $loadMarkdownPage,
     ) {}
 
     /**
@@ -26,32 +23,24 @@ class ShowCategoryController extends Controller
      */
     public function __invoke(string $category): Response
     {
-        $readme = config('notes.path')."/{$category}/README.md";
+        $page = $this->loadMarkdownPage->handle(config('notes.path')."/{$category}/README.md");
 
-        abort_unless(file_exists($readme), 404);
+        abort_unless($page !== null, 404);
 
         $displayName = $this->noteRepository->displayName($category);
 
-        $cached = Cache::remember(
-            'markdown:'.$readme.':'.filemtime($readme),
-            now()->addWeek(),
-            fn (): array => $this->markdownConverter->parseFile($readme),
-        );
-
-        $description = $this->resolveDescription->handle($cached['html']);
-
         Head::title($displayName)
-            ->description($description)
+            ->description($page['description'])
             ->og(
                 type: OgType::Website,
                 title: $displayName,
-                description: $description,
+                description: $page['description'],
             );
 
         return Inertia::render('Page', [
             'title' => $displayName,
-            'html' => $cached['html'],
-            'metadata' => $cached['metadata'],
+            'html' => $page['html'],
+            'metadata' => $page['metadata'],
         ]);
     }
 }

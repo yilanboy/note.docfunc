@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Exceptions\MarkdownReadException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
@@ -84,72 +83,32 @@ class NoteRepository
     }
 
     /**
-     * Build a cached search index of all notes.
+     * Get all note files across all categories, excluding README.md files.
      *
-     * @return array<int, array{category: string, categoryName: string, slug: string, title: string, content: string}>
+     * @return list<array{path: string, category: string, categoryName: string, slug: string, title: string, order: ?int}>
      */
-    public function searchIndex(): array
+    public function all(): array
     {
-        return Cache::remember(
-            'notes:search_index:'.$this->fingerprint(),
-            now()->addWeek(),
-            function (): array {
-                $index = [];
-                $files = $this->glob(config('notes.path').'/*/*.md');
+        $notes = [];
 
-                foreach ($files as $path) {
-                    if (basename($path) === 'README.md') {
-                        continue;
-                    }
+        foreach ($this->glob(config('notes.path').'/*/*.md') as $path) {
+            if (basename($path) === 'README.md') {
+                continue;
+            }
 
-                    $contents = file_get_contents($path);
+            $category = basename(dirname($path));
 
-                    throw_if($contents === false, MarkdownReadException::class, $path);
+            $notes[] = [
+                'path' => $path,
+                'category' => $category,
+                'categoryName' => $this->displayName($category),
+                'slug' => $this->slug($path),
+                'title' => $this->title($path),
+                'order' => $this->order($path),
+            ];
+        }
 
-                    $category = basename(dirname($path));
-
-                    $index[] = [
-                        'category' => $category,
-                        'categoryName' => $this->displayName($category),
-                        'slug' => $this->slug($path),
-                        'title' => $this->title($path),
-                        'content' => $this->searchableContent($contents),
-                    ];
-                }
-
-                return $index;
-            },
-        );
-    }
-
-    /**
-     * Extract clean searchable text from Markdown content.
-     */
-    public function searchableContent(string $markdown): string
-    {
-        // 1. Remove YAML frontmatter
-        $text = preg_replace('/^---\s*[\r\n].*?[\r\n]---\s*[\r\n]/s', '', $markdown);
-
-        // 2. Remove first H1 header (title is indexed separately)
-        $text = preg_replace('/^#\s+[^\r\n]+[\r\n]+/m', '', $text ?? '', 1);
-
-        // 3. Replace images ![alt](url) with alt
-        $text = preg_replace('/!\[([^\]]*)\]\([^)]+\)/', '$1', $text ?? '');
-
-        // 4. Replace links [text](url) with text
-        $text = preg_replace('/\[([^\]]+)\]\([^)]+\)/', '$1', $text ?? '');
-
-        // 5. Remove markdown formatting characters like #, *, _, `, >, etc. but keep code/text
-        $text = preg_replace('/```[a-zA-Z0-9_-]*/', '', $text ?? '');
-        $text = str_replace(['```', '`', '**', '__', '~~'], '', $text ?? '');
-        $text = preg_replace('/^#+\s+/m', '', $text);
-        $text = preg_replace('/^>\s+/m', '', $text ?? '');
-
-        // 6. Normalize whitespace
-        $text = preg_replace('/[ \t]+/', ' ', $text ?? '');
-        $text = preg_replace("/\n\s*\n/", "\n", $text ?? '');
-
-        return trim($text ?? '');
+        return $notes;
     }
 
     /**

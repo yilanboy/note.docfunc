@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Actions\ResolveDescription;
-use App\Services\MarkdownConverter;
-use Illuminate\Support\Facades\Cache;
+use App\Actions\LoadMarkdownPage;
 use Inertia\Inertia;
 use Inertia\Response;
 use Laravel\Head\Enums\OgType;
@@ -15,8 +13,7 @@ use Laravel\Head\Facades\Head;
 class ShowHomeController extends Controller
 {
     public function __construct(
-        private readonly MarkdownConverter $markdownConverter,
-        private readonly ResolveDescription $resolveDescription,
+        private readonly LoadMarkdownPage $loadMarkdownPage,
     ) {}
 
     /**
@@ -24,29 +21,22 @@ class ShowHomeController extends Controller
      */
     public function __invoke(): Response
     {
-        $path = config('notes.path').'/README.md';
-        abort_unless(file_exists($path), 404);
+        $page = $this->loadMarkdownPage->handle(config('notes.path').'/README.md');
 
-        $cached = Cache::remember(
-            'markdown:'.$path.':'.filemtime($path),
-            now()->addWeek(),
-            fn (): array => $this->markdownConverter->parseFile($path),
-        );
-
-        $description = $this->resolveDescription->handle($cached['html']);
+        abort_unless($page !== null, 404);
 
         Head::title(config('app.name'), exact: true)
-            ->description($description)
+            ->description($page['description'])
             ->og(
                 type: OgType::Website,
                 title: config('app.name'),
-                description: $description,
+                description: $page['description'],
             );
 
         return Inertia::render('Page', [
             'title' => config('app.name'),
-            'html' => $cached['html'],
-            'metadata' => $cached['metadata'],
+            'html' => $page['html'],
+            'metadata' => $page['metadata'],
         ]);
     }
 }
